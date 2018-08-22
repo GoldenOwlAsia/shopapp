@@ -1,0 +1,11 @@
+{
+  "presets": ["env"],
+  "env": {
+    "development": {
+      "plugins": [
+        "typecheck",
+        "transform-object-rest-spread"
+      ]
+    }
+  }
+}
