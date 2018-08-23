@@ -19,6 +19,7 @@
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
     "babel-plugin-typecheck": "^3.9.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "cors": "^2.8.4",
     "express": "^4.16.3",
@@ -34,7 +35,6 @@
     "sequelize-cli": "^4.0.0"
   },
   "devDependencies": {
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "env-cmd": "^8.0.2"
   }
 }
