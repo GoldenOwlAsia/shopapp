@@ -26,7 +26,7 @@ module.exports = {
     "logging": false,
   },
   "production": {
-    "use_env_variable": "DATABASE_URL",
+    "use_env_variable": "CLEARDB_DATABASE_URL",
     "dialect": DATABASE['dialect'],
     "logging": false,
   },
