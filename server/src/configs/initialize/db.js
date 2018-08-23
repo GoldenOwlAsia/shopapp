@@ -8,6 +8,9 @@ const env = process.env.NODE_ENV || 'development';
 import { dbConfig as config } from 'configs/env';
 const db = {};
 
+console.log('the config: ', config);
+console.log('url: ', process.env[config.use_env_variable]);
+
 const sequelize = config.use_env_variable ? new Sequelize(process.env[config.use_env_variable]) : new Sequelize(config.database, config.username, config.password, config);
 
 fs
