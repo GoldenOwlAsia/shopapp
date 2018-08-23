@@ -19,5 +19,4 @@ const common = {
 };
 
 let config = _.merge(common, require('./env/' + process.env.NODE_ENV + '.js') || {});
-console.log('the config: ', config);
 module.exports = config;

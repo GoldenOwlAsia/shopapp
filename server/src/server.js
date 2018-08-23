@@ -7,7 +7,6 @@ import { buildSchema } from 'graphql';
 import schema from './modules';
 
 const app = express();
-console.log('test: ', process.env['CLEARDB_DATABASE_URL']);
 // cross origin config
 app.use(cors());
 app.get('/', (req, res, next) => {
