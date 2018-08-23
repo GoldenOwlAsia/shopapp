@@ -8,64 +8,6 @@ import schema from './modules';
 
 const app = express();
 
-// const schema = buildSchema(`
-//   type Query {
-//     user(id: Int!): Person
-//     users(gender: String): [Person]
-//   },
-//   type Person {
-//     id: Int
-//     name: String
-//     age: Int
-//     gender: String  
-//   },
-//   type Mutation {
-//     updateUser(id: Int!, name: String!, age: Int!): Person
-//     createUser(name: String!, gender: String!, age: Int!): Person
-//   }
-// `);
-
-const getUser = (args) => {
-  var userID = args.id;
-  return users.filter(user => {
-    return user.id == userID;
-  })[0];
- }
-
-const retrieveUsers = (args) => {
-  if(args.gender) {
-    var gender = args.gender;
-    return users.filter(user => user.gender === gender);
-  } else {
-    return users;
-  }
- }
-
-const updateUser = ({id, name, age}) => {
-  users.map(user => {
-    if(user.id === id) {
-      user.name = name;
-      user.age = age;
-      return user;
-    }
-  });
-  return users.filter(user=> user.id === id) [0];
-}
-
-const createUser = ({name, gender, age}) => {
-  const newUser = {name, gender, age};
-  users.push(newUser);
-
-  return newUser;
-}
-
-// const root = { 
-//   user: getUser,
-//   users: retrieveUsers,
-//   updateUser: updateUser,
-//   createUser: createUser
-// };
-
 // cross origin config
 app.use(cors());
 app.get('/', (req, res, next) => {
@@ -78,7 +20,7 @@ app.all('/api/*', authMiddleware);
 // Create an express server and a GraphQL endpoint
 app.use('/graphql', graphqlHTTP({
   schema: schema,
-  graphiql: process.env.NODE_ENV === 'development'
+  graphiql: true
 }));
 
 // production error handler

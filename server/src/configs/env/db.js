@@ -26,10 +26,7 @@ module.exports = {
     "logging": false,
   },
   "production": {
-    "username": DATABASE['username'],
-    "password": DATABASE['password'],
-    "database": DATABASE['database'],
-    "host": DATABASE['host'],
+    "use_env_variable": "DATABASE_URL",
     "dialect": DATABASE['dialect'],
     "logging": false,
   },
