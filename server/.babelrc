@@ -1,5 +1,8 @@
 {
-  "presets": ["env"],
+  "presets": [
+    "env",
+    "stage-0"
+  ],
   "env": {
     "development": {
       "plugins": [
