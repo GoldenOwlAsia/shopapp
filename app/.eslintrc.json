@@ -1,0 +1,14 @@
+{
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "parser": "babel-eslint",
+  "plugins": ["react", "react-native", "prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-unexpected-multiline": "error",
+    "react/jsx-filename-extension": [0]
+  },
+  "extends": ["airbnb", "prettier", "prettier/react"]
+}
