@@ -8,10 +8,8 @@ const env = process.env.NODE_ENV || 'development';
 import { dbConfig as config } from 'configs/env';
 const db = {};
 
-console.log('the config: ', config);
-console.log('url: ', process.env[config.use_env_variable]);
-
-const sequelize = config.use_env_variable ? new Sequelize(process.env[config.use_env_variable]) : new Sequelize(config.database, config.username, config.password, config);
+// const sequelize = config.use_env_variable ? new Sequelize('mysql://b0b01912f506a5:5dfa5e15@us-cdbr-iron-east-01.cleardb.net/heroku_c3222d52b5d88fc?reconnect=true') : new Sequelize(config.database, config.username, config.password, config);
+const sequelize = new Sequelize('mysql://b0b01912f506a5:5dfa5e15@us-cdbr-iron-east-01.cleardb.net/heroku_c3222d52b5d88fc?reconnect=true');
 
 fs
   .readdirSync(path.join(__dirname, '../../modules/'))
@@ -27,7 +25,6 @@ fs
   });
 
 Object.keys(db).forEach((modelName) => {
-  console.log(db[modelName]);
   if (db[modelName].options.classMethods && db[modelName].options.classMethods.associate) {
     db[modelName].options.classMethods.associate(db);
   }
@@ -36,6 +33,5 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.sequelize.sync();
-
 
 export default db;
