@@ -14,7 +14,7 @@ import { ApolloProvider } from "react-apollo";
 import messages from "./Messages";
 import store from "./store";
 
-import Navigator from "./Navigator";
+import Navigator from "./navigation";
 import { colors } from "./utils/constants";
 
 const theme = {

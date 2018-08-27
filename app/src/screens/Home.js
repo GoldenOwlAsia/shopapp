@@ -56,7 +56,7 @@ class HomeScreen extends Component {
   render() {
     console.log('home render')
     if (this.props.data.loading) {
-      console.log('Loading');
+      console.log("Is loading!");
       return (
         <View>
           <Text>Loading</Text>
@@ -73,11 +73,8 @@ class HomeScreen extends Component {
       );
     }
 
-    console.log("WTF!")
-
     // const shops = this.props.data.allShops;
-    const products = this.props.data.products;
-    console.log('Product list: ', products);
+    const products = [...this.props.data.products, ...this.props.data.products, ...this.props.data.products];
 
     return (
       <Screen>

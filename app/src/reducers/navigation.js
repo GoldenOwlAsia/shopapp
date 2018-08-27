@@ -1,7 +1,6 @@
-import Navigator from '../Navigator';
-
+import Navigator from '../navigation';
 const initialState = Navigator.router.getStateForAction(
-  Navigator.router.getActionForPathAndParams("Main")
+  Navigator.router.getActionForPathAndParams("Auth")
 );
 const navigation = (state = initialState, action) => {
   const newState = Navigator.router.getStateForAction(action, state);

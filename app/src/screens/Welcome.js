@@ -16,11 +16,13 @@ import {
   Icon
 } from "@shoutem/ui";
 import messages from "../Messages";
+import { colors } from "../utils/constants";
 
 const ContainerView = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
+  background-color: ${colors.WHITE};
 `;
 
 const ButtonContainer = styled.View`
