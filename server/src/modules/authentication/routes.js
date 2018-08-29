@@ -1,33 +1,42 @@
-import express from 'express';
-const router = express.Router();
-import AuthController from './authController';
+import {
+  GraphQLString,
+  GraphQLObjectType,
+  GraphQLNonNull
+} from 'graphql';
 
-router.post('/register', (req, res, next) => {
-  return AuthController.register(req, res, next);
+import Controller from './authController';
+import { UserType } from '../users/routes';
+
+const AuthenticationType = new GraphQLObjectType({
+  name: "Authentication",
+  description: "Authentication describle",
+  fields: () => ({
+    token: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    user: { type: UserType }
+  })
 });
 
-router.post('/login', (req, res, next) => {
-  return AuthController.login(req, res, next);
-});
-
-router.post('/logout', (req, res, next) => {
-  return AuthController.logout(req, res, next);
-});
-
-router.post('/forgot-password', (req, res, next) => {
-  return AuthController.forgotPassword(req, res, next);
-});
-
-router.post('/reset-password', (req, res, next) => {
-  return AuthController.resetPassword(req, res, next);
-});
-
-router.put('/verify-account', (req, res, next) => {
-  return AuthController.verifyAccount(req, res, next);
-});
-
-router.put('/refresh-token', (req, res, next) => {
-  return AuthController.refreshToken(req, res, next);
-});
-
-export default router;
+export default {
+  query: {},
+  mutation: {
+    login: {
+      type: AuthenticationType,
+      description: 'Login',
+      args: {
+        username: { type: GraphQLString },
+        password: { type: GraphQLString }
+      },
+      resolve: (_, args) => Controller.login(args)
+    },
+    logout: {
+      type: AuthenticationType,
+      description: 'Logout',
+      args: {
+        token: { type: GraphQLString },
+      },
+      resolve: (_, args) => Controller.logout(args)
+    }
+  }
+}

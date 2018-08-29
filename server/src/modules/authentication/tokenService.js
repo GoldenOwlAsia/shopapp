@@ -5,7 +5,6 @@ const UserToken = models.UserToken;
 import { CreateUserTokenSchema } from './validation';
 import Joi from '../../utils/pjoi';
 import moment from 'moment';
-import { ItemNotFoundError } from '../../utils/errors';
 
 class TokenService {
   createToken(tokenData) {
