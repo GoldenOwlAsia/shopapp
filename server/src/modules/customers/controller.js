@@ -49,22 +49,14 @@ export default {
         phoneNumber: args.phoneNumber,
         gender: args.gender
       };
-      console.log('params: ', params);
-      // customers.push(newCustomer);
+
       CustomerService.createCustomer(params)
         .then(newCustomer => {
           return resolve(newCustomer)
         })
         .catch(err => {
           return reject(err);
-        })
+        });
     });
-    // if (newCustomer.instanceof(Error)) {
-    //   console.log('Get error');
-    //   return 'Get error';
-    // }
-    // console.log('new customer: ', newCustomer);
-
-    // return newCustomer;
   }
 }

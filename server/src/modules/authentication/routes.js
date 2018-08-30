@@ -11,10 +11,9 @@ const AuthenticationType = new GraphQLObjectType({
   name: "Authentication",
   description: "Authentication describle",
   fields: () => ({
-    token: {
+    authToken: {
       type: new GraphQLNonNull(GraphQLString)
-    },
-    user: { type: UserType }
+    }
   })
 });
 

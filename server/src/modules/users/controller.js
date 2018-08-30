@@ -8,8 +8,8 @@ import { resolve } from 'dns';
 
 class UserController {
   createUser(args) {
-    try {
-      return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
+      try {
         UserService.createUser(args)
           .then(user => {
             resolve(UserService.styleUserResponse(user));
@@ -17,11 +17,29 @@ class UserController {
           .catch(err => {
             reject(err);
           });
-      });
-    } catch(err) {
-      next(err);
-    }
+      }
+      catch(err) {
+        reject(err);
+      }
+    });
   };
+
+  getCurrentUser(args) {
+    return new Promise((resolve, reject) => {
+      try {
+        return UserService.getUserById(args.id)
+          .then(user => {
+            return resolve(UserService.styleUserResponse(user));
+          })
+          .catch(err => {
+            return reject(err);
+          });
+      }
+      catch(err) {
+       return reject(err);
+      }
+    });
+  }
 
   getUserById(req, res, next) {
     try {

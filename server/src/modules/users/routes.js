@@ -37,7 +37,16 @@ export const UserType = new GraphQLObjectType({
 });
 
 export default {
-  query: {},
+  query: {
+    currentUser: {
+      type: UserType,
+      description: 'Get current user',
+      args: {
+        token: { type: GraphQLString }
+      },
+      resolve: (_, args) => Controller.getCurrentUser(args)
+    }
+  },
   mutation: {
     createUser: {
       type: UserType,

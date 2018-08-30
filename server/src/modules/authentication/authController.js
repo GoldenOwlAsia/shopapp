@@ -84,8 +84,7 @@ class AuthController {
           .then(jwtToken => {
             console.log('generate token success');
             resolve({
-              user: UserService.styleUserResponse(user),
-              token: jwtToken
+              authToken: jwtToken
             });
           })
           .catch(err => {

@@ -13,7 +13,7 @@ app.get('/', (req, res, next) => {
   res.send('Hello!');
 });
 
-app.all('/api/*', authMiddleware);
+// app.all('/api/*', authMiddleware);
 // app.use('/api', routes);
 
 // Create an express server and a GraphQL endpoint
