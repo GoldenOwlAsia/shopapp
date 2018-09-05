@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     address: {
-      allowNull: false,
+      allowNull: true,
+      defaultValue: '',
       type: DataTypes.STRING
     },
     phoneNumber: {
@@ -20,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     gender: {
-      allowNull: false,
+      allowNull: true,
+      defaultValue: '',
       type: DataTypes.STRING
     },
     createdAt: {

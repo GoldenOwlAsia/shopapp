@@ -55,9 +55,9 @@ export default {
       description: 'Create new customer',
       args: {
         name: { type: GraphQLString },
-        dateOfBirth: { type: GraphQLString },
-        gender: { type: GraphQLString },
-        address: { type: GraphQLString },
+        // dateOfBirth: { type: GraphQLString },
+        // gender: { type: GraphQLString },
+        // address: { type: GraphQLString },
         phoneNumber: { type: GraphQLString }
       },
       resolve: (_, args) => Controller.createCustomer(args)

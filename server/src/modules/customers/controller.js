@@ -44,10 +44,10 @@ export default {
     return new Promise((resolve, reject) => {
       const params = {
         name: args.name,
-        dateOfBirth: args.dateOfBirth,
-        address: args.address,
+        // dateOfBirth: args.dateOfBirth,
+        // address: args.address,
         phoneNumber: args.phoneNumber,
-        gender: args.gender
+        // gender: args.gender
       };
 
       CustomerService.createCustomer(params)
