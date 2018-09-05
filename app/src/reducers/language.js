@@ -1,12 +1,12 @@
 import {
 	LANGUAGE_CHANGE,
-  } from '../actions/types';
+} from '../actions/types';
 
-  const INITIAL_STATE = {
+const INITIAL_STATE = {
 	language: 'en',
-  };
+};
 
-  const Language = (state = INITIAL_STATE, action) => {
+const Language = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 	  case LANGUAGE_CHANGE:
 		return Object.assign({}, state, {
@@ -15,5 +15,5 @@ import {
 	  default:
 		return state;
 	}
-  }
-  export default Language;
+}
+export default Language;

@@ -8,7 +8,7 @@ const store = (extra) => createStore(
   combineReducers({
     ...reducers,
   }),
-  {},
+  extra,
   compose(
     applyMiddleware(thunk, logger),
   )

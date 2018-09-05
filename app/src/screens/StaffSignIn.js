@@ -2,14 +2,19 @@ import React from 'react';
 
 import {
   View,
-  StyleSheet
+  StyleSheet,
+  AsyncStorage
 } from 'react-native';
+
+import { connect } from 'react-redux';
 
 import AuthHeader from '../components/AuthHeader';
 import TextInput from '../components/TextInput';
 import Button from '../components/Button';
 import { ArrowIcon } from '../components/imageUrls';
-import { colors } from "../utils/constants";
+
+import { login } from '../actions/auth';
+import { LOGIN_SUCCESS } from '../actions/types';
 
 const styles = StyleSheet.create({
   container: {
@@ -38,22 +43,24 @@ class SignInScreen extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Staff sign in'
+    title: 'Staff sign in',
   };
 
-  handleSignIn = () => {
-    console.log('handle sign in');
+  handleSignIn = async () => {
+    const result = await this.props.login(this.state.username, this.state.password);
+    if (result.type === LOGIN_SUCCESS) {
+      await AsyncStorage.setItem('authToken', result.payload.authToken);
+      this.props.navigation.navigate("App");
+    }
   }
 
   onChangeUsername = (username) => {
-    console.log('username: ', username);
     this.setState({
       username: username
     });
   }
 
   onChangePassword = (pass) => {
-    console.log('password: ', pass);
     this.setState({
       password: pass
     });
@@ -109,4 +116,14 @@ class SignInScreen extends React.Component {
   }
 }
 
-export default SignInScreen;
+const mapStateToProps = state => ({
+	isAuthenticated: state.isAuthenticated,
+	error: state.error
+});
+
+const mapDispatchToProps = {
+  login
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);

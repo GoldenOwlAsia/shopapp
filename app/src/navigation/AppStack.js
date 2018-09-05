@@ -5,8 +5,6 @@ import {
 } from 'react-navigation'
 
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-
-import WelcomeScreen from "../screens/Welcome";
 import HomeScreen from '../screens/Home';
 import ProfileScreen from '../screens/Profile';
 import MapScreen from '../screens/Map';
@@ -21,7 +19,7 @@ const HomeStack = createStackNavigator({
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'Products',
   tabBarIcon: ({ tintColor }) => (
     <FontAwesome name="home" size={23} color={tintColor} />
   ),
@@ -46,18 +44,34 @@ const MapStack = createStackNavigator({
 });
 
 MapStack.navigationOptions = {
-  tabBarLabel: "Nearby",
+  tabBarLabel: "Cart",
   tabBarIcon: ({ tintColor }) => (
     <FontAwesome name="map" size={23} color={tintColor} />
   ),
-  // drawerLabel: "Nearby",
+  tabBarOnPress: ({ navigation, defaultHandler }) => {
+    if (navigation.isFocused()) {
+      // Do nothing
+    } else {
+      let parentNavigation = navigation.dangerouslyGetParent();
+      let prevRoute = parentNavigation.state.routes[parentNavigation.state.index];
+      let nextRoute = navigation.state;
+      const route = prevRoute.routes && prevRoute.routes[0]
+      if (route && (route.params || {}).handler) {
+        route.params.handler();
+      } else {
+        defaultHandler();
+      }
+    } 
+    // handler();
+  },
+  // drawerLabel: "Cart",
   // drawerIcon: ({ tintColor }) => (
   //   <FontAwesome name="map" size={23} color={tintColor} />
   // ),
   // headerStyle: {
   //   backgroundColor: colors.BLUE_100
   // },
-  // headerTitle: "Nearby",
+  // headerTitle: "Cart",
   // headerTitleStyle: {
   //   color: colors.WHITE
   // },

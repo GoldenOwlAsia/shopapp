@@ -2,9 +2,6 @@ import React from 'react';
 import {
   createStackNavigator
 } from 'react-navigation';
-
-import { colors } from '../utils/constants';
-import { HamburgerIcon, SettingsIcon, BackIcon } from '../components/icons';
 import StaffSignInScreen from '../screens/StaffSignIn';
 import ChooseUserTypeScreen from '../screens/ChooseUser';
 

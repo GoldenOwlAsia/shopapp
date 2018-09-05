@@ -13,8 +13,11 @@ import { PropTypes } from 'prop-types';
 
 const styles = StyleSheet.create({
   wrapper: {
-    padding: 15,
-    backgroundColor: '#F6F6F8'
+    padding: 10,
+    backgroundColor: '#F6F6F8',
+  },
+  text: {
+    width: '100%'
   }
 });
 
@@ -32,8 +35,10 @@ class NormalTextInput extends Component {
   render() {
     return (
       <KeyboardAvoidingView style={[styles.wrapper, this.props.wrapperStyle]} behavior="padding" enabled>
-        {this.props.label && <Text>{this.props.label}</Text>}
+        {!!this.props.label && <Text>{this.props.label}</Text>}
         <TextInput
+          style={[styles.text, this.props.style]}
+          underlineColorAndroid="transparent"
           {...this.props}
         />
       </KeyboardAvoidingView>
@@ -42,9 +47,9 @@ class NormalTextInput extends Component {
 }
 
 NormalTextInput.propTypes = {
-  onChange: PropTypes.func.required,
   placeholder: PropTypes.string,
-  value: PropTypes.string
+  value: PropTypes.string,
+  wrapperStyle: PropTypes.object
 }
 
 // skip this line if using Create React Native App

@@ -1,3 +1,0 @@
-const PREFIX = 'PRODUCT.';
-
-export const GET_PRODUCTS = `${PREFIX}GET_ALL_PRODUCTS`;

@@ -55,7 +55,7 @@ class Button extends Component {
         ]}
       >
         {
-          this.props.leftIcon && <Image
+          !!this.props.leftIcon && <Image
             style={styles.leftIcon}
             source={this.props.leftIcon}
           />
@@ -64,7 +64,7 @@ class Button extends Component {
           {text}
         </Text>
         {
-          this.props.rightIcon && <Image
+          !!this.props.rightIcon && <Image
             style={styles.rightIcon}
             source={this.props.rightIcon}
           />
