@@ -7,7 +7,7 @@ import {
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import HomeScreen from '../screens/Home';
 import ProfileScreen from '../screens/Profile';
-import MapScreen from '../screens/Map';
+import CheckoutScreen from '../screens/Checkout';
 
 import { HamburgerIcon, SettingsIcon, BackIcon } from '../components/icons';
 
@@ -39,16 +39,17 @@ HomeStack.navigationOptions = {
   // )
 };
 
-const MapStack = createStackNavigator({
-  Map: MapScreen,
+const CheckoutStack = createStackNavigator({
+  Checkout: CheckoutScreen,
 });
 
-MapStack.navigationOptions = {
+CheckoutStack.navigationOptions = {
   tabBarLabel: "Cart",
   tabBarIcon: ({ tintColor }) => (
     <FontAwesome name="map" size={23} color={tintColor} />
   ),
   tabBarOnPress: ({ navigation, defaultHandler }) => {
+    // defaultHandler();
     if (navigation.isFocused()) {
       // Do nothing
     } else {
@@ -62,8 +63,8 @@ MapStack.navigationOptions = {
         defaultHandler();
       }
     } 
-    // handler();
   },
+  tabBarVisible: false,
   // drawerLabel: "Cart",
   // drawerIcon: ({ tintColor }) => (
   //   <FontAwesome name="map" size={23} color={tintColor} />
@@ -110,6 +111,6 @@ ProfileStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  MapStack,
+  CheckoutStack,
   ProfileStack,
 });

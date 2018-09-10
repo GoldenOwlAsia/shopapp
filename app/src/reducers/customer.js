@@ -14,7 +14,7 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case CREATE_CUSTOMER_SUCCESS:
-      return { ...state, list: [...state.list, action.payload] }
+      return { ...state, list: [...state.list, action.payload], selectedCustomer: action.payload.id }
     default:
       return state
   }

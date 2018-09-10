@@ -21,8 +21,207 @@ import TextInput from '../components/TextInput';
 
 import { getAllProducts } from '../actions/product';
 import { createCustomer } from '../actions/customer';
+import { createOrder } from '../actions/order';
 import { colors } from "../utils/constants";
 import { CREATE_CUSTOMER_SUCCESS } from "../actions/types";
+
+class HomeScreen extends Component {
+  static navigatorStyle = {
+    drawUnderNavBar: true,
+    navBarTranslucent: true
+  };
+
+  static getDerivedStateFromProps= (props, state) => {
+    state.products = props.products.map((item) => ({ ...item, quantity: 0}));
+  };
+
+  static navigationOptions = ({ navigation }) => ({
+    title: `${(navigation.state.params || {}).title || 'Product list'}`,
+    headerRight: (
+      <TouchableOpacity onPress={() => console.log('right clicked')}>
+        <Image
+          style={styles.headerRightIcon}
+          source={Squares}
+        />
+      </TouchableOpacity>
+    ),
+    headerLeft: (
+      <TouchableOpacity onPress={() => console.log('left clicked')}>
+        <Image
+          style={styles.headerLeftIcon}
+          source={Hamburger}
+        />
+      </TouchableOpacity>
+    )
+  });
+
+  constructor(props) {
+    super(props);
+    this.props.getAllProducts();
+    this.state = {
+      searchKeyword: '',
+      customerName: '',
+      customerPhoneNumber: '',
+      isOpenCreateCustomerModal: false
+    };
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({ handler: this.openModal });
+  }
+
+  openModal = () => {
+    this.setModalVisible(true);
+  }
+  
+  closeModal = () => {
+    this.setModalVisible(false);
+  }
+
+  _keyExtractor = (item, index) => item.id
+
+  onChangeSearhKeyword = (keyword) => {
+    this.setState({
+      searchKeyword: keyword
+    });
+  }
+
+  onChangeCustomerName = (text) => this.setState({ customerName: text });
+  onChangeCustomerPhone = (text) => this.setState({ customerPhoneNumber: text });
+
+  onItemPress(itemId) {
+    console.log('on item pressed');
+  }
+
+  increaseBuyNumber = (index) => {
+    const products = this.state.products;
+    let item = products[index];
+    item.quantity++;
+    products[index] = item;
+    this.setState({
+      products
+    });
+  }
+
+  decreaseBuyNumber = (index) => {
+    const products = this.state.products;
+    let item = products[index];
+    item.quantity--;
+    if (item.quantity < 0) {
+      item.quantity = 0;
+    }
+    products[index] = item;
+    this.setState({
+      products
+    });
+  }
+
+  setModalVisible = (isOpen) => {
+    this.setState({isOpenCreateCustomerModal: isOpen});
+  }
+
+  handleCreateCustomer = async () => {
+    const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
+    const result = await this.props.createCustomer(this.state.customerName, this.state.customerPhoneNumber);
+    if (result.type === CREATE_CUSTOMER_SUCCESS) {
+      this.closeModal();
+      this.props.createOrder(this.props.customer, selectedProducts);
+      this.props.navigation.navigate("Checkout");
+    }
+  }
+
+  renderRow = (params) => {
+    let item  =  {...params.item};
+    item.index = params.index;
+    item.image = 'http://www.gravityimprint.com/images/large/nike%20shoes%20for%20men-436oip.jpg';
+    item.status = 'Available';
+
+    return (
+      <TouchableOpacity key={item.index} onPress={this.onItemPress} style={styles.itemWrapper}>
+        <Image
+          style={styles.itemImage}
+          source={{uri: item.image}}
+        />
+        <View style={styles.itemInformation}>
+          <Text style={styles.itemTitle}>{item.name}</Text>
+          <Text style={styles.itemCategory}>{item.category}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.itemPrice}>{item.price} VND</Text>
+            <Text style={styles.itemStatus}>{item.status}</Text>
+          </View>
+          <View style={styles.itemActionsWrapper}>
+            <TouchableHighlight onPress={() => this.decreaseBuyNumber(item.index)} style={styles.itemAction}>
+              <Text>-</Text>
+            </TouchableHighlight>
+            <View style={styles.itemAction}>
+              <Text>{item.quantity}</Text>
+            </View>
+            <TouchableHighlight onPress={() => this.increaseBuyNumber(item.index)} style={styles.itemAction}>
+              <Text>+</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
+  render() {
+    return (
+      <View style={styles.pageWrapper}>
+        <View style={[styles.searchWrapper, styles.container]}>
+          <TextInput
+            wrapperStyle={{marginTop: 15}}
+            placeholder="Search"
+            value={this.state.searchKeyword}
+            onChangeText={this.onChangeSearhKeyword}
+          />
+        </View>
+        <FlatList contentContainerStyle={{paddingLeft: 15, paddingRight: 15}} data={this.state.products} renderItem={this.renderRow} keyExtractor={this._keyExtractor}/>
+        <Modal
+          animationType="slide"
+          visible={this.state.isOpenCreateCustomerModal}
+          transparent={true}
+          onRequestClose={this.closeModal}>
+          <View style={styles.modalContainer}>
+            <View style={styles.contentContainer}>
+              <View style={styles.modalTitle}>
+                <Text style={styles.modalTitleText}>New customer</Text>
+              </View>
+              <View style={styles.createCustomerForm}>
+                <TextInput
+                  wrapperStyle={styles.textInput}
+                  placeholder="Customer's name"
+                  value={this.state.customerName}
+                  onChangeText={this.onChangeCustomerName}
+                />
+                <TextInput
+                  wrapperStyle={styles.textInput}
+                  placeholder="Phone number"
+                  value={this.state.customerPhoneNumber}
+                  onChangeText={this.onChangeCustomerPhone}
+                />
+                <View style={styles.buttonsWrapper}>
+                  <Button
+                    text="New customer"
+                    primary
+                    centerText
+                    onPress={this.handleCreateCustomer}
+                  />
+                  <Button
+                    text="No, do it later"
+                    centerText
+                    textStyle={{color: 'black'}}
+                    onPress={this.closeModal}
+                  />
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   headerRightIcon: {
@@ -133,211 +332,17 @@ const styles = StyleSheet.create({
   }
 });
 
-class HomeScreen extends Component {
-  static navigatorStyle = {
-    drawUnderNavBar: true,
-    navBarTranslucent: true
-  };
-
-  static getDerivedStateFromProps= (props, state) => {
-    state.products = props.products.map((item) => ({ ...item, quantity: 0}));
-  };
-
-  static navigationOptions = ({ navigation }) => ({
-    title: `${(navigation.state.params || {}).title || 'Product list'}`,
-    headerRight: (
-      <TouchableOpacity onPress={() => console.log('right clicked')}>
-        <Image
-          style={styles.headerRightIcon}
-          source={Squares}
-        />
-      </TouchableOpacity>
-    ),
-    headerLeft: (
-      <TouchableOpacity onPress={() => console.log('left clicked')}>
-        <Image
-          style={styles.headerLeftIcon}
-          source={Hamburger}
-        />
-      </TouchableOpacity>
-    )
-  });
-
-  constructor(props) {
-    super(props);
-    this.props.getAllProducts();
-    this.state = {
-      searchKeyword: '',
-      customerName: '',
-      customerPhoneNumber: '',
-      isOpenCreateCustomerModal: false
-    };
-  }
-
-  componentDidMount() {
-    this.props.navigation.setParams({ handler: this.openModal });
-  }
-
-  openModal = () => {
-    this.setModalVisible(true);
-  }
-  
-  closeModal = () => {
-    this.setModalVisible(false);
-  }
-
-  _keyExtractor = (item, index) => item.id
-
-  onChangeSearhKeyword = (keyword) => {
-    this.setState({
-      searchKeyword: keyword
-    });
-  }
-
-  onChangeCustomerName = (text) => this.setState({ customerName: text });
-  onChangeCustomerPhone = (text) => this.setState({ customerPhoneNumber: text });
-
-  onItemPress(itemId) {
-    console.log('on item pressed');
-  }
-
-  increaseBuyNumber = (index) => {
-    const products = this.state.products;
-    let item = products[index];
-    item.quantity++;
-    products[index] = item;
-    this.setState({
-      products
-    });
-  }
-
-  decreaseBuyNumber = (index) => {
-    const products = this.state.products;
-    let item = products[index];
-    item.quantity--;
-    if (item.quantity < 0) {
-      item.quantity = 0;
-    }
-    products[index] = item;
-    this.setState({
-      products
-    });
-  }
-
-  setModalVisible = (isOpen) => {
-    this.setState({isOpenCreateCustomerModal: isOpen});
-  }
-
-  handleCreateCustomer = async () => {
-    const result = await this.props.createCustomer(this.state.customerName, this.state.customerPhoneNumber);
-    if (result.type === CREATE_CUSTOMER_SUCCESS) {
-      this.closeModal();
-      this.props.navigation.navigate("Map");
-    }
-  }
-
-  renderRow = (params) => {
-    let item  =  {...params.item};
-    item.index = params.index;
-    item.image = 'http://www.gravityimprint.com/images/large/nike%20shoes%20for%20men-436oip.jpg';
-    item.status = 'Available';
-
-    return (
-      <TouchableOpacity key={item.index} onPress={this.onItemPress} style={styles.itemWrapper}>
-        <Image
-          style={styles.itemImage}
-          source={{uri: item.image}}
-        />
-        <View style={styles.itemInformation}>
-          <Text style={styles.itemTitle}>{item.name}</Text>
-          <Text style={styles.itemCategory}>{item.category}</Text>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={styles.itemPrice}>{item.price} VND</Text>
-            <Text style={styles.itemStatus}>{item.status}</Text>
-          </View>
-          <View style={styles.itemActionsWrapper}>
-            <TouchableHighlight onPress={() => this.decreaseBuyNumber(item.index)} style={styles.itemAction}>
-              <Text>-</Text>
-            </TouchableHighlight>
-            <View style={styles.itemAction}>
-              <Text>{item.quantity}</Text>
-            </View>
-            <TouchableHighlight onPress={() => this.increaseBuyNumber(item.index)} style={styles.itemAction}>
-              <Text>+</Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  }
-
-  render() {
-    return (
-      <View style={styles.pageWrapper}>
-        <View style={[styles.searchWrapper, styles.container]}>
-          <TextInput
-            wrapperStyle={{marginTop: 15}}
-            placeholder="Search"
-            value={this.state.searchKeyword}
-            onChangeText={this.onChangeSearhKeyword}
-          />
-        </View>
-        <FlatList contentContainerStyle={{paddingLeft: 15, paddingRight: 15}} data={this.state.products} renderItem={this.renderRow} keyExtractor={this._keyExtractor}/>
-        <Modal
-          animationType="slide"
-          visible={this.state.isOpenCreateCustomerModal}
-          transparent={true}
-          onRequestClose={this.closeModal}>
-          <View style={styles.modalContainer}>
-            <View style={styles.contentContainer}>
-              <View style={styles.modalTitle}>
-                <Text style={styles.modalTitleText}>New customer</Text>
-              </View>
-              <View style={styles.createCustomerForm}>
-                <TextInput
-                  wrapperStyle={styles.textInput}
-                  placeholder="Customer's name"
-                  value={this.state.customerName}
-                  onChangeText={this.onChangeCustomerName}
-                />
-                <TextInput
-                  wrapperStyle={styles.textInput}
-                  placeholder="Phone number"
-                  value={this.state.customerPhoneNumber}
-                  onChangeText={this.onChangeCustomerPhone}
-                />
-                <View style={styles.buttonsWrapper}>
-                  <Button
-                    text="New customer"
-                    primary
-                    centerText
-                    onPress={this.handleCreateCustomer}
-                  />
-                  <Button
-                    text="No, do it later"
-                    centerText
-                    textStyle={{color: 'black'}}
-                    onPress={this.closeModal}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-        </Modal>
-      </View>
-    );
-  }
-}
-
 const mapStateToProps = state => {
   return {
-	  products: state.Product.products
+    products: state.Product.products,
+    customer: state.Customer.selectedCustomer,
   }
 };
 
 const mapDispatchToProps = {
   getAllProducts,
-  createCustomer
+  createCustomer,
+  createOrder
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

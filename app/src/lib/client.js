@@ -28,7 +28,8 @@ import { AsyncStorage } from 'react-native';
 const cache = new InMemoryCache();
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: 'https://shop-app-backend.herokuapp.com/graphql'
+    // uri: 'https://shop-app-backend.herokuapp.com/graphql'
+    uri: 'http://192.168.11.109:3001/graphql'
   }),
   cache
 });
