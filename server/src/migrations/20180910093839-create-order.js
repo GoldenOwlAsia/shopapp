@@ -21,15 +21,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       subTotal: {
-        allowNull: false,
+        allowNull: true,
+        default: 0,
         type: Sequelize.DOUBLE(10,2),
       },
       tax: {
-        allowNull: false,
+        allowNull: true,
+        default: 0,
         type: Sequelize.DOUBLE(10,2),
       },
       grandTotal: {
-        allowNull: false,
+        allowNull: true,
+        default: 0,
         type: Sequelize.DOUBLE(10,2),
       },
       createdAt: {
