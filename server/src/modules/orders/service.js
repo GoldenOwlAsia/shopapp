@@ -6,7 +6,12 @@ const Order = models.Order;
 class OrderService {
   createOrder(newOrder) {
     return new Promise((resolve, reject) => {
-      Order.create(newOrder)
+      let { items } = newOrder;
+      if (typeof items !== 'string') {
+        items = JSON.stringify(items);
+      }
+
+      Order.create({ ...newOrder, items })
         .then(createdOrder => {
           resolve(createdOrder);
         })
@@ -26,6 +31,17 @@ class OrderService {
           reject(err);
         });
     });
+  }
+
+  styledOrder(order) {
+    let items = order.items;
+    if (typeof items === 'string') {
+      items = JSON.parse(items);
+    }
+    return {
+      ...order,
+      items: items
+    };
   }
 }
 

@@ -27,7 +27,7 @@ export default {
           return OrderService.getOrderByQuery(query);
         })
         .then(result => {
-          return resolve(result[0].toJSON());
+          return resolve(OrderService.styledOrder(result[0].toJSON()));
         })
         .catch(err => {
           return reject(err);
