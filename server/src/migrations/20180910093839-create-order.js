@@ -22,15 +22,15 @@ module.exports = {
       },
       subTotal: {
         allowNull: false,
-        type: Sequelize.DOUBLE,
+        type: Sequelize.FLOAT,
       },
       tax: {
         allowNull: false,
-        type: Sequelize.DOUBLE,
+        type: Sequelize.FLOAT,
       },
       grandTotal: {
         allowNull: false,
-        type: Sequelize.DOUBLE,
+        type: Sequelize.FLOAT,
       },
       createdAt: {
         allowNull: false,
