@@ -21,15 +21,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     subTotal: {
       allowNull: false,
-      type: DataTypes.DECIMAL,
+      type: DataTypes.DOUBLE(10,2),
     },
     tax: {
       allowNull: false,
-      type: DataTypes.DECIMAL,
+      type: DataTypes.DOUBLE(10,2),
     },
     grandTotal: {
       allowNull: false,
-      type: DataTypes.DECIMAL,
+      type: DataTypes.DOUBLE(10,2),
     },
     createdAt: {
       allowNull: false,
