@@ -21,19 +21,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       subTotal: {
-        allowNull: true,
-        default: 0,
-        type: Sequelize.DOUBLE(10,2),
+        allowNull: false,
+        type: Sequelize.INTEGER,
       },
       tax: {
-        allowNull: true,
-        default: 0,
-        type: Sequelize.DOUBLE(10,2),
+        allowNull: false,
+        type: Sequelize.INTEGER,
       },
       grandTotal: {
-        allowNull: true,
-        default: 0,
-        type: Sequelize.DOUBLE(10,2),
+        allowNull: false,
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,

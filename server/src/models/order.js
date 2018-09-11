@@ -20,19 +20,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     subTotal: {
-      allowNull: true,
-      default: 0,
-      type: DataTypes.DOUBLE(10,2),
+      allowNull: false,
+      type: DataTypes.INTEGER,
     },
     tax: {
-      allowNull: true,
-      default: 0,
-      type: DataTypes.DOUBLE(10,2),
+      allowNull: false,
+      type: DataTypes.INTEGER,
     },
     grandTotal: {
-      allowNull: true,
-      default: 0,
-      type: DataTypes.DOUBLE(10,2),
+      allowNull: false,
+      type: DataTypes.INTEGER,
     },
     createdAt: {
       allowNull: false,
