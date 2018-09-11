@@ -8,7 +8,7 @@ import {
 
 import Controller from './controller';
 
-const CustomerType = new GraphQLObjectType({
+export const CustomerType = new GraphQLObjectType({
   name: "Customer",
   description: "This represent an customer",
   fields: () => ({

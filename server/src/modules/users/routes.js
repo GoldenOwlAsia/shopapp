@@ -24,6 +24,9 @@ export const UserType = new GraphQLObjectType({
     gender: {
       type: new GraphQLNonNull(GraphQLString)
     },
+    username: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
     dateOfBirth: {
       type: GraphQLString
     },

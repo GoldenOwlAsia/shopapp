@@ -47,9 +47,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.DATE
     }
-  }, {});
+  }, {
+    raw: true,
+  });
   User.associate = function(models) {
-    // associations can be defined here
+    this.hasMany(models.Order, {foreignKey: 'createdBy', as: 'orders'})
   };
   return User;
 };
