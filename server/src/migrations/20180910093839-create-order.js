@@ -14,7 +14,7 @@ module.exports = {
       },
       items: {
         allowNull: false,
-        type: Sequelize.JSON,
+        type: Sequelize.INTEGER,
       },
       customerId: {
         allowNull: false,
@@ -22,15 +22,15 @@ module.exports = {
       },
       subTotal: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.DOUBLE,
       },
       tax: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.DOUBLE,
       },
       grandTotal: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.DOUBLE,
       },
       createdAt: {
         allowNull: false,

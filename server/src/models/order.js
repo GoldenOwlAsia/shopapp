@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     items: {
       allowNull: false,
-      type: DataTypes.JSON,
+      type: DataTypes.INTEGER,
     },
     customerId: {
       allowNull: false,
@@ -21,15 +21,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     subTotal: {
       allowNull: false,
-      type: DataTypes.INTEGER,
+      type: DataTypes.DOUBLE,
     },
     tax: {
       allowNull: false,
-      type: DataTypes.INTEGER,
+      type: DataTypes.DOUBLE,
     },
     grandTotal: {
       allowNull: false,
-      type: DataTypes.INTEGER,
+      type: DataTypes.DOUBLE,
     },
     createdAt: {
       allowNull: false,
