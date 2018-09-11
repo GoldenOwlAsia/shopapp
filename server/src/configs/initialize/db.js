@@ -7,10 +7,7 @@ const basename = path.basename(module.filename);
 const env = process.env.NODE_ENV || 'development';
 import { dbConfig as config } from 'configs/env';
 const db = {};
-
 const sequelize = config.use_env_variable ? new Sequelize(process.env[config.use_env_variable]) : new Sequelize(config.database, config.username, config.password, config);
-// const sequelize = new Sequelize('mysql://b0b01912f506a5:5dfa5e15@us-cdbr-iron-east-01.cleardb.net/heroku_c3222d52b5d88fc?reconnect=true');
-
 fs
   .readdirSync(path.join(__dirname, '../../modules/'))
   .forEach((file) => {
