@@ -71,7 +71,16 @@ class HomeScreen extends Component {
   }
 
   openModal = () => {
-    this.setModalVisible(true);
+    const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
+    if (!selectedProducts.length) {
+      alert('Please select products');
+      return;
+    } 
+    if (!this.props.selectedCustomer) {
+      this.setModalVisible(true);
+    } else {
+      this.props.navigation.navigate("Checkout");
+    }
   }
   
   closeModal = () => {
@@ -125,7 +134,7 @@ class HomeScreen extends Component {
     const result = await this.props.createCustomer(this.state.customerName, this.state.customerPhoneNumber);
     if (result.type === CREATE_CUSTOMER_SUCCESS) {
       this.closeModal();
-      this.props.createOrder(this.props.customer, selectedProducts);
+      this.props.createOrder(this.props.selectedCustomer, selectedProducts);
       this.props.navigation.navigate("Checkout");
     }
   }
@@ -335,7 +344,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     products: state.Product.products,
-    customer: state.Customer.selectedCustomer,
+    selectedCustomer: state.Customer.selectedCustomer,
   }
 };
 

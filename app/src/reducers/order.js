@@ -3,6 +3,8 @@ import {
   REMOVE_ITEM,
   INCREASE_ITEM_QUANTITY,
   DECREASE_ITEM_QUANTITY,
+  CHECKOUT_SUCCESS,
+  CHECKOUT_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -51,6 +53,13 @@ export default (state = initialState, action) => {
       items[itemIndex] = item;
       list[customerId] = [...items];
       return { ...state, list }
+    }
+    case CHECKOUT_SUCCESS: {
+      delete state.list[action.payload.customer.id];
+      return { ...state };
+    }
+    case CHECKOUT_FAIL: {
+      return state;
     }
     default: 
       return state;

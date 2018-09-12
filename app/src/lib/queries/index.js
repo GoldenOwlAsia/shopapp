@@ -1,7 +1,6 @@
-import ShopQuery from "./shops";
-
 import { GetAllProducts } from './products';
 import { Login } from './authentication';
 import { CreateCustomer } from './customers';
+import { Checkout } from  './order';
 
-export { ShopQuery, GetAllProducts, Login, CreateCustomer };
+export { GetAllProducts, Login, CreateCustomer, Checkout };

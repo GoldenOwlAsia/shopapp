@@ -16,13 +16,15 @@ import { BackArrow, UpArrow, DownArrow, Trash } from '../components/imageUrls';
 import Button from '../components/Button';
 import SlideDownView from '../components/SlideDownView';
 
-import { removeItemFormOrder, increaseItemQuantity, decreaseItemQuantity } from '../actions/order';
+import { removeItemFormOrder, increaseItemQuantity, decreaseItemQuantity, checkout } from '../actions/order';
+import { CHECKOUT_SUCCESS } from "../actions/types";
+import { clearSelectedCustomer } from '../actions/customer';
 
 class CheckOutScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Checkout',
     headerLeft: (
-      <TouchableOpacity onPress={() => this.handleGoBack}>
+      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
         <Image
           style={styles.headerLeftIcon}
           source={BackArrow}
@@ -38,29 +40,33 @@ class CheckOutScreen extends Component {
     this.itemRefs = new Array(items.length);
     this.state = {
       tax: 0,
-      // items,
       customer,
     };
   }
 
-  handleGoBack = () => {
-    console.log('Go back!');
-  }
+  handleCheckout = async () => {
+    let items = this.props.orders[this.props.selectedCustomer].map((item) => {delete item.__typename; return item;});
+    const subTotal = this.calculateSubTotal(items);
+    const tax = this.calculateTax(subTotal);
+    const grandTotal = this.calculateGrandTotal(subTotal, tax)
 
-  handleCheckout = () => {
-    console.log('Checkout button pressed!');
+    let params = {
+      items,
+      subTotal,
+      tax,
+      grandTotal,
+      createdBy: 1,
+      customerId: this.state.customer.id
+    }
+
+    const result = await this.props.checkout(params);
+    if (result.type === CHECKOUT_SUCCESS) {
+      this.props.clearSelectedCustomer();
+      this.props.navigation.navigate('Home');
+    }
   }
 
   decreaseQuantity = (item, index) => {
-    // const items = [...this.state.items];
-    // item.quantity--;
-    // if (item.quantity < 0) {
-    //   item.quantity = 0;
-    // }
-    // items[index] = item;
-    // this.setState({
-    //   items
-    // });
     this.props.decreaseItemQuantity(this.props.selectedCustomer, item.id);
   }
 
@@ -92,12 +98,6 @@ class CheckOutScreen extends Component {
 
   toggleItemDetail = (index) => {
     const ref = this.itemRefs[index];
-
-    // const items = [...this.props.orders[this.state.customer.id]];
-    // items[index].isOpenQuantity = !items[index].isOpenQuantity;
-    // this.setState({
-    //   items
-    // });
     ref.toggleOpen();
   }
 
@@ -170,8 +170,8 @@ class CheckOutScreen extends Component {
               <Text>{subTotal}</Text>
             </View>
             <View style={styles.row}>
-              <Text style={styles.label}>Tax: {taxAmount}</Text>
-              <Text>{subTotal}</Text>
+              <Text style={styles.label}>Tax: </Text>
+              <Text>{taxAmount}</Text>
             </View>
             <View style={styles.row}>
               <Text style={[styles.label, styles.grandTotal]}>Grand total:</Text>
@@ -317,7 +317,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   increaseItemQuantity,
   decreaseItemQuantity,
-  removeItemFormOrder
+  removeItemFormOrder,
+  checkout,
+  clearSelectedCustomer
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CheckOutScreen);
