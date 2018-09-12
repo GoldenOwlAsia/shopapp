@@ -20,9 +20,11 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontSize: 16,
-    marginLeft: 15,
     color: colors.WHITE,
     flex: 1
+  },
+  marginLeft15: {
+    marginLeft: 15,
   },
   btnCenterText: {
     alignItems: 'center',
@@ -60,7 +62,7 @@ class Button extends Component {
             source={this.props.leftIcon}
           />
         }
-        <Text style={[styles.btnText, this.props.centerText ? styles.btnCenterText : {}, this.props.textStyle]}>
+        <Text style={[styles.btnText, this.props.centerText ? styles.btnCenterText : marginLeft15, this.props.textStyle]}>
           {text}
         </Text>
         {

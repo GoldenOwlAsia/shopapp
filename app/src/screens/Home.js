@@ -18,6 +18,7 @@ import {
 } from '../components/imageUrls';
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
+import NewCustomerModal from '../components/NewCustomerModal';
 
 import { getAllProducts } from '../actions/product';
 import { createCustomer } from '../actions/customer';
@@ -129,9 +130,9 @@ class HomeScreen extends Component {
     this.setState({isOpenCreateCustomerModal: isOpen});
   }
 
-  handleCreateCustomer = async () => {
+  handleCreateCustomer = async (params) => {
     const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
-    const result = await this.props.createCustomer(this.state.customerName, this.state.customerPhoneNumber);
+    const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
     if (result.type === CREATE_CUSTOMER_SUCCESS) {
       this.closeModal();
       this.props.createOrder(this.props.selectedCustomer, selectedProducts);
@@ -139,14 +140,9 @@ class HomeScreen extends Component {
     }
   }
 
-  renderRow = (params) => {
-    let item  =  {...params.item};
-    item.index = params.index;
-    item.image = 'http://www.gravityimprint.com/images/large/nike%20shoes%20for%20men-436oip.jpg';
-    item.status = 'Available';
-
+  renderRow = ({item, index}) => {
     return (
-      <TouchableOpacity key={item.index} onPress={this.onItemPress} style={styles.itemWrapper}>
+      <TouchableOpacity key={index} onPress={this.onItemPress} style={styles.itemWrapper}>
         <Image
           style={styles.itemImage}
           source={{uri: item.image}}
@@ -159,13 +155,13 @@ class HomeScreen extends Component {
             <Text style={styles.itemStatus}>{item.status}</Text>
           </View>
           <View style={styles.itemActionsWrapper}>
-            <TouchableHighlight onPress={() => this.decreaseBuyNumber(item.index)} style={styles.itemAction}>
+            <TouchableHighlight onPress={() => this.decreaseBuyNumber(index)} style={styles.itemAction}>
               <Text>-</Text>
             </TouchableHighlight>
             <View style={styles.itemAction}>
               <Text>{item.quantity}</Text>
             </View>
-            <TouchableHighlight onPress={() => this.increaseBuyNumber(item.index)} style={styles.itemAction}>
+            <TouchableHighlight onPress={() => this.increaseBuyNumber(index)} style={styles.itemAction}>
               <Text>+</Text>
             </TouchableHighlight>
           </View>
@@ -186,7 +182,7 @@ class HomeScreen extends Component {
           />
         </View>
         <FlatList contentContainerStyle={{paddingLeft: 15, paddingRight: 15}} data={this.state.products} renderItem={this.renderRow} keyExtractor={this._keyExtractor}/>
-        <Modal
+        {/* <Modal
           animationType="slide"
           visible={this.state.isOpenCreateCustomerModal}
           transparent={true}
@@ -226,7 +222,12 @@ class HomeScreen extends Component {
               </View>
             </View>
           </View>
-        </Modal>
+        </Modal> */}
+        <NewCustomerModal
+          isOpen={this.state.isOpenCreateCustomerModal}
+          onSubmit={this.handleCreateCustomer}
+          onRequestClose={this.closeModal}
+        />
       </View>
     );
   }
@@ -295,50 +296,50 @@ const styles = StyleSheet.create({
   searchWrapper: {
     marginBottom: 15
   },
-  modalContainer: {
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    backgroundColor: '#00000063',
-    height: '100%'
-  },
-  contentContainer: {
-    backgroundColor: colors.WHITE,
-    height: 320,
-    width: '100%',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    justifyContent: 'center',
-    flexDirection: 'column'
-  },
-  modalTitle: {
-    borderBottomWidth: 1,
-    flexDirection: 'column',
-    borderBottomColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 70
-  },
-  modalTitleText: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    marginTop: 15
-  },
-  createCustomerForm: {
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    paddingLeft: 20,
-    paddingRight: 20
-  },
-  textInput: {
-    marginTop: 20,
-    height: 50
-  },
-  buttonsWrapper: {
-    marginTop: 20,
-    marginBottom: 20,
-    flexWrap: 'wrap'
-  }
+  // modalContainer: {
+  //   flexDirection: 'column',
+  //   justifyContent: 'flex-end',
+  //   alignItems: 'flex-end',
+  //   backgroundColor: '#00000063',
+  //   height: '100%'
+  // },
+  // contentContainer: {
+  //   backgroundColor: colors.WHITE,
+  //   height: 320,
+  //   width: '100%',
+  //   borderTopLeftRadius: 25,
+  //   borderTopRightRadius: 25,
+  //   justifyContent: 'center',
+  //   flexDirection: 'column'
+  // },
+  // modalTitle: {
+  //   borderBottomWidth: 1,
+  //   flexDirection: 'column',
+  //   borderBottomColor: 'black',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   height: 70
+  // },
+  // modalTitleText: {
+  //   fontWeight: 'bold',
+  //   fontSize: 18,
+  //   marginTop: 15
+  // },
+  // createCustomerForm: {
+  //   flexDirection: 'column',
+  //   flexWrap: 'wrap',
+  //   paddingLeft: 20,
+  //   paddingRight: 20
+  // },
+  // textInput: {
+  //   marginTop: 20,
+  //   height: 50
+  // },
+  // buttonsWrapper: {
+  //   marginTop: 20,
+  //   marginBottom: 20,
+  //   flexWrap: 'wrap'
+  // }
 });
 
 const mapStateToProps = state => {

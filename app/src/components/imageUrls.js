@@ -8,3 +8,4 @@ export const BackArrow = require('../../assets/images/back-arrow.png');
 export const UpArrow = require('../../assets/images/up-arrow.png');
 export const DownArrow = require('../../assets/images/down-arrow.png');
 export const Trash = require('../../assets/images/trash.png');
+export const PlusIcon = require('../../assets/images/plus.png');

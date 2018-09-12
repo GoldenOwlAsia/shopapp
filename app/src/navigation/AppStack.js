@@ -6,7 +6,7 @@ import {
 
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import HomeScreen from '../screens/Home';
-import ProfileScreen from '../screens/Profile';
+import CustomersScreen from '../screens/Customers';
 import CheckoutScreen from '../screens/Checkout';
 
 import { HamburgerIcon, SettingsIcon, BackIcon } from '../components/icons';
@@ -65,52 +65,21 @@ CheckoutStack.navigationOptions = {
     } 
   },
   tabBarVisible: false,
-  // drawerLabel: "Cart",
-  // drawerIcon: ({ tintColor }) => (
-  //   <FontAwesome name="map" size={23} color={tintColor} />
-  // ),
-  // headerStyle: {
-  //   backgroundColor: colors.BLUE_100
-  // },
-  // headerTitle: "Cart",
-  // headerTitleStyle: {
-  //   color: colors.WHITE
-  // },
-  // headerLeft: (
-  //   <HamburgerIcon onPress={() => navigation.navigate("DrawerOpen")} />
-  // )
 };
 
-const ProfileStack = createStackNavigator({
-  Profile: ProfileScreen,
+const CustomersStack = createStackNavigator({
+  Customers: CustomersScreen,
 });
 
-ProfileStack.navigationOptions = {
-  tabBarLabel: "Profile",
+CustomersStack.navigationOptions = {
+  tabBarLabel: "Customers",
   tabBarIcon: ({ tintColor }) => (
     <FontAwesome name="user-circle" size={23} color={tintColor} />
   ),
-  // drawerLabel: "Profile",
-  // drawerIcon: ({ tintColor }) => (
-  //   <FontAwesome name="user-circle" size={23} color={tintColor} />
-  // ),
-  // headerStyle: {
-  //   backgroundColor: colors.BLUE_100
-  // },
-  // headerTitle: "Profile",
-  // headerTitleStyle: {
-  //   color: colors.WHITE
-  // },
-  // headerLeft: (
-  //   <HamburgerIcon onPress={() => navigation.navigate("DrawerOpen")} />
-  // ),
-  // headerRight: (
-  //   <SettingsIcon onPress={() => navigation.navigate("Settings")} />
-  // )
 };
 
 export default createBottomTabNavigator({
   HomeStack,
   CheckoutStack,
-  ProfileStack,
+  CustomersStack,
 });
