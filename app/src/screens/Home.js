@@ -9,21 +9,18 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   Image,
-  Modal,
 } from 'react-native';
 
 import {
   Squares,
   Hamburger
 } from '../components/imageUrls';
-import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import NewCustomerModal from '../components/NewCustomerModal';
 
 import { getAllProducts } from '../actions/product';
 import { createCustomer } from '../actions/customer';
 import { createOrder } from '../actions/order';
-import { colors } from "../utils/constants";
 import { CREATE_CUSTOMER_SUCCESS } from "../actions/types";
 
 class HomeScreen extends Component {
@@ -33,7 +30,21 @@ class HomeScreen extends Component {
   };
 
   static getDerivedStateFromProps= (props, state) => {
-    state.products = props.products.map((item) => ({ ...item, quantity: 0}));
+    const allProducts = props.products.map((item) => ({ ...item, quantity: 0}));
+    if (props.selectedCustomer) {
+      const selectedCustomer = props.selectedCustomer
+      const selectedProducts = props.orders[selectedCustomer];
+      (selectedProducts || []).forEach((prod) => {
+        const prodIndex = allProducts.findIndex((item) => item.id === prod.id);
+        if (prodIndex > -1) {
+          allProducts[prodIndex].quantity = prod.quantity;
+        }
+      });
+    }
+
+    state.products = allProducts;
+    
+    return state;
   };
 
   static navigationOptions = ({ navigation }) => ({
@@ -182,47 +193,6 @@ class HomeScreen extends Component {
           />
         </View>
         <FlatList contentContainerStyle={{paddingLeft: 15, paddingRight: 15}} data={this.state.products} renderItem={this.renderRow} keyExtractor={this._keyExtractor}/>
-        {/* <Modal
-          animationType="slide"
-          visible={this.state.isOpenCreateCustomerModal}
-          transparent={true}
-          onRequestClose={this.closeModal}>
-          <View style={styles.modalContainer}>
-            <View style={styles.contentContainer}>
-              <View style={styles.modalTitle}>
-                <Text style={styles.modalTitleText}>New customer</Text>
-              </View>
-              <View style={styles.createCustomerForm}>
-                <TextInput
-                  wrapperStyle={styles.textInput}
-                  placeholder="Customer's name"
-                  value={this.state.customerName}
-                  onChangeText={this.onChangeCustomerName}
-                />
-                <TextInput
-                  wrapperStyle={styles.textInput}
-                  placeholder="Phone number"
-                  value={this.state.customerPhoneNumber}
-                  onChangeText={this.onChangeCustomerPhone}
-                />
-                <View style={styles.buttonsWrapper}>
-                  <Button
-                    text="New customer"
-                    primary
-                    centerText
-                    onPress={this.handleCreateCustomer}
-                  />
-                  <Button
-                    text="No, do it later"
-                    centerText
-                    textStyle={{color: 'black'}}
-                    onPress={this.closeModal}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-        </Modal> */}
         <NewCustomerModal
           isOpen={this.state.isOpenCreateCustomerModal}
           onSubmit={this.handleCreateCustomer}
@@ -296,56 +266,14 @@ const styles = StyleSheet.create({
   searchWrapper: {
     marginBottom: 15
   },
-  // modalContainer: {
-  //   flexDirection: 'column',
-  //   justifyContent: 'flex-end',
-  //   alignItems: 'flex-end',
-  //   backgroundColor: '#00000063',
-  //   height: '100%'
-  // },
-  // contentContainer: {
-  //   backgroundColor: colors.WHITE,
-  //   height: 320,
-  //   width: '100%',
-  //   borderTopLeftRadius: 25,
-  //   borderTopRightRadius: 25,
-  //   justifyContent: 'center',
-  //   flexDirection: 'column'
-  // },
-  // modalTitle: {
-  //   borderBottomWidth: 1,
-  //   flexDirection: 'column',
-  //   borderBottomColor: 'black',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   height: 70
-  // },
-  // modalTitleText: {
-  //   fontWeight: 'bold',
-  //   fontSize: 18,
-  //   marginTop: 15
-  // },
-  // createCustomerForm: {
-  //   flexDirection: 'column',
-  //   flexWrap: 'wrap',
-  //   paddingLeft: 20,
-  //   paddingRight: 20
-  // },
-  // textInput: {
-  //   marginTop: 20,
-  //   height: 50
-  // },
-  // buttonsWrapper: {
-  //   marginTop: 20,
-  //   marginBottom: 20,
-  //   flexWrap: 'wrap'
-  // }
 });
 
 const mapStateToProps = state => {
   return {
     products: state.Product.products,
     selectedCustomer: state.Customer.selectedCustomer,
+    orders: state.Order.list,
+    customers: state.Customer.list,
   }
 };
 

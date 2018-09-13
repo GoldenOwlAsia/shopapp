@@ -14,11 +14,11 @@ import { PlusIcon } from '../components/imageUrls';
 import TextInput from '../components/TextInput';
 import NewCustomerModal from '../components/NewCustomerModal';
 
-import { createCustomer } from '../actions/customer';
+import { createCustomer, changeSelectedCustomer } from '../actions/customer';
 
 class CustomersScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Checkout',
+    title: 'Customers',
     headerRight: (
       <TouchableOpacity onPress={() => navigation.state.params.rightButtonHandler()}>
         <Image
@@ -62,8 +62,9 @@ class CustomersScreen extends Component {
     this.props.navigation.setParams({rightButtonHandler: this.handleAddCustomer});
   }
 
-  handleItemClick = (customerId) => {
-    console.log('handle item clicked customerId: ', customerId);
+  handleItemClick = async (customer) => {
+    await this.props.changeSelectedCustomer(customer.id);
+    this.props.navigation.navigate('Home', {title: customer.name});
   }
 
   handleCreateCustomer = async (params) => {
@@ -94,11 +95,9 @@ class CustomersScreen extends Component {
     });
   }
 
-  
-
   renderItem = ({item, index}) => {
     return (
-      <View style={styles.itemWrapper}>
+      <TouchableOpacity key={index} style={styles.itemWrapper} onPress={() => this.handleItemClick(item)}>
         <View style={styles.information}>
           <Text style={styles.customerName}>{item.name}</Text>
           <Text style={styles.itemPrice}>{item.totalQuantity} prducts - {item.subTotal} VND</Text>
@@ -109,7 +108,7 @@ class CustomersScreen extends Component {
             source={{uri: (item.products[0] || {}).image}}
           />
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 
@@ -124,7 +123,6 @@ class CustomersScreen extends Component {
           onChangeText={this.onChangeSearchKeyword}
         />
         <FlatList
-          style={styles.customerList}
           data={this.state.data}
           renderItem={this.renderItem}
         />
@@ -163,10 +161,7 @@ const styles = StyleSheet.create({
   },
   searchWrapper: {
     padding: 15,
-  },
-  customerList: {
-    paddingLeft: 15,
-    paddingRight: 15
+    marginBottom: 10
   },
   customerName: {
     fontWeight: 'bold',
@@ -188,7 +183,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  createCustomer
+  createCustomer,
+  changeSelectedCustomer
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomersScreen);

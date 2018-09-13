@@ -49,7 +49,7 @@ class NormalTextInput extends Component {
 NormalTextInput.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string,
-  wrapperStyle: PropTypes.object
+  wrapperStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number])
 }
 
 // skip this line if using Create React Native App
