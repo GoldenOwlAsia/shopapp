@@ -31,6 +31,12 @@ const OrderItemType = new GraphQLObjectType({
     quantity: {
       type: GraphQLInt
     },
+    image: {
+      type: GraphQLString
+    },
+    status: {
+      type: GraphQLString
+    }
   })
 });
 
@@ -53,6 +59,12 @@ const OrderItemInputType = new GraphQLInputObjectType({
     quantity: {
       type: GraphQLInt
     },
+    image: {
+      type: GraphQLString
+    },
+    status: {
+      type: GraphQLString
+    }
   })
 })
 

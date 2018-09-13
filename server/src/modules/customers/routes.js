@@ -61,6 +61,16 @@ export default {
         phoneNumber: { type: GraphQLString }
       },
       resolve: (_, args) => Controller.createCustomer(args)
+    },
+    updateCustomer: {
+      type: CustomerType,
+      description: 'Update customer by id',
+      args: {
+        name: { type: GraphQLString },
+        phoneNumber: { type: GraphQLString },
+        id: { type: GraphQLInt }
+      },
+      resolve: (_, args) => Controller.updateCustomerById(args)
     }
   }
 }

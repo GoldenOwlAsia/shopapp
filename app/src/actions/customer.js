@@ -3,11 +3,13 @@ import {
   CREATE_CUSTOMER_SUCCESS,
   CREATE_CUSTOMER_FAIL,
   CLEAR_SELECTED_CUSTOMER,
-  CHANGE_SELECTED_CUSTOMER
+  CHANGE_SELECTED_CUSTOMER,
+  UPDATE_CUSTOMER_SUCCESS,
+  UPDATE_CUSTOMER_FAIL
 } from './types';
 
 import client from '../lib/client';
-import { CreateCustomer } from '../lib/queries';
+import { CreateCustomer, UpdateCustomer } from '../lib/queries';
 
 const handleCreateCustomer = (name, phoneNumber) => dispatch => {
   return client
@@ -60,13 +62,68 @@ export const createCustomerFail = (response) => {
   }
 }
 
+const handleUpdateCustomer = (params) => dispatch => {
+  console.log('the params: ', params);
+  return client
+    .mutate({
+      mutation: UpdateCustomer,
+      variables: {
+        ...params
+      }
+    })
+    .then(response => {
+      const customer = response.data.updateCustomer;
+      return dispatch(updateCustomerSuccess(customer));
+    })
+    .catch(error => {
+      console.log('update customer error:  ', error);
+      return dispatch(updateCustomerFail(error));
+    });
+}
+
+export const updateCustomer = (params) => {
+  return (dispatch, getState) => {
+    return dispatch(handleUpdateCustomer(params));
+  }
+}
+
+const handleUpdateCustomerSuccess = (params) => {
+  return {
+    type: UPDATE_CUSTOMER_SUCCESS,
+    payload: {
+      ...params
+    }
+  }
+}
+
+export const updateCustomerSuccess = (params) => {
+  return (dispatch, getState) => {
+    return dispatch(handleUpdateCustomerSuccess(params));
+  }
+}
+
+const handleUpdateCustomerFail = (error) => {
+  return {
+    type: UPDATE_CUSTOMER_FAIL,
+    papyload: {
+      error
+    }
+  }
+}
+
+export const updateCustomerFail = (error) => {
+  return (dispatch, getState) => {
+    return dispatch(handleUpdateCustomerFail(error));
+  }
+}
+
 const handleClearSelectedCustomer = () => {
   return {
     type: CLEAR_SELECTED_CUSTOMER
   }
 }
 
-export const clearSelectedCustoemr = () => {
+export const clearSelectedCustomer = () => {
   return (dispatch, getState) => {
     return dispatch(handleClearSelectedCustomer());
   }

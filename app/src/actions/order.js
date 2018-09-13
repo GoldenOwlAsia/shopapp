@@ -84,6 +84,7 @@ const handleCheckout = (params) => dispatch => {
     })
     .catch(error => {
       console.log('checkout error: ', error);
+      debugger;
       return dispatch(checkoutFail(error));
     });
 }

@@ -50,9 +50,25 @@ export default {
         // gender: args.gender
       };
 
-      CustomerService.createCustomer(params)
+      return CustomerService.createCustomer(params)
         .then(newCustomer => {
           return resolve(newCustomer)
+        })
+        .catch(err => {
+          return reject(err);
+        });
+    });
+  },
+  updateCustomerById: (args) => {
+    return new Promise((resolve, reject) => {
+      const params = {
+        name: args.name,
+        phoneNumber: args.phoneNumber
+      };
+
+      return CustomerService.updateById(args.id, params)
+        .then(updated => {
+          return resolve(updated);
         })
         .catch(err => {
           return reject(err);

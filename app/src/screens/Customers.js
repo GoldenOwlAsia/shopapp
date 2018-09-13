@@ -130,6 +130,9 @@ class CustomersScreen extends Component {
           isOpen={this.state.isAddNewCustomer}
           onSubmit={this.handleCreateCustomer}
           onRequestClose={this.closeModal}
+          submitText={'Create new customer'}
+          cancleText={'No, do it later'}
+          title={'New customer'}
         />
       </View>
     );

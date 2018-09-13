@@ -23,24 +23,6 @@ HomeStack.navigationOptions = {
   tabBarIcon: ({ tintColor }) => (
     <FontAwesome name="home" size={23} color={tintColor} />
   ),
-  tabBarOnPress: ({ navigation, defaultHandler }) => {
-    // defaultHandler();
-    if (navigation.isFocused()) {
-      // Do nothing
-    } else {
-      console.log('navigation app navigate: ', navigation)
-      // let parentNavigation = navigation.dangerouslyGetParent();
-      // let prevRoute = parentNavigation.state.routes[parentNavigation.state.index];
-      // let nextRoute = navigation.state;
-      // const route = prevRoute.routes && prevRoute.routes[0]
-      // if (route && (route.params || {}).handler) {
-      //   route.params.handler();
-      // } else {
-      //   defaultHandler();
-      // }
-    }
-    defaultHandler();
-  },
 };
 
 const CheckoutStack = createStackNavigator({

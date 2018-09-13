@@ -29,7 +29,7 @@ const cache = new InMemoryCache();
 const client = new ApolloClient({
   link: new HttpLink({
     // uri: 'https://shop-app-backend.herokuapp.com/graphql'
-    uri: 'http://192.168.11.110:3001/graphql'
+    uri: 'http://192.168.11.112:3001/graphql'
   }),
   cache
 });

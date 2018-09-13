@@ -12,12 +12,10 @@ import { colors } from "../utils/constants";
 class NewCustomerModal extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      customerName: '',
-      customerPhoneNumber: ''
+      customerName: props.customer?  (props.customer || {}).name : '',
+      customerPhoneNumber: props.customer ? (props.customer || {}).phoneNumber : '',
     };
-
   }
 
   onChangeCustomerName = (text) => this.setState({ customerName: text });
@@ -37,7 +35,7 @@ class NewCustomerModal extends Component {
         <View style={styles.modalContainer}>
           <View style={styles.contentContainer}>
             <View style={styles.modalTitle}>
-              <Text style={styles.modalTitleText}>New customer</Text>
+              <Text style={styles.modalTitleText}>{this.props.title}</Text>
             </View>
             <View style={styles.createCustomerForm}>
               <TextInput
@@ -54,13 +52,13 @@ class NewCustomerModal extends Component {
               />
               <View style={styles.buttonsWrapper}>
                 <Button
-                  text="New customer"
+                  text={this.props.submitText}
                   primary
                   centerText
                   onPress={this.handleSubmit}
                 />
                 <Button
-                  text="No, do it later"
+                  text={this.props.cancleText}
                   centerText
                   textStyle={{color: 'black'}}
                   onPress={this.props.onRequestClose}

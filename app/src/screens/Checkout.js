@@ -15,16 +15,17 @@ import PropTypes from "prop-types";
 import { BackArrow, UpArrow, DownArrow, Trash } from '../components/imageUrls';
 import Button from '../components/Button';
 import SlideDownView from '../components/SlideDownView';
+import NewCustomerModal from '../components/NewCustomerModal';
 
 import { removeItemFormOrder, increaseItemQuantity, decreaseItemQuantity, checkout } from '../actions/order';
-import { CHECKOUT_SUCCESS } from "../actions/types";
-import { clearSelectedCustomer } from '../actions/customer';
+import { CHECKOUT_SUCCESS, UPDATE_CUSTOMER_SUCCESS } from "../actions/types";
+import { clearSelectedCustomer, updateCustomer } from '../actions/customer';
 
 class CheckOutScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Checkout',
     headerLeft: (
-      <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+      <TouchableOpacity onPress={() => navigation.state.params.goBack()}>
         <Image
           style={styles.headerLeftIcon}
           source={BackArrow}
@@ -41,7 +42,12 @@ class CheckOutScreen extends Component {
     this.state = {
       tax: 0,
       customer,
+      isEditCustomer: false
     };
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({goBack: this.goBack});
   }
 
   handleCheckout = async () => {
@@ -62,7 +68,7 @@ class CheckOutScreen extends Component {
     const result = await this.props.checkout(params);
     if (result.type === CHECKOUT_SUCCESS) {
       this.props.clearSelectedCustomer();
-      this.props.navigation.navigate('Home');
+      this.props.navigation.navigate('Home', {title: ''});
     }
   }
 
@@ -79,9 +85,13 @@ class CheckOutScreen extends Component {
     this.props.removeItemFormOrder(this.props.selectedCustomer, itemId);
   }
 
+  goBack = () => {
+    this.props.navigation.navigate('Home', { title: this.state.customer.name});
+  }
+
   calculateSubTotal = (items) => {
     let result = 0;
-    items.forEach((item) => {
+    (items || []).forEach((item) => {
       result += item.quantity * item.price;
     });
 
@@ -102,7 +112,21 @@ class CheckOutScreen extends Component {
   }
 
   editCustomer = () => {
-    console.log('edit customer');
+    this.openModal();
+  }
+
+  closeModal = () => this.setState({isEditCustomer: false});
+  
+  openModal = () => this.setState({isEditCustomer: true});
+
+  handleUpdateCustomer = async (params) => {
+    const result = await this.props.updateCustomer({ name: params.customerName, phoneNumber: params.customerPhoneNumber, id: this.props.selectedCustomer });
+    if (result.type === UPDATE_CUSTOMER_SUCCESS) {
+      this.setState({
+        customer: { ...result.payload }
+      })
+      this.closeModal();
+    }
   }
 
   renderItem = ({item, index}) => {
@@ -199,6 +223,15 @@ class CheckOutScreen extends Component {
             onPress={this.handleCheckout}
           />
         </View>
+        <NewCustomerModal
+          customer={this.state.customer}
+          isOpen={this.state.isEditCustomer}
+          onSubmit={this.handleUpdateCustomer}
+          onRequestClose={this.closeModal}
+          submitText={'Update'}
+          cancleText={'No, do it later'}
+          title={'Update customer'}
+        />
       </View>
     )
   }
@@ -319,7 +352,8 @@ const mapDispatchToProps = {
   decreaseItemQuantity,
   removeItemFormOrder,
   checkout,
-  clearSelectedCustomer
+  clearSelectedCustomer,
+  updateCustomer
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CheckOutScreen);

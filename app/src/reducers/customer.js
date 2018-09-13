@@ -3,7 +3,8 @@ import {
   CREATE_CUSTOMER_SUCCESS,
   CREATE_CUSTOMER_FAIL,
   CLEAR_SELECTED_CUSTOMER,
-  CHANGE_SELECTED_CUSTOMER
+  CHANGE_SELECTED_CUSTOMER,
+  UPDATE_CUSTOMER_SUCCESS
 } from '../actions/types';
 
 const initialState = {
@@ -20,7 +21,14 @@ export default (state = initialState, action) => {
     case CLEAR_SELECTED_CUSTOMER:
       return { ...state, selectedCustomer: null }
     case CHANGE_SELECTED_CUSTOMER:
-    return { ...state, selectedCustomer: action.payload.customerId }
+      return { ...state, selectedCustomer: action.payload.customerId }
+    case UPDATE_CUSTOMER_SUCCESS: {
+      const customers = [...state.list];
+      console.log('payload: ', action.payload);
+      const customerIndex = customers.findIndex((customer) => customer.id === action.payload.id);
+      if (customerIndex > -1) customers[customerIndex] = { ...action.payload }
+      return { ...state,  list: [...customers] }
+    }
     default:
       return state
   }

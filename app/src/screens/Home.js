@@ -7,7 +7,6 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  TouchableHighlight,
   Image,
 } from 'react-native';
 
@@ -166,15 +165,15 @@ class HomeScreen extends Component {
             <Text style={styles.itemStatus}>{item.status}</Text>
           </View>
           <View style={styles.itemActionsWrapper}>
-            <TouchableHighlight onPress={() => this.decreaseBuyNumber(index)} style={styles.itemAction}>
+            <TouchableOpacity onPress={() => this.decreaseBuyNumber(index)} style={styles.itemAction}>
               <Text>-</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
             <View style={styles.itemAction}>
               <Text>{item.quantity}</Text>
             </View>
-            <TouchableHighlight onPress={() => this.increaseBuyNumber(index)} style={styles.itemAction}>
+            <TouchableOpacity onPress={() => this.increaseBuyNumber(index)} style={styles.itemAction}>
               <Text>+</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
       </TouchableOpacity>
@@ -197,6 +196,9 @@ class HomeScreen extends Component {
           isOpen={this.state.isOpenCreateCustomerModal}
           onSubmit={this.handleCreateCustomer}
           onRequestClose={this.closeModal}
+          submitText={'Create new customer'}
+          cancleText={'No, do it later'}
+          title={'New customer'}
         />
       </View>
     );

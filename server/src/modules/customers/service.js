@@ -15,6 +15,26 @@ class CustomerService {
         });
     });
   }
+
+  updateById(id, params) {
+    return new Promise((resolve, reject) => {
+      Customer.findOne({
+        where: {id: id}
+      })
+        .then(customer => {
+          if (!customer) {
+            return reject(new Error('Not found'));
+          }
+          return customer.update(params);
+        })
+        .then(updatedCustomer => {
+          return resolve(updatedCustomer);
+        })
+        .catch(err => {
+          return reject(err);
+        });
+    });
+  }
 }
 
 export default new CustomerService();
