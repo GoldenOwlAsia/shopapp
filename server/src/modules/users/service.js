@@ -14,7 +14,10 @@ class UserService {
         .then(user => {
           resolve(user);
         })
-        .catch(reject);
+        .catch(err => {
+          console.log('create user error: ', err);
+          reject(err);
+        });
     });
   };
 
@@ -59,6 +62,12 @@ class UserService {
         });
     });
   };
+
+  getUserByQuery(query) {
+    return new Promise((resolve, reject) => {
+      return User.find(query)
+    });
+  }
 
   updateUserById(id, params) {
     return new Promise((resolve, reject) => {

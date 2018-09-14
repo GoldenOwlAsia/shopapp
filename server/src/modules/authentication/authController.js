@@ -54,6 +54,7 @@ class AuthController {
       next(err);
     }
   };
+
   login(args) {
     try {
       return new Promise((resolve, reject) => {
@@ -95,6 +96,46 @@ class AuthController {
       reject(err);
     }
   };
+
+  ownerLogin(args) {
+    return new Promise((reolve, reject) => {
+      try {
+        const query = {
+          where: {
+            role: 'owner'
+          }
+        }
+        return UserService.getUserByQuery(query)
+          .then(owners => {
+            const owner = owners[0]
+            if (!owners || !owner) {
+              return reject('Not found!');
+            }
+
+            if (owner.code === args.code) {
+              const jwtData = {
+                id: user.id,
+                email: user.email
+              };
+              return AuthService.generateToken(jwtData);
+            } else {
+              return null;
+            }
+          })
+          .then(jwtToken => {
+            console.log('generate token success');
+            resolve({
+              authToken: jwtToken
+            });
+          })
+          .catch(err => {
+            return reject(err);
+          })
+      } catch(err) {
+        return reject(err);
+      }
+    });
+  }
 
   logout(req, res, next) {
     try {

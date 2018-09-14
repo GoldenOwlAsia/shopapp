@@ -1,4 +1,8 @@
 'use strict';
+const generateToken = () => {
+  return Math.floor((Math.random() * 8999) + 1000);
+};
+
 module.exports = (sequelize, DataTypes) => {
   var User = sequelize.define('User', {
     id: {
@@ -39,6 +43,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.STRING
     },
+    role: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    code: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE
@@ -50,8 +62,19 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     raw: true,
   });
+
   User.associate = function(models) {
     this.hasMany(models.Order, {foreignKey: 'createdBy', as: 'orders'})
   };
+
+  User.beforeCreate((instance, options) => {
+    if (instance.role === 'owner') {
+      const code = generateToken();;
+      console.log('generated code: ', code);
+      instance.code = code;
+    }
+    return instance;
+  });
+
   return User;
 };

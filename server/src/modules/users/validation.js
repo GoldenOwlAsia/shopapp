@@ -8,6 +8,7 @@ export const createUserSchema = Joi.object().keys({
   phoneNumber: Joi.string().required(),
   address: Joi.string(),
   username: Joi.string().required(),
+  role: Joi.string().required(),
   dateOfBirth: Joi.string()
 });
 

@@ -35,6 +35,12 @@ export const UserType = new GraphQLObjectType({
     },
     phoneNumber: {
       type: GraphQLString
+    },
+    role: {
+      type: GraphQLString
+    },
+    code: {
+      type: GraphQLString
     }
   })
 });
@@ -64,6 +70,20 @@ export default {
         dateOfBirth: { type: GraphQLString }
       },
       resolve: (_, args) => Controller.createUser(args)
+    },
+    createOwner: {
+      type: UserType,
+      description: 'Create an owner',
+      args: {
+        address: { type: GraphQLString },
+        phoneNumber: { type: GraphQLString },
+        firstName: { type: GraphQLString },
+        lastName: { type: GraphQLString },
+        username: { type: GraphQLString },
+        password: { type: GraphQLString },
+        dateOfBirth: { type: GraphQLString },
+      },
+      resolve: (_, args) => Controller.createOwner(args)
     }
   }
 }

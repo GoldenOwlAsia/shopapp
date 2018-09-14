@@ -10,7 +10,7 @@ class UserController {
   createUser(args) {
     return new Promise((resolve, reject) => {
       try {
-        UserService.createUser(args)
+        UserService.createUser({ ...args, role: 'staff' })
           .then(user => {
             resolve(UserService.styleUserResponse(user));
           })
@@ -23,6 +23,22 @@ class UserController {
       }
     });
   };
+
+  createOwner(args) {
+    return new Promise((resolve, reject) => {
+      try {
+        UserService.createUser({ ...args, role: 'owner' })
+          .then(user => {
+            resolve(UserService.styleUserResponse(user));
+          })
+          .catch(err => {
+            reject(err);
+          });
+      } catch(err) {
+        reject(err);
+      }
+    });
+  }
 
   getCurrentUser(args) {
     return new Promise((resolve, reject) => {

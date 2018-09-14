@@ -29,6 +29,14 @@ export default {
       },
       resolve: (_, args) => Controller.login(args)
     },
+    ownerLogin: {
+      type: AuthenticationType,
+      description: 'Owner login api',
+      args: {
+        code: { type: GraphQLString }
+      },
+      resolve: (_, args) => Controller.ownerLogin(args)
+    },
     logout: {
       type: AuthenticationType,
       description: 'Logout',
