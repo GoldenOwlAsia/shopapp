@@ -63,7 +63,6 @@ export const createCustomerFail = (response) => {
 }
 
 const handleUpdateCustomer = (params) => dispatch => {
-  console.log('the params: ', params);
   return client
     .mutate({
       mutation: UpdateCustomer,

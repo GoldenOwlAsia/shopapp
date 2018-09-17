@@ -62,7 +62,7 @@ class Button extends Component {
             source={this.props.leftIcon}
           />
         }
-        <Text style={[styles.btnText, this.props.centerText ? styles.btnCenterText : marginLeft15, this.props.textStyle]}>
+        <Text style={[styles.btnText, this.props.centerText ? styles.btnCenterText : styles.marginLeft15, this.props.textStyle]}>
           {text}
         </Text>
         {
@@ -78,11 +78,19 @@ class Button extends Component {
 
 Button.propTypes = {
   text: PropTypes.string.required,
-  leftIcon: PropTypes.string,
+  leftIcon: PropTypes.oneOfType([
+    PropTypes.string,
+  ]),
   rightIcon: PropTypes.string,
-  btnStyle: PropTypes.object,
+  btnStyle: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.number
+  ]),
   onPress: PropTypes.func.required,
-  textStyle: PropTypes.object,
+  textStyle: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.number
+  ]),
 }
 
 export default Button;

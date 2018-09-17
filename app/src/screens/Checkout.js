@@ -17,7 +17,7 @@ import Button from '../components/Button';
 import SlideDownView from '../components/SlideDownView';
 import NewCustomerModal from '../components/NewCustomerModal';
 
-import { removeItemFormOrder, increaseItemQuantity, decreaseItemQuantity, checkout } from '../actions/order';
+import { removeItemFromOrder, increaseItemQuantity, decreaseItemQuantity, checkout } from '../actions/order';
 import { CHECKOUT_SUCCESS, UPDATE_CUSTOMER_SUCCESS } from "../actions/types";
 import { clearSelectedCustomer, updateCustomer } from '../actions/customer';
 
@@ -33,6 +33,21 @@ class CheckOutScreen extends Component {
       </TouchableOpacity>
     )
   });
+
+  static getDerivedStateFromProps= (props, state) => {
+    if (props.selectedCustomer) {
+      const customer = props.customers.filter((c) => c.id === props.selectedCustomer)[0];
+      const items = props.orders[props.selectedCustomer];
+      this.itemRefs = new Array((items || []).length);
+      state = {
+        tax: 0,
+        customer,
+        isEditCustomer: false
+      };
+    }
+
+    return state;
+  }
 
   constructor(props) {
     super(props);
@@ -82,7 +97,7 @@ class CheckOutScreen extends Component {
 
   removeItem = (itemId) => {
     // TODO: Handle pop up confirm remove!
-    this.props.removeItemFormOrder(this.props.selectedCustomer, itemId);
+    this.props.removeItemFromOrder(this.props.selectedCustomer, itemId);
   }
 
   goBack = () => {
@@ -350,7 +365,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   increaseItemQuantity,
   decreaseItemQuantity,
-  removeItemFormOrder,
+  removeItemFromOrder,
   checkout,
   clearSelectedCustomer,
   updateCustomer

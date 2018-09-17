@@ -1,6 +1,6 @@
 import {
   CREATE_ORDER, REMOVE_ITEM, INCREASE_ITEM_QUANTITY, DECREASE_ITEM_QUANTITY,
-  CHECKOUT, CHECKOUT_SUCCESS, CHECKOUT_FAIL
+  CHECKOUT, CHECKOUT_SUCCESS, CHECKOUT_FAIL, UPDATE_ORDER_BY_CUSTOMER
 } from './types';
 
 import client from '../lib/client';
@@ -32,7 +32,7 @@ const handleRemoveItemFromOrder = (customerId, itemId) => {
   }
 }
 
-export const removeItemFormOrder = (customerId, itemId) => {
+export const removeItemFromOrder = (customerId, itemId) => {
   return (dispatch, getState) => {
     dispatch(handleRemoveItemFromOrder(customerId, itemId));
   }
@@ -118,5 +118,21 @@ const handleCheckoutFail = (params) => {
 export const checkoutFail = (params) => {
   return (dispatch, getState) => {
     return dispatch(handleCheckoutFail(params));
+  }
+}
+
+const handleUpdateOrderByCustomer = ({customerId, items}) => {
+  return {
+    type: UPDATE_ORDER_BY_CUSTOMER,
+    payload: {
+      customerId,
+      items
+    }
+  }
+}
+
+export const updateOrderByCustomer = (params) => {
+  return (dispatch, getState) => {
+    return dispatch(handleUpdateOrderByCustomer(params));
   }
 }

@@ -19,7 +19,7 @@ import NewCustomerModal from '../components/NewCustomerModal';
 
 import { getAllProducts } from '../actions/product';
 import { createCustomer } from '../actions/customer';
-import { createOrder } from '../actions/order';
+import { createOrder, updateOrderByCustomer } from '../actions/order';
 import { CREATE_CUSTOMER_SUCCESS } from "../actions/types";
 
 class HomeScreen extends Component {
@@ -90,7 +90,8 @@ class HomeScreen extends Component {
     if (!this.props.selectedCustomer) {
       this.setModalVisible(true);
     } else {
-      this.props.navigation.navigate("Checkout");
+      this.props.updateOrderByCustomer({ customerId: this.props.selectedCustomer, items: selectedProducts });
+      this.props.navigation.navigate('Checkout');
     }
   }
   
@@ -145,7 +146,7 @@ class HomeScreen extends Component {
     const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
     if (result.type === CREATE_CUSTOMER_SUCCESS) {
       this.closeModal();
-      this.props.createOrder(this.props.selectedCustomer, selectedProducts);
+      await this.props.createOrder(this.props.selectedCustomer, selectedProducts);
       this.props.navigation.navigate("Checkout");
     }
   }
@@ -282,7 +283,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   getAllProducts,
   createCustomer,
-  createOrder
+  createOrder,
+  updateOrderByCustomer
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

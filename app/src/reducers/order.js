@@ -5,6 +5,7 @@ import {
   DECREASE_ITEM_QUANTITY,
   CHECKOUT_SUCCESS,
   CHECKOUT_FAIL,
+  UPDATE_ORDER_BY_CUSTOMER,
 } from '../actions/types';
 
 const initialState = {
@@ -17,6 +18,11 @@ export default (state = initialState, action) => {
       let list = { ...state.list };
       list[action.payload.customerId] = action.payload.items;
       return { ...state, list };
+    }
+    case UPDATE_ORDER_BY_CUSTOMER: {
+      let list = { ...state.list };
+      list[action.payload.customerId] = action.payload.items;
+      return { ...state, list }
     }
     case REMOVE_ITEM: {
       let list = { ...state.list };
@@ -55,7 +61,7 @@ export default (state = initialState, action) => {
       return { ...state, list }
     }
     case CHECKOUT_SUCCESS: {
-      delete state.list[action.payload.customer.id];
+      // delete state.list[action.payload.customer.id];
       return { ...state };
     }
     case CHECKOUT_FAIL: {

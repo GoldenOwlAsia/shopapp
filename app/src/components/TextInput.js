@@ -3,11 +3,8 @@ import {
   AppRegistry,
   StyleSheet,
   TextInput,
-  ScrollView,
   KeyboardAvoidingView,
   Text,
-  View,
-  Platform
 } from 'react-native';
 import { PropTypes } from 'prop-types';
 

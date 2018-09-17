@@ -24,7 +24,6 @@ export default (state = initialState, action) => {
       return { ...state, selectedCustomer: action.payload.customerId }
     case UPDATE_CUSTOMER_SUCCESS: {
       const customers = [...state.list];
-      console.log('payload: ', action.payload);
       const customerIndex = customers.findIndex((customer) => customer.id === action.payload.id);
       if (customerIndex > -1) customers[customerIndex] = { ...action.payload }
       return { ...state,  list: [...customers] }

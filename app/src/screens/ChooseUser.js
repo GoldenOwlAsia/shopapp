@@ -71,7 +71,7 @@ class ChooseUserScreen extends Component {
   };
 
   chooseShopOwner = () => {
-    this.props.navigation.navigate('SignIn');
+    this.props.navigation.navigate('OnwerLogin');
   }
 
   chooseStaff = () => {

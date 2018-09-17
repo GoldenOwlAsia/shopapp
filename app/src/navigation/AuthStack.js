@@ -4,11 +4,13 @@ import {
 } from 'react-navigation';
 import StaffSignInScreen from '../screens/StaffSignIn';
 import ChooseUserTypeScreen from '../screens/ChooseUser';
+import OnwerLogin from '../screens/OwnerLogin'
 
 const AuthStack = createStackNavigator(
   { 
     SignIn: StaffSignInScreen,
-    ChooseUserTypeScreen: ChooseUserTypeScreen
+    ChooseUserTypeScreen: ChooseUserTypeScreen,
+    OnwerLogin: OnwerLogin
   },
   {
     initialRouteName: 'ChooseUserTypeScreen'
