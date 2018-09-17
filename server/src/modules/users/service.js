@@ -65,7 +65,13 @@ class UserService {
 
   getUserByQuery(query) {
     return new Promise((resolve, reject) => {
-      return User.find(query)
+      return User.findAll(query)
+        .then(users => {
+          return resolve(users);
+        })
+        .catch(err => {
+          return reject(err);
+        });
     });
   }
 

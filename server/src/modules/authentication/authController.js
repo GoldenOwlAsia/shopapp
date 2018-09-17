@@ -78,7 +78,8 @@ class AuthController {
             }
             const jwtData = {
               id: user.id,
-              email: user.email
+              username: user.username,
+              role: user.role
             };
             return AuthService.generateToken(jwtData);
           })
@@ -98,7 +99,7 @@ class AuthController {
   };
 
   ownerLogin(args) {
-    return new Promise((reolve, reject) => {
+    return new Promise((resolve, reject) => {
       try {
         const query = {
           where: {
@@ -107,15 +108,16 @@ class AuthController {
         }
         return UserService.getUserByQuery(query)
           .then(owners => {
-            const owner = owners[0]
-            if (!owners || !owner) {
+            const owner = owners[0];
+            if (!owner) {
               return reject('Not found!');
             }
 
             if (owner.code === args.code) {
               const jwtData = {
-                id: user.id,
-                email: user.email
+                id: owner.id,
+                username: owner.username,
+                role: owner.role
               };
               return AuthService.generateToken(jwtData);
             } else {
@@ -123,8 +125,10 @@ class AuthController {
             }
           })
           .then(jwtToken => {
-            console.log('generate token success');
-            resolve({
+            if (!jwtToken) {
+              return reject(new Error('Something went wrong!'));
+            }
+            return resolve({
               authToken: jwtToken
             });
           })
