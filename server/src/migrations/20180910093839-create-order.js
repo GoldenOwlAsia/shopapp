@@ -14,7 +14,7 @@ module.exports = {
       },
       items: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       customerId: {
         allowNull: false,

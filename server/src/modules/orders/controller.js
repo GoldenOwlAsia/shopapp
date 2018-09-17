@@ -11,6 +11,7 @@ export default {
     return new Promise((resolve, reject) => {
       const { items, customerId, subTotal, tax, grandTotal, createdBy } = args;
       const params = { items, customerId, subTotal, tax, grandTotal, createdBy };
+      console.log('params: ', args);
 
       OrderService.createOrder(params)
         .then(newOrder => {
@@ -30,6 +31,7 @@ export default {
           return resolve(OrderService.styledOrder(result[0].toJSON()));
         })
         .catch(err => {
+          console.log('the error: ', err);
           return reject(err);
         });
     });
