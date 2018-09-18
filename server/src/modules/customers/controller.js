@@ -32,16 +32,19 @@ const customers = [
 ];
 
 import CustomerService from './service';
+import AuthService from '../authentication/authService';
 
 export default {
-  getCustomers: () => {
+  getCustomers: (_, args, ctx) => {
+    const curUser = AuthService.getCurrentUserFromContext(ctx);
     return customers;
   },
-  getCustomerById: (args) => {
+  getCustomerById: (_, args, ctx) => {
     return customers.filter(c => c.id === args.id)[0];
   },
-  createCustomer: (args) => {
+  createCustomer: (_, args, ctx) => {
     return new Promise((resolve, reject) => {
+      const curUser = AuthService.getCurrentUserFromContext(ctx);
       const params = {
         name: args.name,
         // dateOfBirth: args.dateOfBirth,
@@ -59,8 +62,9 @@ export default {
         });
     });
   },
-  updateCustomerById: (args) => {
+  updateCustomerById: (_, args, ctx) => {
     return new Promise((resolve, reject) => {
+      const curUser = AuthService.getCurrentUserFromContext(ctx);
       const params = {
         name: args.name,
         phoneNumber: args.phoneNumber

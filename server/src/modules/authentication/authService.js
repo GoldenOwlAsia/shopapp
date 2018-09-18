@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import config from '../../configs';
 import moment from 'moment';
 import TokenService from './tokenService';
+import { AuthorizationError } from './errors';
 
 class AuthService {
   generateToken(jwtData) {
@@ -32,6 +33,14 @@ class AuthService {
         });
     });
   };
+
+  getCurrentUserFromContext(ctx) {
+    if (ctx.user) {
+      return ctx.user;
+    } else {
+      throw new AuthorizationError();
+    }
+  }
 };
 
 export default new AuthService();

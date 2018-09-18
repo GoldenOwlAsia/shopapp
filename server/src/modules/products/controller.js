@@ -58,7 +58,12 @@ const products = [
 ]
 
 export default {
-  getProducts: () => {
+  getProducts: (_, args, ctx) => {
+    console.log('root???', _);
+    console.log('args: ', args);
+    // console.log('args: ', args);
+    // console.log('context: ', context);
+    console.log('user???? ', ctx.user.toJSON());
     return products;
   }
 }

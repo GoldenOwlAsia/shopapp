@@ -116,7 +116,7 @@ export default {
         createdBy: { type: GraphQLInt },
         customerId: { type: GraphQLInt },
       },
-      resolve: (_, args) => Controller.createOrder(args)
+      resolve: Controller.createOrder
     }
   }
 }

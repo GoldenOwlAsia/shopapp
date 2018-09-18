@@ -27,7 +27,7 @@ export default {
         username: { type: GraphQLString },
         password: { type: GraphQLString }
       },
-      resolve: (_, args) => Controller.login(args)
+      resolve: Controller.login
     },
     ownerLogin: {
       type: AuthenticationType,
@@ -35,7 +35,7 @@ export default {
       args: {
         code: { type: GraphQLString }
       },
-      resolve: (_, args) => Controller.ownerLogin(args)
+      resolve: Controller.ownerLogin
     },
     logout: {
       type: AuthenticationType,
@@ -43,7 +43,7 @@ export default {
       args: {
         token: { type: GraphQLString },
       },
-      resolve: (_, args) => Controller.logout(args)
+      resolve: Controller.logout
     }
   }
 }

@@ -46,7 +46,7 @@ export default {
       args: {
         id: { type: GraphQLInt }
       },
-      resolve: (_, args) => Controller.getCustomerById(args)
+      resolve: Controller.getCustomerById
     }
   },
   mutation: {
@@ -60,7 +60,7 @@ export default {
         // address: { type: GraphQLString },
         phoneNumber: { type: GraphQLString }
       },
-      resolve: (_, args) => Controller.createCustomer(args)
+      resolve: Controller.createCustomer
     },
     updateCustomer: {
       type: CustomerType,
@@ -70,7 +70,7 @@ export default {
         phoneNumber: { type: GraphQLString },
         id: { type: GraphQLInt }
       },
-      resolve: (_, args) => Controller.updateCustomerById(args)
+      resolve: Controller.updateCustomerById
     }
   }
 }

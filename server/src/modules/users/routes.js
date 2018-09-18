@@ -53,7 +53,7 @@ export default {
       args: {
         token: { type: GraphQLString }
       },
-      resolve: (_, args) => Controller.getCurrentUser(args)
+      resolve: Controller.getCurrentUser
     }
   },
   mutation: {
@@ -69,7 +69,7 @@ export default {
         password: { type: GraphQLString },
         dateOfBirth: { type: GraphQLString }
       },
-      resolve: (_, args) => Controller.createUser(args)
+      resolve: Controller.createUser
     },
     createOwner: {
       type: UserType,
@@ -83,7 +83,7 @@ export default {
         password: { type: GraphQLString },
         dateOfBirth: { type: GraphQLString },
       },
-      resolve: (_, args) => Controller.createOwner(args)
+      resolve: Controller.createOwner
     }
   }
 }

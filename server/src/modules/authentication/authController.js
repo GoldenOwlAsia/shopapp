@@ -9,53 +9,7 @@ import { AuthorizationError } from './errors';
 import config from '../../configs';
 
 class AuthController {
-  register(req, res, next) {
-    try {
-      let user;
-      const params = req.body;
-      Joi.validate(params, RegisterParams)
-        .then(validParams => {
-          // Check email existed
-          return UserService.getUserByEmail(params.email)
-        })
-        .then(existedUser => {
-          if(existedUser) {
-            throw new ItemConflictError('Email existed!');
-          }
-          return UserService.createUser(params)
-        })
-        .then(u => {
-          user = u;
-          const jwtData = {
-            id: u.id,
-            email: u.email
-          };
-          return AuthService.generateToken(jwtData);
-        })
-        .then(jwtToken => {
-          const mailTemplateParams = {
-            user,
-            verfiyAccountUrl: `${config.WEB_DOMAIN}/verify-account?token=${jwtToken}`
-          }
-          let mailTpl = getConfirmationEmailTemplate(mailTemplateParams);
-          mailTpl.toUser = [user.email];
-          const emailOpts = MailService.initMailOptions(mailTpl);
-          return MailService.sendEmail(emailOpts);
-        })
-        .then(resulte => {
-          res.json({
-            success: true
-          });
-        })
-        .catch(err => {
-          next(err);
-        });
-    } catch(err) {
-      next(err);
-    }
-  };
-
-  login(args) {
+  login(_, args, ctx) {
     try {
       return new Promise((resolve, reject) => {
         const loginData = args;
@@ -98,7 +52,7 @@ class AuthController {
     }
   };
 
-  ownerLogin(args) {
+  ownerLogin(_, args, ctx) {
     return new Promise((resolve, reject) => {
       try {
         const query = {
@@ -141,7 +95,7 @@ class AuthController {
     });
   }
 
-  logout(req, res, next) {
+  logout(_, args, ctx) {
     try {
       const auth_token = req.body.auth_token || req.query.auth_token || req.headers['x-auth-token'];
       if(!auth_token) {

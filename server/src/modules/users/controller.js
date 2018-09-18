@@ -7,7 +7,7 @@ import configs from '../../configs';
 import { resolve } from 'dns';
 
 class UserController {
-  createUser(args) {
+  createUser(_, args, ctx) {
     return new Promise((resolve, reject) => {
       try {
         UserService.createUser({ ...args, role: 'staff' })
@@ -24,7 +24,7 @@ class UserController {
     });
   };
 
-  createOwner(args) {
+  createOwner(_, args, ctx) {
     return new Promise((resolve, reject) => {
       try {
         UserService.createUser({ ...args, role: 'owner' })

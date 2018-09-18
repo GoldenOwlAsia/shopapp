@@ -1,18 +1,19 @@
 import OrderService from './service';
 import models from '../../models';
+import AuthService from '../authentication/authService';;
 
 export default {
-  getOrder: () => {
+  getOrder: (_, args, ctx) => {
     return new Promise((resolve, reject) => {
       resolve([]);
     });
   },
-  createOrder: (args) => {
+  createOrder: (_, args, ctx) => {
     return new Promise((resolve, reject) => {
-      const { items, customerId, subTotal, tax, grandTotal, createdBy } = args;
+      const curUser = AuthService.getCurrentUserFromContext(ctx);
+      const { items, customerId, subTotal, tax, grandTotal } = args;
+      const createdBy = curUser.id;
       const params = { items, customerId, subTotal, tax, grandTotal, createdBy };
-      console.log('params: ', args);
-
       OrderService.createOrder(params)
         .then(newOrder => {
           const query = {
