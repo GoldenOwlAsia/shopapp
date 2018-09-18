@@ -7,29 +7,50 @@ import {
   TouchableOpacity,
   TextInput
 } from 'react-native';
+import { colors } from '../utils/constants';
+
+import { ownerLogin } from '../actions/auth';
+import { OWNER_LOGIN_SUCCESS } from '../actions/types';
 
 class OwnerLogin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      code: new Array(4)
+      code: ['', '', '', '']
     }
   }
 
   onChangeCode = (index, character) => {
-    console.log('the character: ', character);
-    console.log('index: ', index);
+    const code = [...this.state.code];
+    code[index] = character;
+    this.setState({
+      code
+    });
+    const emptyField = code.filter((char) => !char && char !== '0').length;
+    if (!emptyField) {
+      this.handleLogin(code);
+    }
+  }
+
+  handleLogin = async (codeArr) => {
+    const code = codeArr.join('');
+    const result = await this.props.ownerLogin({ code });
+    console.log('owner login result: ', result);
+    if (result.type === OWNER_LOGIN_SUCCESS) {
+      this.props.navigation.navigate('Owner');
+    }
   }
 
   renderInputs = () => {
-    console.log('code: ', this.state.code);
-    return this.state.code.map((input, index) => {
+    return this.state.code.map((value, index) => {
       return (
         <TextInput
-          style={styles.input}
+          style={[styles.input, value ? styles.hasValue : {}]}
           keyboardType='numeric'
+          maxLength={1}
           value={index}
           underlineColorAndroid="transparent"
+          onChangeText={(text) => this.onChangeCode(index, text)}
         />
       )
     })
@@ -59,6 +80,7 @@ const styles = StyleSheet.create({
   },
   hint: {
     textAlign: 'center',
+    fontSize: 16,
     paddingTop: 30,
     paddingBottom: 30
   },
@@ -71,11 +93,14 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderWidth: 1,
-    borderColor: 'red',
-    backgroundColor: 'grey',
+    borderColor: colors.GREY_97,
+    backgroundColor: colors.WHITE,
     marginLeft: 15,
     marginRight: 15,
     textAlign: 'center'
+  },
+  hasValue: {
+    backgroundColor: colors.GREY_97
   }
 });
 
@@ -84,7 +109,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  
+  ownerLogin
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OwnerLogin);

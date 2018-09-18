@@ -7,3 +7,11 @@ export const Login = gql`
     }
   }
 `;
+
+export const OwnerLogin = gql`
+  mutation ownerLogin ($code:String) {
+    ownerLogin(code: $code) {
+      authToken
+    }
+  }
+`;

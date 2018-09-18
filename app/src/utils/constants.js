@@ -8,5 +8,6 @@ export const colors = {
   BLUE_500: "#212F3C",
   BLUE: '#5175ff',
   GREY: '#f6f6f8',
+  GREY_97: '#f7f7f7',
   BUTTON_PRIMARY_COLOR: '#5175FF'
 };

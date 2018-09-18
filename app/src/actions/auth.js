@@ -2,11 +2,12 @@
 import {
   LOGIN,
   LOGIN_SUCCESS,
-  LOGIN_FAIL
+  LOGIN_FAIL,
+  OWNER_LOGIN_SUCCESS
 } from './types';
 
 import client from '../lib/client';
-import { Login } from '../lib/queries';
+import { Login, OwnerLogin } from '../lib/queries';
 
 const handleLogin = (username, password) => dispatch => {
   return client
@@ -56,5 +57,46 @@ const handleLoginFail = (payload) => {
 export const loginFail = (response) => {
   return (dispatch, getState) => {
     return dispatch(handleLoginFail(response));
+  }
+}
+
+const handleOwnerLogin = ({ code }) => dispatch => {
+  console.log('come here???');
+  return client
+    .mutate({
+      mutation: OwnerLogin,
+      variables: {
+        code
+      }
+    })
+    .then(response => {
+      const authToken = response.data.ownerLogin.authToken;
+      return dispatch(ownerLoginSuccess({ authToken, isOwner: true }));
+    })
+    .catch(error => {
+      console.log('owner login error: ', error);
+      return dispatch(loginFail(error));
+    });
+}
+
+export const ownerLogin = (params) => {
+  return (dispatch, getState) => {
+    return dispatch(handleOwnerLogin(params));
+  }
+}
+
+const handleOwnerLoginSuccess = ({ authToken, isOwner }) => {
+  return {
+    type: OWNER_LOGIN_SUCCESS,
+    payload: {
+      authToken,
+      isOwner
+    }
+  }
+}
+
+export const ownerLoginSuccess = (params) => {
+  return (dispatch, getState) => {
+    return dispatch(handleOwnerLoginSuccess(params));
   }
 }
