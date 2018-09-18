@@ -2,7 +2,7 @@ import ApolloClient from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink, createHttpLink } from "apollo-link-http";
 // import { graphQL as graphqlUri } from "../utils/constants";
-// import { setContext } from 'apollo-link-context';
+import { setContext } from 'apollo-link-context';
 import { AsyncStorage } from 'react-native';
 
 // async function getToken() {
@@ -15,22 +15,24 @@ import { AsyncStorage } from 'react-native';
 //   }
 // }
 
-// const authLink = setContext(async () => {
-//   const token = await AsyncStorage.getItem('authen_token');
+const authLink = setContext(async () => {
+  const token = await AsyncStorage.getItem('authToken');
 
-//   return {
-//     headers: {
-//       AUTHEN_TOKEN: token ? `${token}` : null,
-//     },
-//   };
-// });
+  return {
+    headers: {
+      'x-auth-token': token ? `${token}` : null,
+    },
+  };
+});
+
+const httpLink = createHttpLink({
+  // uri: 'https://shop-app-backend.herokuapp.com/graphql'
+  uri: 'http://192.168.56.1:3001/graphql'
+})
 
 const cache = new InMemoryCache();
 const client = new ApolloClient({
-  link: new HttpLink({
-    // uri: 'https://shop-app-backend.herokuapp.com/graphql'
-    uri: 'http://192.168.56.1:3001/graphql'
-  }),
+  link: authLink.concat(httpLink),
   cache
 });
 
