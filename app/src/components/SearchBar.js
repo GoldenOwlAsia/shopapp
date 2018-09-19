@@ -34,6 +34,7 @@ SearchBar.componentName = 'SearchBar';
 const styles = StyleSheet.create({
   content: {
     flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: '#F5F5F5',
     padding: 10,

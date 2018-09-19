@@ -69,7 +69,9 @@ class AvatarPicker extends React.PureComponent {
         ) : 
         (
           <View style={styles.container}>
-            <Image style={styles.btnAdd} source={PickAvatarIcon} />
+            <View style={styles.wrapButton}>
+              <Image style={styles.btnAdd} source={PickAvatarIcon} />
+            </View>
             <Text style={styles.label}>Chọn hình ảnh</Text>
           </View>
         )
@@ -99,12 +101,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     overflow: 'hidden',
   },
-  btnAdd: {
+  wrapButton: {
     width: 24,
     height: 24,
-    padding: 4,
     borderRadius: 12,
-    backgroundColor: '#C1C5CB',
+  },
+  btnAdd: {
+    width: '100%',
+    height: '100%',
   },
   btnEdit: {
     marginLeft: 16,

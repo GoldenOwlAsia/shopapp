@@ -47,6 +47,7 @@ const BaseButton = (props) => {
             borderWidth: 1,
             backgroundColor: 'transparent',
             borderColor: '#5275FF',
+            elevation: 0,
           },
         ]}
         >
