@@ -55,15 +55,37 @@ const products = [
     image: 'http://www.gravityimprint.com/images/large/nike%20shoes%20for%20men-436oip.jpg',
     status: 'Available',
   }
-]
+];
 
-export default {
-  getProducts: (_, args, ctx) => {
-    console.log('root???', _);
-    console.log('args: ', args);
-    // console.log('args: ', args);
-    // console.log('context: ', context);
-    console.log('user???? ', ctx.user.toJSON());
+import AuthService from '../authentication/authService';
+import { ROLES } from '../../utils/constant';
+import ProductService from './service';
+
+class ProductController {
+  getProducts(_, args, ctx) {
     return products;
+  };
+
+  createProduct(_, args, ctx) {
+    return new Promise((resolve, reject) => {
+      try {
+        const curUser = AuthService.getCurrentUserFromContext(ctx);
+        if (curUser.role !== ROLES.OWNER) {
+          throw new Error('Not Authorize!');
+        }
+
+        return ProductService.createProduct(args)
+          .then(prod => {
+            return resolve(prod);
+          })
+          .catch(err => {
+            return reject(err);
+          });
+      } catch(err) {
+        return reject(err);
+      }
+    });
   }
 }
+
+export default new ProductController();
