@@ -9,3 +9,6 @@ export const UpArrow = require('../../assets/images/up-arrow.png');
 export const DownArrow = require('../../assets/images/down-arrow.png');
 export const Trash = require('../../assets/images/trash.png');
 export const PlusIcon = require('../../assets/images/plus.png');
+export const CloseIcon = require('../../assets/images/close.png');
+export const PickAvatarIcon = require('../../assets/images/pick-avatar.png');
+export const EditIcon = require('../../assets/images/edit.png');
