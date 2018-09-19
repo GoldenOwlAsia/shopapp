@@ -38,6 +38,7 @@ class AuthService {
     if (ctx.user) {
       return ctx.user;
     } else {
+      console.log('Dose it come here????');
       throw new AuthorizationError();
     }
   }
