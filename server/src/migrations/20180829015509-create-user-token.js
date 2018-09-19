@@ -14,7 +14,7 @@ module.exports = {
       },
       token: {
         allowNull: false,
-        type: Sequelize.MEDIUMTEXT
+        type: Sequelize.TEXT('medium')
       },
       expiredAt: {
         allowNull: false,

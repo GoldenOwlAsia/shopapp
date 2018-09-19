@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     token: {
       allowNull: false,
-      type: DataTypes.MEDIUMTEXT
+      type: DataTypes.TEXT('medium')
     },
     expiredAt: {
       allowNull: false,
