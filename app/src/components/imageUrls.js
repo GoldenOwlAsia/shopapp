@@ -12,3 +12,4 @@ export const PlusIcon = require('../../assets/images/plus.png');
 export const CloseIcon = require('../../assets/images/close.png');
 export const PickAvatarIcon = require('../../assets/images/pick-avatar.png');
 export const EditIcon = require('../../assets/images/edit.png');
+export const NotificationIcon = require('../../assets/images/notification.png');
