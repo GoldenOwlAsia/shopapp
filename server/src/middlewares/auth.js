@@ -19,23 +19,27 @@ const authenticate = (req, res, next) => {
       if (auth_token && auth_token !== 'null') {
         jwt.verify(auth_token, token.secretKey, (err, decoded) => {
           // failed
+          console.log('verify err: ', err);
           if (err) throw new AuthorizationError();
 
           // Check token is valid
           UserTokenService.getToken(auth_token)
             .then(token => {
               if (!token) {
-                // throw new AuthorizationError();
+                console.log('token not found!')
                 return next(new AuthorizationError());
               }
               // req.user = JSON.parse(decoded.data);
               const jwtData = JSON.parse(decoded.data);
+              console.log('jwtData: ', jwtData);
               return UserService.getUserById(jwtData.id);
             })
             .then(u => {
+              console.log('the user: ', u);
               if(!u) {
                 return next(new AuthorizationError());
               }
+              console.log("??????")
               req.user= u;
               next();
             })
@@ -47,15 +51,14 @@ const authenticate = (req, res, next) => {
       } else {
         req.user = null;
         next();
-        // throw new AuthorizationError();
       }
     } else {
       // without api-key
       req.user = null;
-      // throw new AuthorizationError();
       next();
     }
   } catch (err) {
+    console.log('Come here?????');
     next(err);
   }
 };
