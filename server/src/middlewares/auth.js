@@ -19,8 +19,9 @@ const authenticate = (req, res, next) => {
       if (auth_token && auth_token !== 'null') {
         jwt.verify(auth_token, token.secretKey, (err, decoded) => {
           // failed
-          console.log('verify err: ', err);
           if (err) throw new AuthorizationError();
+
+          console.log('auth token: ', auth_token);
 
           // Check token is valid
           UserTokenService.getToken(auth_token)
@@ -29,7 +30,6 @@ const authenticate = (req, res, next) => {
                 console.log('token not found!')
                 return next(new AuthorizationError());
               }
-              // req.user = JSON.parse(decoded.data);
               const jwtData = JSON.parse(decoded.data);
               console.log('jwtData: ', jwtData);
               return UserService.getUserById(jwtData.id);
