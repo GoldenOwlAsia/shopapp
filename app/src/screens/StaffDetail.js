@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import {
-  Image,
   StyleSheet,
   View,
   Text,
+  TouchableOpacity,
+  Image
 } from 'react-native';
 import Button from '../components/BaseButton';
 import { MaterialIcons } from "@expo/vector-icons";
+import { BackArrow } from '../components/imageUrls';
 
 const STATUS_SIZE = 6;
 const URL = 'https://i.ytimg.com/vi/SJrb_d7W9Ww/maxresdefault.jpg';
@@ -26,13 +28,13 @@ const BasicInfo = ({ isOnline, avatarUrl, name, phone, address, onCall, onEdit }
       </View>
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end' }}>
         <Button
-          title={'Call'}
+          title={'Gọi điện'}
           fullWidth={false}
           buttonStyle={basicInfostyles.buttonStyle}
           onPress={onCall}
         />
         <Button
-          title={'Edit'}
+          title={'Chỉnh sửa'}
           fullWidth={false}
           outline
           buttonStyle={[basicInfostyles.buttonStyle, basicInfostyles.btnEdit]}
@@ -108,6 +110,18 @@ const basicInfostyles = StyleSheet.create({
 });
 
 class StaffDetailScreen extends Component {
+
+  static navigationOptions = ({ navigation }) => ({
+    headerLeft: (
+      <TouchableOpacity onPress={() => navigation.goBack(null)}>
+        <Image
+          style={{ width: 24, height: 16, marginLeft: 16 }}
+          source={BackArrow}
+        />
+      </TouchableOpacity>
+    ),
+  });
+
   constructor(props) {
     super(props);
   }
@@ -132,7 +146,7 @@ class StaffDetailScreen extends Component {
           </View>
         </View>
         <View style={styles.description}>
-          <Text style={styles.desTitle}>Description</Text>
+          <Text style={styles.desTitle}>Mô tả</Text>
           <Text style={styles.desText}>Lorem ipsum dolor sit amet, eu tota zril nec, ad has zril eirmod. Eum eu alia dolores eligendi, eligendi expetendis vis in, duis posidonium.</Text>
         </View>
       </View>

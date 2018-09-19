@@ -3,12 +3,35 @@ import {
   FlatList,
   StyleSheet,
   View,
-  Text
+  TouchableOpacity,
+  Image,
 } from 'react-native';
 import SearchBar from '../components/SearchBar';
 import StaffItem from '../components/StaffItem';
+import { Hamburger, PlusIcon } from '../components/imageUrls';
 
 class StaffsScreen extends Component {
+
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Nhân viên',
+    headerLeft: (
+      <TouchableOpacity>
+        <Image
+          style={{ width: 16, height: 16, marginLeft: 16 }}
+          source={Hamburger}
+        />
+      </TouchableOpacity>
+    ),
+    headerRight: (
+      <TouchableOpacity onPress={() => navigation.navigate('CreateStaff')}>
+        <Image
+          style={{ width: 16, height: 16, marginRight: 16 }}
+          source={PlusIcon}
+        />
+      </TouchableOpacity>
+    )
+  });
+
   constructor(props) {
     super(props);
   }
@@ -37,7 +60,7 @@ class StaffsScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <SearchBar placeholder="Search" />
+        <SearchBar placeholder="Tìm kiếm" />
         <FlatList
           data={staffs}
           renderItem={this.renderStaffItem}

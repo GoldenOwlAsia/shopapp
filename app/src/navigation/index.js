@@ -9,6 +9,7 @@ import AuthStack from './AuthStack';
 import OwnerStack from './OwnerStack';
 import AuthLoading from '../screens/AuthLoading';
 import StaffDetailStack from './StaffDetailStack';
+import CreateStaffStack from './CreateStaffStack';
 
 const AppNavigator = createSwitchNavigator(
   {
@@ -19,9 +20,11 @@ const AppNavigator = createSwitchNavigator(
     App: AppStack,
     Auth: AuthStack,
     StaffDetail: StaffDetailStack,
+    CreateStaff: CreateStaffStack,
   },
   {
-    initialRouteName: 'Owner'
+    initialRouteName: 'Owner',
+    backBehavior: 'initialRoute',
   }
 );
 

@@ -12,6 +12,7 @@ import Welcome from './Welcome';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import BaseButton from '../../src/components/BaseButton';
+import AvatarPicker from '../../src/components/AvatarPicker';
 
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
@@ -43,3 +44,9 @@ storiesOf('Button', module)
   .add('with loading', () => (
     <BaseButton loading title="Basic Button" />
   ));
+
+  storiesOf('Avatar', module)
+    .addDecorator(getStory => <CenterView>{getStory()}</CenterView>)
+    .add('Default', () => (
+      <AvatarPicker />
+    ))  
