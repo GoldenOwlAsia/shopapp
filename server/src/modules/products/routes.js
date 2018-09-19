@@ -41,5 +41,11 @@ export default {
       resolve: Controller.getProducts
     },
   },
-  mutation: {}
+  mutation: {
+    createProduct: {
+      type: ProductType,
+      description: 'Create new product in database',
+      resolve: Controller.createProduct
+    }
+  }
 }
