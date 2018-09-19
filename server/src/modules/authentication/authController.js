@@ -16,6 +16,7 @@ class AuthController {
         let user;
         Joi.validate(args, LoginParams)
           .then(validParams => {
+            console.log('login username: ', loginData.username, loginData.password);
             return UserService.getUserByUsername(loginData.username);
           })
           .then(u => {
