@@ -94,7 +94,6 @@ module.exports = (sequelize, DataTypes) => {
   User.beforeCreate((instance, options) => {
     if (instance.role === 'owner') {
       const code = generateToken();;
-      console.log('generated code: ', code);
       instance.code = code;
     }
     return instance;

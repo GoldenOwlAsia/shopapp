@@ -52,7 +52,6 @@ const authenticate = (req, res, next) => {
       next();
     }
   } catch (err) {
-    console.log('Come here?????');
     next(err);
   }
 };

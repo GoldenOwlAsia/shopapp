@@ -13,8 +13,6 @@ class UserController {
         if (curUser.role !== ROLES.OWNER) {
           throw new AuthorizationError();
         }
-
-        console.log('this: ', this);
         
         if (args.avatar) {
           const params = { ...args };  
