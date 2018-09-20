@@ -66,7 +66,7 @@ class NormalTextInput extends Component {
 
   handleChange = (text) => {
     this.setState({text});
-    this.props.onChange && this.props.onChange(text);
+    this.props.onChangeText && this.props.onChangeText(text);
   }
 
   render(){
