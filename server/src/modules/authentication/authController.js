@@ -15,11 +15,13 @@ class AuthController {
         const loginData = args;
         let user;
         Joi.validate(args, LoginParams)
-          .then(validParams => {            
+          .then(validParams => {       
+            console.log('username pas: ', loginData);     
             return UserService.getUserByUsername(loginData.username);
           })
           .then(u => {
             if(!u) {
+              console.log('login not found user!');
               throw new AuthorizationError('Wrong username or password!');
             }
             user = u;
@@ -28,6 +30,7 @@ class AuthController {
           })
           .then(isValid => {
             if (!isValid) {
+              console.log('login passwor not match');
               throw new AuthorizationError('Wrong username or password!');
             }
             const jwtData = {
