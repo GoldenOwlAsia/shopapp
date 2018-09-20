@@ -25,7 +25,7 @@ const AppNavigator = createSwitchNavigator(
     OwnerNotification: OwnerNotificationStack,
   },
   {
-    initialRouteName: 'Owner',
+    initialRouteName: 'AuthLoading',
     backBehavior: 'initialRoute',
   }
 );
