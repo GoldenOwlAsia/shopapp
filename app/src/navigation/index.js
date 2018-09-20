@@ -23,7 +23,7 @@ const AppNavigator = createSwitchNavigator(
     CreateStaff: CreateStaffStack,
   },
   {
-    initialRouteName: 'Owner',
+    initialRouteName: 'AuthLoading',
     backBehavior: 'initialRoute',
   }
 );
