@@ -10,7 +10,6 @@ class UserService {
     return new Promise((resolve, reject) => {
       Joi.validate(params, createUserSchema)
         .then(params => {
-          console.log('create params: ', params);
           return User.create(params);
         })
         .then(user => {
