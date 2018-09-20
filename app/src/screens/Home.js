@@ -79,7 +79,7 @@ class HomeScreen extends Component {
       customerPhoneNumber: '',
       isOpenCreateCustomerModal: false,
       loading: false,
-      grid: true,
+      grid: false,
     };
   }
 
@@ -176,7 +176,6 @@ class HomeScreen extends Component {
   }
 
   render() {
-    console.log('[Home.js] project', this.state.products);
     return (
       <View style={styles.container}>
         <SearchBar
@@ -191,7 +190,7 @@ class HomeScreen extends Component {
           renderItem={this.renderRow}
           keyExtractor={this.keyExtractor} 
           ItemSeparatorComponent={Divider}
-          columnWrapperStyle={styles.columnWrapperStyle}
+          columnWrapperStyle={this.state.grid ? styles.columnWrapperStyle : null}
           refreshControl={
             <RefreshControl
               refreshing={this.props.loading}
@@ -203,9 +202,9 @@ class HomeScreen extends Component {
           isOpen={this.state.isOpenCreateCustomerModal}
           onSubmit={this.handleCreateCustomer}
           onRequestClose={this.closeModal}
-          submitText={'Create new customer'}
-          cancleText={'No, do it later'}
-          title={'New customer'}
+          submitText={'Tạo mới'}
+          cancleText={'Không, thêm khách hàng sau'}
+          title={'Thêm khách hàng mới'}
         />
       </View>
     );
