@@ -4,7 +4,7 @@ import { TextInput, View, StyleSheet, KeyboardAvoidingView } from 'react-native'
 import { FontAwesome } from "@expo/vector-icons";
 
 /* Component ==================================================================== */
-const SearchBar = (props) => {
+const SearchBar =  (props) => {
   const { wrapperStyle, style, ...rest } = props;
   return (
     <KeyboardAvoidingView style={[styles.container, props.wrapperStyle]} behavior="padding" enabled>
