@@ -12,11 +12,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     firstName: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.STRING
     },
     lastName: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.STRING
     },
     phoneNumber: {
@@ -48,6 +48,30 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     code: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    fullName: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    salary: {
+      allowNull: true,
+      type: DataTypes.DOUBLE
+    },
+    bonus: {
+      allowNull: true,
+      type: DataTypes.DOUBLE
+    },
+    note: {
+      allowNull: true,
+      type: DataTypes.TEXT('MEDIUM'),
+    },
+    CMND: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    avatar: {
       allowNull: true,
       type: DataTypes.STRING
     },

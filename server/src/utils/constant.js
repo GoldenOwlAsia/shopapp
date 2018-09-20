@@ -1,6 +1,4 @@
-export default {
-  ROLES: {
-    OWNER: 'owner',
-    STAFF: 'staff'
-  }
+export const ROLES = {
+  OWNER: 'owner',
+  STAFF: 'staff'
 }

@@ -9,11 +9,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       firstName: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING
       },
       lastName: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.STRING
       },
       phoneNumber: {
@@ -33,6 +33,30 @@ module.exports = {
         type: Sequelize.STRING
       },
       password: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      fullName: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      avatar: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
+      salary: {
+        allowNull: true,
+        type: Sequelize.DOUBLE
+      },
+      bonus: {
+        allowNull: true,
+        type: Sequelize.DOUBLE
+      },
+      note: {
+        allowNull: true,
+        type: Sequelize.TEXT('MEDIUM'),
+      },
+      CMND: {
         allowNull: false,
         type: Sequelize.STRING
       },
