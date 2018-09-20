@@ -60,6 +60,7 @@ const products = [
 import AuthService from '../authentication/authService';
 import { ROLES } from '../../utils/constant';
 import ProductService from './service';
+import { AuthorizationError } from '../authentication/errors';
 
 class ProductController {
   getProducts(_, args, ctx) {
@@ -71,7 +72,7 @@ class ProductController {
       try {
         const curUser = AuthService.getCurrentUserFromContext(ctx);
         if (curUser.role !== ROLES.OWNER) {
-          throw new Error('Not Authorize!');
+          throw new AuthorizationError();
         }
 
         return ProductService.createProduct(args)

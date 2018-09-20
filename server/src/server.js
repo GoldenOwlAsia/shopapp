@@ -5,13 +5,19 @@ import configs from './configs';
 import graphqlHTTP  from 'express-graphql';
 import { buildSchema } from 'graphql';
 import schema from './modules';
+import bodyParser from 'body-parser';
+import path from 'path'
 
 const app = express();
 // cross origin config
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb'}));
+app.use(bodyParser.json({limit: '10mb'}));
 app.get('/', (req, res, next) => {
   res.send('Hello!');
 });
+
+app.use(express.static(path.join(__dirname, '../public')))
 
 // Create an express server and a GraphQL endpoint
 app.use('/graphql', authMiddleware, graphqlHTTP({

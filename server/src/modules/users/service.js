@@ -2,6 +2,7 @@ import models from '../../models';
 import { createUserSchema } from './validation';
 import Joi from '../../utils/pjoi';
 import { ItemNotFoundError } from '../../utils/errors';
+import uuidv1 from 'uuid/v1';
 const User = models.User;
 
 class UserService {
@@ -9,6 +10,7 @@ class UserService {
     return new Promise((resolve, reject) => {
       Joi.validate(params, createUserSchema)
         .then(params => {
+          console.log('create params: ', params);
           return User.create(params);
         })
         .then(user => {
@@ -27,10 +29,10 @@ class UserService {
         where: {username: username}
       })
         .then(u => {
-          resolve(u);
+          return resolve(u);
         })
         .catch(err => {
-          reject(err);
+          return reject(err);
         })
     })
   }
@@ -55,10 +57,10 @@ class UserService {
         where: {id: id}
       })
         .then(u => {
-          resolve(u);
+          return resolve(u);
         })
         .catch(err => {
-          reject(err);
+          return reject(err);
         });
     });
   };
@@ -73,7 +75,7 @@ class UserService {
           return reject(err);
         });
     });
-  }
+  };
 
   updateUserById(id, params) {
     return new Promise((resolve, reject) => {
@@ -92,6 +94,10 @@ class UserService {
           reject(err);
         });
     });
+  }
+
+  generateAvatarUrl() {
+    return uuidv1();
   }
   
   styleUserResponse(user) {

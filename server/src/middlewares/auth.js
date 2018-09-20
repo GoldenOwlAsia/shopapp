@@ -20,26 +20,20 @@ const authenticate = (req, res, next) => {
         jwt.verify(auth_token, token.secretKey, (err, decoded) => {
           // failed
           if (err) throw new AuthorizationError();
-
-          console.log('auth token: ', auth_token);
-
           // Check token is valid
           UserTokenService.getToken(auth_token)
             .then(token => {
               if (!token) {
-                console.log('token not found!')
+                console.log('token not found!');
                 return next(new AuthorizationError());
               }
               const jwtData = JSON.parse(decoded.data);
-              console.log('jwtData: ', jwtData);
               return UserService.getUserById(jwtData.id);
             })
             .then(u => {
-              console.log('the user: ', u);
               if(!u) {
                 return next(new AuthorizationError());
               }
-              console.log("??????")
               req.user= u;
               next();
             })
