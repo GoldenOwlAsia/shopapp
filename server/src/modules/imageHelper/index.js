@@ -20,6 +20,11 @@ class ImageHelper {
   parseBase64(rootBase64) {
     return rootBase64.replace(/^data:image\/[a-z]+;base64,/, '');
   }
+
+  isBase64ImageString(base64String) {
+    const matched = base64String.match(/^data:image\/[a-z]+;base64,/);
+    return matched && matched.length > 0;
+  }
 }
 
 export default new ImageHelper();

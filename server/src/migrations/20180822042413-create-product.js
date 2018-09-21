@@ -12,13 +12,37 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      importPrice: {
+        allowNull: false,
+        type: Sequelize.DOUBLE
+      },
       price: {
+        allowNull: false,
+        type: Sequelize.DOUBLE
+      },
+      category: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
+      description: {
+        allowNull: true,
+        type: Sequelize.TEXT
+      },
+      color: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      images: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
+      quantity: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      category: {
+      size: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

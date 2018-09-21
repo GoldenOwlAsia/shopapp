@@ -2,18 +2,20 @@ import {
   GraphQLString,
   GraphQLList,
   GraphQLObjectType,
+  GraphQLInputObjectType,
   GraphQLNonNull,
+  GraphQLFloat,
   GraphQLInt
 } from 'graphql';
 
 import Controller from './controller';
 
-const ProductType = new GraphQLObjectType({
+export const ProductType = new GraphQLObjectType({
   name: "Product",
   description: "This represent an product",
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(GraphQLInt)
+      type: GraphQLInt
     },
     name: {
       type: new GraphQLNonNull(GraphQLString)
@@ -21,17 +23,78 @@ const ProductType = new GraphQLObjectType({
     category: {
       type: GraphQLString
     },
+    status: {
+      type: GraphQLString
+    },
+    importPrice: {
+      type: GraphQLFloat
+    },
     price: {
+      type: GraphQLFloat
+    },
+    description: {
+      type: GraphQLString
+    },
+    color: {
+      type: GraphQLString
+    },
+    images: {
+      type: new GraphQLList(GraphQLString)
+    },
+    quantity: {
       type: GraphQLInt
     },
-    image: {
+    size: {
+      type: GraphQLString
+    },
+  })
+});
+
+export const ProductInputType = new GraphQLInputObjectType({
+  name: "ProductInput",
+  description: "This represent an input of a product",
+  fields: () => ({
+    id: {
+      type: GraphQLInt
+    },
+    name: {
+      type: GraphQLString
+    },
+    category: {
       type: GraphQLString
     },
     status: {
       type: GraphQLString
+    },
+    importPrice: {
+      type: GraphQLFloat
+    },
+    price: {
+      type: GraphQLFloat
+    },
+    description: {
+      type: GraphQLString
+    },
+    color: {
+      type: GraphQLString
+    },
+    images: {
+      type: new GraphQLList(GraphQLString)
+    },
+    quantity: {
+      type: GraphQLInt
+    },
+    size: {
+      type: GraphQLString
+    },
+    createdAt: {
+      type: GraphQLString
+    },
+    updatedAt: {
+      type: GraphQLString
     }
   })
-});
+})
 
 export default {
   query: {
@@ -40,12 +103,55 @@ export default {
       description: 'Get all products',
       resolve: Controller.getProducts
     },
+    getProductById: {
+      type: ProductType,
+      description: 'Get a product',
+      args: {
+        productId: { type: GraphQLInt }
+      },
+      resolve: Controller.getProductById
+    }
   },
   mutation: {
     createProduct: {
       type: ProductType,
       description: 'Create new product in database',
+      args: {
+        name: {
+          type: new GraphQLNonNull(GraphQLString)
+        },
+        importPrice: {
+          type: GraphQLFloat
+        },
+        price: {
+          type: GraphQLFloat
+        },
+        description: {
+          type: GraphQLString
+        },
+        color: {
+          type: GraphQLString
+        },
+        images: {
+          type: new GraphQLList(GraphQLString)
+        },
+        quantity: {
+          type: GraphQLInt
+        },
+        size: {
+          type: GraphQLString
+        },
+      },
       resolve: Controller.createProduct
+    },
+    updateProduct: {
+      type: ProductType,
+      description: 'Update a product in database',
+      args: {
+        productId: { type: GraphQLInt },
+        params: { type: ProductInputType }
+      },
+      resolve: Controller.updateProduct
     }
   }
 }

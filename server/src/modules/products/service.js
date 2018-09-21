@@ -1,7 +1,5 @@
 import models from '../../models';
-// import { createUserSchema } from './validation';
-// import Joi from '../../utils/pjoi';
-import { ItemNotFoundError } from'../../utils/errors';
+import uuidv1 from 'uuid/v1';
 const Product = models.Product;
 
 class ProductService {
@@ -17,6 +15,34 @@ class ProductService {
     });
   }
 
+  getProducts() {
+    return new Promise((resolve, reject) => {
+      return Product.findAll()
+        .then(prods => {
+          return resolve(prods);
+        })
+        .catch(err => {
+          return reject(err);
+        });
+    })
+  }
+
+  getProductById(prodId) {
+    return new Promise((resolve, reject) => {
+      return Product.findOne({
+        where: {
+          id: prodId
+        }
+      })
+      .then(prod => {
+        return resolve(prod);
+      })
+      .catch(err => {
+        return reject(err);
+      });
+    })
+  }
+
   createProduct(params) {
     return new Promise((resolve, reject) => {
       return Product.create(params)
@@ -27,6 +53,22 @@ class ProductService {
           return reject(err);
         })
     });
+  }
+
+  generateProductUrl() {
+    return uuidv1();
+  }
+
+  styleProductResponse(product) {
+    let result = { ...(product.toJSON()) };
+    if (result.images) {
+      result.images = JSON.parse(result.images);
+    }
+    if (result.quantity > 0) {
+      result.status = 'Available';
+    }
+
+    return result;
   }
 }
 
