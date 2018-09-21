@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   quantity: {
     fontSize: 16,
-    fontFamily: "Rubik-Regular",
+    // fontFamily: "Rubik-Regular",
     color: "#c1c5cb"
   },
   text: {
