@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
-  TextInput,
   KeyboardAvoidingView,
-  Text,
-  View,
 } from 'react-native';
 import { PropTypes } from 'prop-types';
 import { TextField } from 'react-native-material-textfield';
@@ -19,10 +15,6 @@ const styles = StyleSheet.create({
     borderColor: "#eeeeee",
     paddingLeft: 16,
     paddingRight: 16,
-  },
-  wrapper: {
-    // padding: 10,
-    // backgroundColor: '#F6F6F8',
   },
   container: {
     paddingLeft: 16,
@@ -72,24 +64,26 @@ class NormalTextInput extends Component {
   render(){
     const { label, spaceTop, ...rest } = this.props;
     return (
-      <TextField
-        {...rest}
-        label={label}
-        value={this.state.phone}
-        onChangeText={this.handleChange}
-        containerStyle={[styles.containerStyle, spaceTop && { marginTop: 10 }]}
-        tintColor="#caced4"
-        baseColor="#caced4"
-        labelFontSize={14}
-        titleFontSize={24}
-        fontSize={16}
-        textColor={'#12283f'}
-        lineWidth={0}
-        activeLineWidth={0}
-        style={styles.textInput}
-        autoCapitalize={'none'}
-        value={this.state.text}
-      />
+      <KeyboardAvoidingView behavior="padding" enabled>
+        <TextField
+          {...rest}
+          label={label}
+          value={this.state.phone}
+          onChangeText={this.handleChange}
+          containerStyle={[styles.containerStyle, spaceTop && { marginTop: 10 }]}
+          tintColor="#caced4"
+          baseColor="#caced4"
+          labelFontSize={14}
+          titleFontSize={24}
+          fontSize={16}
+          textColor={'#12283f'}
+          lineWidth={0}
+          activeLineWidth={0}
+          style={styles.textInput}
+          autoCapitalize={'none'}
+          value={this.state.text}
+        />
+      </KeyboardAvoidingView>
     )
   }
 }
@@ -103,8 +97,5 @@ NormalTextInput.propTypes = {
 NormalTextInput.defaultProps = {
   spaceTop: true,
 }
-
-// skip this line if using Create React Native App
-// AppRegistry.registerComponent('ShopApp', () => NormalTextInput);
 
 export default NormalTextInput;

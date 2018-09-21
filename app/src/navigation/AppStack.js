@@ -1,4 +1,5 @@
 import React from "react";
+import { Image } from 'react-native';
 import {
   createStackNavigator,
   createBottomTabNavigator
@@ -10,9 +11,14 @@ import CustomersScreen from '../screens/Customers';
 import CheckoutScreen from '../screens/Checkout';
 
 import { HamburgerIcon, SettingsIcon, BackIcon } from '../components/icons';
-
+import TouchableView from '../components/TouchableView';
 import { CustomDrawerContent } from '../components';
 import { colors } from '../utils/constants';
+import { CheckoutTabIconActive, CheckoutTabIconInactive, HomeTabIconActive, HomeTabIconInactive, CustomerTabIconActive, CustomerTabIconInactive } from '../components/imageUrls';
+
+const TabIcon = ({ icon }) => (
+    <Image resizeMode="contain" source={icon} style={{ width: 28, height: 28 }} />
+)
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -20,8 +26,8 @@ const HomeStack = createStackNavigator({
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Products',
-  tabBarIcon: ({ tintColor }) => (
-    <FontAwesome name="home" size={23} color={tintColor} />
+  tabBarIcon: ({ focused }) => (
+    <TabIcon icon={focused ? HomeTabIconActive : HomeTabIconInactive} />
   ),
 };
 
@@ -30,9 +36,8 @@ const CheckoutStack = createStackNavigator({
 });
 
 CheckoutStack.navigationOptions = {
-  tabBarLabel: "Cart",
-  tabBarIcon: ({ tintColor }) => (
-    <FontAwesome name="map" size={23} color={tintColor} />
+  tabBarIcon: ({ focused }) => (
+    <TabIcon icon={focused ? CheckoutTabIconActive : CheckoutTabIconInactive} />
   ),
   tabBarOnPress: ({ navigation, defaultHandler }) => {
     // defaultHandler();
@@ -58,9 +63,8 @@ const CustomersStack = createStackNavigator({
 });
 
 CustomersStack.navigationOptions = {
-  tabBarLabel: "Customers",
-  tabBarIcon: ({ tintColor }) => (
-    <FontAwesome name="user-circle" size={23} color={tintColor} />
+  tabBarIcon: ({ focused }) => (
+    <TabIcon icon={focused ? CustomerTabIconActive : CustomerTabIconInactive} />
   ),
 };
 
@@ -68,4 +72,8 @@ export default createBottomTabNavigator({
   HomeStack,
   CheckoutStack,
   CustomersStack,
+}, {
+  tabBarOptions: {
+    showLabel: false,
+  }
 });

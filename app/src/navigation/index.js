@@ -1,5 +1,6 @@
 import {
-  createSwitchNavigator
+  createSwitchNavigator,
+  createStackNavigator,
 } from "react-navigation";
 
 import { AsyncStorage } from "react-native"
@@ -12,7 +13,7 @@ import StaffDetailStack from './StaffDetailStack';
 import CreateStaffStack from './CreateStaffStack';
 import OwnerNotificationStack from './OwnerNotificationStack';
 
-const AppNavigator = createSwitchNavigator(
+const AppNavigator = createStackNavigator(
   {
     // You could add another route here for authentication.
     // Read more at https://reactnavigation.org/docs/en/auth-flow.html
@@ -26,7 +27,8 @@ const AppNavigator = createSwitchNavigator(
   },
   {
     initialRouteName: 'AuthLoading',
-    backBehavior: 'initialRoute',
+    headerMode: 'none',
+    // backBehavior: 'initialRoute',
   }
 );
 

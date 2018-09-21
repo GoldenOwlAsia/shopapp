@@ -7,8 +7,9 @@ export const GetAllProducts = gql`
       name,
       category,
       price,
-      image,
-      status
+      images,
+      status,
+      description,
     }
   }
 `;

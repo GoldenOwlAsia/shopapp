@@ -19,6 +19,7 @@ import NewCustomerModal from '../components/NewCustomerModal';
 import CheckoutItem from '../components/CheckoutItem';
 import TouchableView from '../components/TouchableView';
 import BaseButton from '../components/BaseButton';
+import { formatMoney } from '../utils/helpers';
 
 import { removeItemFromOrder, increaseItemQuantity, decreaseItemQuantity, checkout } from '../actions/order';
 import { CHECKOUT_SUCCESS, UPDATE_CUSTOMER_SUCCESS } from "../actions/types";
@@ -54,7 +55,7 @@ class CheckOutScreen extends Component {
   constructor(props) {
     super(props);
     const customer = props.customers.filter((c) => c.id === props.selectedCustomer)[0];
-    const items = props.orders[props.selectedCustomer];
+    const items = props.orders[props.selectedCustomer] || [];
     this.itemRefs = new Array(items.length);
     this.state = {
       tax: 0,
@@ -71,6 +72,7 @@ class CheckOutScreen extends Component {
     let items = this.props.orders[this.props.selectedCustomer].map((item) => {delete item.__typename; return item;});
     const subTotal = this.calculateSubTotal(items);
     const tax = this.calculateTax(subTotal);
+    debugger
     const grandTotal = this.calculateGrandTotal(subTotal, tax)
 
     let params = {
@@ -182,15 +184,15 @@ class CheckOutScreen extends Component {
           <Divider />
           <View style={styles.row}>
             <Text style={styles.label}>Tổng giá</Text>
-            <Text>{subTotal}</Text>
+            <Text>{formatMoney(subTotal)} VNĐ</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.label}>Thuế</Text>
-            <Text>{taxAmount}</Text>
+            <Text>{formatMoney(taxAmount)} VNĐ</Text>
           </View>
           <View style={styles.row}>
             <Text style={[styles.grandTotal, { color: "#0F2336" }]}>Tổng cộng</Text>
-            <Text style={[{ color: '#5175FF' }, styles.grandTotal]}>{grandTotal}</Text>
+            <Text style={[{ color: '#5175FF' }, styles.grandTotal]}>{formatMoney(grandTotal)} VNĐ</Text>
           </View>
           <Divider />
           <View style={styles.customerInfo}>
@@ -198,7 +200,7 @@ class CheckOutScreen extends Component {
             <Text style={styles.customerInfoText}>{customer.name}</Text>
             <Text style={styles.customerInfoText}>{customer.phoneNumber}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={styles.customerInfoText}>{customer.address}</Text>
+              <Text style={styles.customerInfoText}>{customer.address? customer.address : ''}</Text>
               <TouchableView onPress={this.editCustomer}>
                 <Text style={styles.editText}>Chỉnh sửa</Text>
               </TouchableView>

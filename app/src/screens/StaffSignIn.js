@@ -7,6 +7,7 @@ import {
   Image,
   Text,
   Alert,
+  KeyboardAvoidingView,
 } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
@@ -66,7 +67,7 @@ class SignInScreen extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Staff sign in',
+    title: '',
   };
 
   handleSignIn = async () => {
@@ -117,24 +118,22 @@ class SignInScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <AuthHeader />
-
         <View style={styles.contentWrapper}>
           <TextInput
-            label="Username"
+            label="Tên đăng nhập"
             value={this.state.username}
             onChangeText={this.onChangeUsername}
           />
 
           <TextInput
-            label="Password"
+            label="Mật khẩu"
             secureTextEntry
             value={this.state.password}
             onChangeText={this.onChangePassword}
           />
         </View>
-
         <BaseButton
           loading={this.state.loading}
           onPress={this.handleSignIn}
@@ -144,7 +143,7 @@ class SignInScreen extends React.Component {
           <TouchableView onPress={this.goToForgotPassword}>
             <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
           </TouchableView>  
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
