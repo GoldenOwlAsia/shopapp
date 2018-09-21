@@ -193,6 +193,7 @@ class HomeScreen extends Component {
   }
 
   renderRow = ({item, index}) => {
+    console.log('[Home.js] zz item', item);
     return (
       <ProductItem
         key={`product-${item.id}`}

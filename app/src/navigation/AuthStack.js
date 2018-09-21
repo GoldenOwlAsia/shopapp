@@ -13,7 +13,7 @@ const AuthStack = createStackNavigator(
     OnwerLogin: OnwerLogin
   },
   {
-    initialRouteName: 'SignIn'
+    initialRouteName: 'ChooseUserTypeScreen'
   }
 );
 
