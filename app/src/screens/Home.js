@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 import {
   StyleSheet,
   View,
-  Text,
   FlatList,
   TouchableOpacity,
   Image,
   RefreshControl,
-  SafeAreaView,
+  AsyncStorage,
+  Alert,
 } from 'react-native';
-
+import { StackActions, NavigationActions } from 'react-navigation';
 import {
   Squares,
   Hamburger
@@ -51,7 +51,7 @@ class HomeScreen extends Component {
   };
 
   static navigationOptions = ({ navigation }) => ({
-    title: `${(navigation.state.params || {}).title || 'Product list'}`,
+    title: `${(navigation.state.params || {}).title || ''}`,
     headerRight: (
       <TouchableOpacity onPress={() => console.log('right clicked')}>
         <Image
@@ -61,7 +61,26 @@ class HomeScreen extends Component {
       </TouchableOpacity>
     ),
     headerLeft: (
-      <TouchableOpacity onPress={() => console.log('left clicked')}>
+      <TouchableOpacity onPress={() => {
+        Alert.alert(
+          'Xác Nhận',
+          'Bạn có thật sự muốn đăng xuất ?',
+          [
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'OK', onPress: async () => {
+              await AsyncStorage.clear();
+
+              navigation.dispatch(StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'AuthLoading' })],
+                key: null,
+              }));
+
+            }},
+          ],
+          { cancelable: false }
+        )
+      }}>
         <Image
           style={styles.headerLeftIcon}
           source={Hamburger}
@@ -90,7 +109,7 @@ class HomeScreen extends Component {
   openModal = () => {
     const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
     if (!selectedProducts.length) {
-      alert('Please select products');
+      alert('Vui lòng chọn sản phẩm');
       return;
     } 
     if (!this.props.selectedCustomer) {
@@ -159,6 +178,7 @@ class HomeScreen extends Component {
   }
 
   renderRow = ({item, index}) => {
+    console.log('[Home.js] zz item', item);
     return (
       <ProductItem
         key={`product-${item.id}`}
@@ -176,6 +196,7 @@ class HomeScreen extends Component {
   }
 
   render() {
+    console.log('[Home.js] home nav', this.props)
     return (
       <View style={styles.container}>
         <SearchBar

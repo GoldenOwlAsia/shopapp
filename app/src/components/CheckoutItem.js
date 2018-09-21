@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, View, StyleSheet, Image } from 'react-native';
-import { FontAwesome } from "@expo/vector-icons";
 import QuantityPicker from './QuantityPicker';
 import TouchableView from './TouchableView';
 import { UpArrow, DownArrow, Trash } from './imageUrls';
+import { formatMoney } from '../utils/helpers';
 
 /* Component ==================================================================== */
 class CheckoutItem extends React.PureComponent {
@@ -22,7 +22,7 @@ class CheckoutItem extends React.PureComponent {
       <View>
         <Header
           productName={productName}
-          totalPrice={totalPrice}
+          totalPrice={formatMoney(totalPrice)}
           expand={this.state.expand}
           toggleExpand={this.toggleExpand}
         />
@@ -37,7 +37,7 @@ const Header = ({ expand, toggleExpand, productName, totalPrice }) => (
     <View style={styles.header}>
       <Image source={expand ? UpArrow : DownArrow} resizeMode={'contain'} style={styles.arrow} />
       <Text numberOfLines={1} style={styles.title}>{productName}</Text>
-      <Text style={styles.price}>{totalPrice}</Text>
+      <Text style={styles.price}>{totalPrice} VNĐ</Text>
     </View>
   </TouchableView>
 )

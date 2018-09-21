@@ -3,24 +3,27 @@ import PropTypes from 'prop-types';
 import { Image, View, StyleSheet, Text, Dimensions } from 'react-native';
 import QuantityPicker from './QuantityPicker';
 import TouchableView from './TouchableView';
+import { formatMoney } from '../utils/helpers';
 
 /* Component ==================================================================== */
 const ProductItem = (props) => {
   const { item, gridItem, onPress, onIncrease, onDecrease } = props;
-  const { image, name, category, price, status, quantity } = item;
+  const { images, name, category, price, status, quantity, description } = item;
+
+  const URL = images.length > 0 ? images[0] : null;
 
   if(gridItem){
     return (
       <TouchableView onPress={onPress}>
         <View style={styles.gridContainer}>
           <View style={[styles.imageWrap, styles.gridImageWrap]}>
-            <Image source={{ uri: image }} style={styles.image} />
+            <Image source={{ uri: URL }} style={styles.image} />
           </View>
           <View style={styles.gridContent}>
             <Text style={styles.title}>{name}</Text>
-            <Text style={styles.category}>{category}</Text>
-            <Text style={[styles.status, styles.gridStatus]}>{status}</Text>
-            <Text style={[styles.price, styles.gridPrice]}>{price}</Text>
+            <Text numberOfLines={1} style={styles.category}>{description}</Text>
+            <Text style={[styles.status, styles.gridStatus]}>{status === 'Available' ? 'Còn hàng' : 'Hết hàng'}</Text>
+            <Text style={[styles.price, styles.gridPrice]}>{formatMoney(price)}</Text>
             <QuantityPicker
               quantity={quantity}
               onIncrease={onIncrease}
@@ -35,14 +38,14 @@ const ProductItem = (props) => {
       <TouchableView onPress={onPress}>
         <View style={styles.container}>
           <View style={[styles.imageWrap, styles.listImageWrap]}>
-            <Image source={{ uri: image }} style={styles.image} />
+            <Image source={{ uri: URL }} style={styles.image} />
           </View>
           <View style={styles.listContent}>
             <Text style={styles.title}>{name}</Text>
-            <Text style={styles.category}>{category}</Text>
+            <Text numberOfLines={1} style={styles.category}>{description}</Text>
             <View style={styles.horizontal}>
-              <Text style={styles.price}>{price}</Text>
-              <Text style={styles.status}>{status}</Text>
+              <Text style={styles.price}>{formatMoney(price)} VNĐ</Text>
+              <Text style={[styles.status, styles.gridStatus]}>{status === 'Available' ? 'Còn hàng' : 'Hết hàng'}</Text>
             </View>
             <View style={styles.dummy} />
             <QuantityPicker

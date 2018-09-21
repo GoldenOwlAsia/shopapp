@@ -71,6 +71,7 @@ export const decreaseItemQuantity = (customerId, itemId) => {
 }
 
 const handleCheckout = (params) => dispatch => {
+  console.log('[order.js] params', JSON.stringify(params));
   return client
     .mutate({
       mutation: Checkout,
@@ -84,7 +85,7 @@ const handleCheckout = (params) => dispatch => {
     })
     .catch(error => {
       console.log('checkout error: ', error);
-      debugger;
+      // debugger;
       return dispatch(checkoutFail(error));
     });
 }
@@ -111,7 +112,7 @@ export const checkoutSuccess = (params) => {
 const handleCheckoutFail = (params) => {
   return {
     type: CHECKOUT_FAIL,
-    payload: { ...params }
+    payload: params,
   }
 }
 

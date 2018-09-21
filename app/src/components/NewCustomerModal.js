@@ -4,12 +4,17 @@ import {
   Modal,
   View,
   Text,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
 } from 'react-native';
 import Button from './Button';
 import BaseButton from './BaseButton';
 import TouchableView from './TouchableView';
 import TextInput from './TextInput';
 import { colors } from "../utils/constants";
+
+const ContaineComponent = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
 
 class NewCustomerModal extends Component {
   constructor(props) {
@@ -34,8 +39,8 @@ class NewCustomerModal extends Component {
         visible={this.props.isOpen}
         transparent={true}
         onRequestClose={this.props.onRequestClose}>
-        <View style={styles.modalContainer}>
-          <View style={styles.contentContainer}>
+        <ContaineComponent style={styles.modalContainer} behavior="padding" enabled>
+          <View style={[styles.contentContainer]}>
             <View style={styles.modalTitle}>
               <Text style={styles.modalTitleText}>{this.props.title}</Text>
             </View>
@@ -44,13 +49,15 @@ class NewCustomerModal extends Component {
                 label="Tên khách hàng"
                 value={this.state.customerName}
                 onChangeText={this.onChangeCustomerName}
+                returnKeyType="next"
               />
               <TextInput
                 label="Số điện thoại"
                 value={this.state.customerPhoneNumber}
                 onChangeText={this.onChangeCustomerPhone}
+                keyboardType="phone-pad"
+                returnKeyType="done"
               />
-
               <BaseButton
                 containerStyle={styles.btnSubmit}
                 onPress={this.handleSubmit}
@@ -60,23 +67,9 @@ class NewCustomerModal extends Component {
               <TouchableView onPress={this.props.onRequestClose}>
                 <Text style={styles.cancelText}>{this.props.cancleText}</Text>
               </TouchableView>
-              {/* <View style={styles.buttonsWrapper}>
-                <Button
-                  text={this.props.submitText}
-                  primary
-                  centerText
-                  onPress={this.handleSubmit}
-                />
-                <Button
-                  text={this.props.cancleText}
-                  centerText
-                  textStyle={{color: 'black'}}
-                  onPress={this.props.onRequestClose}
-                />
-              </View> */}
             </View>
           </View>
-        </View>
+        </ContaineComponent>
       </Modal>
     )
   }
@@ -95,7 +88,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     justifyContent: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   modalTitle: {
     borderBottomWidth: 1,
