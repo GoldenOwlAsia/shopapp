@@ -11,13 +11,37 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
+    importPrice: {
+      allowNull: false,
+      type: DataTypes.DOUBLE
+    },
     price: {
+      allowNull: false,
+      type: DataTypes.DOUBLE
+    },
+    category: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    description: {
+      allowNull: true,
+      type: DataTypes.TEXT
+    },
+    color: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    images: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
+    quantity: {
       allowNull: false,
       type: DataTypes.INTEGER
     },
-    category: {
+    size: {
       allowNull: false,
-      type: DataTypes.INTEGER
+      type: DataTypes.STRING
     },
     createdAt: {
       allowNull: false,
