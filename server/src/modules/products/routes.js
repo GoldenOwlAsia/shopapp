@@ -94,7 +94,7 @@ export const ProductInputType = new GraphQLInputObjectType({
       type: GraphQLString
     }
   })
-})
+});
 
 export default {
   query: {
@@ -110,6 +110,11 @@ export default {
         productId: { type: GraphQLInt }
       },
       resolve: Controller.getProductById
+    },
+    getCategories: {
+      type: new GraphQLList(GraphQLString),
+      description: 'Get list of product categories',
+      resolve: Controller.getCategories
     }
   },
   mutation: {
