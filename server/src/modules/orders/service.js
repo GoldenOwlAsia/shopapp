@@ -21,6 +21,22 @@ class OrderService {
     });
   }
 
+  getOrderById(orderId) {
+    return new Promise((resolve, reject) => {
+      return Order.findOne({
+        where: {
+          id: orderId
+        }
+      })
+        .then(order => {
+          return resolve(order);
+        })
+        .catch(err => {
+          return reject(err);
+        });
+    });
+  }
+
   getOrderByQuery(query) {
     return new Promise((resolve, reject) => {
       return Order.findAll(query)

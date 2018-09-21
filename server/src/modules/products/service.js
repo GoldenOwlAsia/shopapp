@@ -4,7 +4,7 @@ const Product = models.Product;
 
 class ProductService {
   getProductsByQuery(query) {
-    return new promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       Product.findAll(query)
         .then(prods => {
           return resolve(prods);

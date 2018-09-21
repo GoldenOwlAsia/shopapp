@@ -11,6 +11,7 @@ import {
 import Controller from './controller';
 import { CustomerType } from '../customers/routes';
 import { UserType } from '../users/routes';
+import { ProductInputType } from '../products/routes';
 
 const OrderItemType = new GraphQLObjectType({
   name: 'OrderItem',
@@ -109,7 +110,7 @@ export default {
       type: OrderType,
       description: 'Create new order for storage',
       args: {
-        items: { type: new GraphQLList(OrderItemInputType) },
+        items: { type: new GraphQLList(ProductInputType) },
         subTotal: { type: GraphQLFloat },
         tax: { type: GraphQLFloat },
         grandTotal: { type: GraphQLFloat },
