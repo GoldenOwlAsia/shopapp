@@ -1,3 +1,6 @@
+import { Image } from 'react-native';
+import { Asset, Font } from 'expo';
+
 export function formatMoney(amount, decimalCount = 0, decimal = ".", thousands = ",") {
   try {
     decimalCount = Math.abs(decimalCount);
@@ -13,3 +16,18 @@ export function formatMoney(amount, decimalCount = 0, decimal = ".", thousands =
     console.log(e)
   }
 };
+
+export function preloadImages(images){
+  return images.map(image => {
+    console.log('[helpers.js] image type', typeof image);
+    if (typeof image === 'string') {
+      return Image.prefetch(image);
+    } else {
+      return Asset.fromModule(image).downloadAsync();
+    }
+  });
+}
+
+export function cacheFonts(fonts) {
+  return fonts.map(font => Font.loadAsync(font));
+}
