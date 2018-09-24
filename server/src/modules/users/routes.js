@@ -35,6 +35,12 @@ export const UserType = new GraphQLObjectType({
     address: {
       type: GraphQLString
     },
+    revenue: {
+      type: GraphQLFloat
+    },
+    soldProducts: {
+      type: GraphQLInt
+    },
     phoneNumber: {
       type: GraphQLString
     },
@@ -60,6 +66,9 @@ export const UserType = new GraphQLObjectType({
       type: GraphQLString
     },
     code: {
+      type: GraphQLString
+    },
+    createdAt: {
       type: GraphQLString
     }
   })
@@ -115,6 +124,15 @@ export const UserInputType = new GraphQLInputObjectType({
       type: GraphQLString
     },
     code: {
+      type: GraphQLString
+    },
+    revenue: {
+      type: GraphQLFloat
+    },
+    soldProducts: {
+      type: GraphQLInt
+    },
+    createdAt: {
       type: GraphQLString
     }
   })

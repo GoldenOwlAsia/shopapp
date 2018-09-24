@@ -3,6 +3,7 @@ import { createUserSchema } from './validation';
 import Joi from '../../utils/pjoi';
 import { ItemNotFoundError } from '../../utils/errors';
 import uuidv1 from 'uuid/v1';
+import moment from 'moment';
 const User = models.User;
 
 class UserService {
@@ -102,6 +103,7 @@ class UserService {
   styleUserResponse(user) {
     let result = user.toJSON();
     delete result.password;
+    result.createdAt = moment(result.createdAt).toISOString();
     return result;
   };
 }

@@ -59,6 +59,16 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       type: DataTypes.DOUBLE
     },
+    revenue: {
+      allowNull: false,
+      type: DataTypes.DOUBLE,
+      defaultValue: 0
+    },
+    soldProducts: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
     bonus: {
       allowNull: true,
       type: DataTypes.DOUBLE
