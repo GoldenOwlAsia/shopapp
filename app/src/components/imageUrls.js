@@ -4,6 +4,7 @@ export const StaffIcon = require('../../assets/images/staff.png');
 export const ArrowIcon = require('../../assets/images/white-arrow.png');
 export const Hamburger = require('../../assets/images/hamburger.png');
 export const Squares = require('../../assets/images/4-squares.png');
+export const GridList = require('../../assets/images/grid.png');
 export const BackArrow = require('../../assets/images/back-arrow.png');
 export const UpArrow = require('../../assets/images/up-arrow.png');
 export const DownArrow = require('../../assets/images/down-arrow.png');
