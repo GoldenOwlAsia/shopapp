@@ -45,7 +45,7 @@ class StaffsScreen extends Component {
   }
 
   onItemPress = (staff) => {
-    this.props.navigation.navigate('StaffDetail');
+    this.props.navigation.navigate('StaffDetail', { userId: staff.id });
   }
 
   renderStaffItem = ({ item }) => (
