@@ -13,6 +13,12 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 import BaseButton from '../../src/components/BaseButton';
 import AvatarPicker from '../../src/components/AvatarPicker';
+import ProductItem from '../../src/components/ProductItem';
+import QuantityPicker from '../../src/components/QuantityPicker';
+import CheckoutItem from '../../src/components/CheckoutItem';
+
+storiesOf('Checkout', module)
+  .add('Item', () => <CheckoutItem showApp={linkTo('Button')} />);
 
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
@@ -49,4 +55,16 @@ storiesOf('Button', module)
     .addDecorator(getStory => <CenterView>{getStory()}</CenterView>)
     .add('Default', () => (
       <AvatarPicker />
-    ))  
+    )) 
+
+  storiesOf('Product', module)
+    // .addDecorator(getStory => <CenterView>{getStory()}</CenterView>)
+    .add('Default', () => (
+      <ProductItem />
+    ))
+  
+    storiesOf('QuantityPicker', module)
+      .addDecorator(getStory => <CenterView>{getStory()}</CenterView>)
+      .add('Default', () => (
+        <QuantityPicker />
+      ))  
