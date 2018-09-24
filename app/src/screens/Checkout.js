@@ -218,9 +218,9 @@ class CheckOutScreen extends Component {
           isOpen={this.state.isEditCustomer}
           onSubmit={this.handleUpdateCustomer}
           onRequestClose={this.closeModal}
-          submitText={'Update'}
-          cancleText={'No, do it later'}
-          title={'Update customer'}
+          submitText={'Cập nhật'}
+          cancleText={'Cập nhật sau'}
+          title={'Cập nhật thông tin khách hàng'}
         />
       </View>
     )

@@ -14,17 +14,39 @@ import {
 import { StackActions, NavigationActions } from 'react-navigation';
 import {
   Squares,
-  Hamburger
+  Hamburger,
+  GridList,
 } from '../components/imageUrls';
 import SearchBar from '../components/SearchBar';
-import TextInput from '../components/TextInput';
 import NewCustomerModal from '../components/NewCustomerModal';
 import ProductItem from '../components/ProductItem';
 
 import { getAllProducts } from '../actions/product';
 import { createCustomer } from '../actions/customer';
 import { createOrder, updateOrderByCustomer } from '../actions/order';
+import { toggleListProducts } from '../actions/app';
 import { CREATE_CUSTOMER_SUCCESS } from "../actions/types";
+
+const mapDistch = {
+  toggleListProducts,
+}
+
+const RightButton = connect(
+  (state) => ({
+    showList: state.App.showList,
+  }),
+  mapDistch,
+)(({ navigation, toggleListProducts, showList }) => (
+  <TouchableOpacity onPress={() => {
+    toggleListProducts();
+  }}>
+    <Image
+      style={styles.headerRightIcon}
+      resizeMode="contain"
+      source={showList ? Squares : GridList}
+    />
+  </TouchableOpacity>
+))
 
 class HomeScreen extends Component {
   static navigatorStyle = {
@@ -52,14 +74,7 @@ class HomeScreen extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     title: `${(navigation.state.params || {}).title || ''}`,
-    headerRight: (
-      <TouchableOpacity onPress={() => console.log('right clicked')}>
-        <Image
-          style={styles.headerRightIcon}
-          source={Squares}
-        />
-      </TouchableOpacity>
-    ),
+    headerRight: <RightButton navigation={navigation} />,
     headerLeft: (
       <TouchableOpacity onPress={() => {
         Alert.alert(
@@ -124,7 +139,7 @@ class HomeScreen extends Component {
     this.setModalVisible(false);
   }
 
-  keyExtractor = (item) => `${item.id}`;
+  keyExtractor = (item) => this.props.showList ?  `list-${item.id}` :  `grid-${item.id}`;
 
   onChangeSearhKeyword = (keyword) => {
     this.setState({
@@ -178,11 +193,10 @@ class HomeScreen extends Component {
   }
 
   renderRow = ({item, index}) => {
-    console.log('[Home.js] zz item', item);
     return (
       <ProductItem
         key={`product-${item.id}`}
-        gridItem={this.state.grid}
+        gridItem={!this.props.showList}
         item={item}
         onItemPress={this.onItemPress}
         onIncrease={() => this.increaseBuyNumber(index)}
@@ -196,7 +210,7 @@ class HomeScreen extends Component {
   }
 
   render() {
-    console.log('[Home.js] home nav', this.props)
+    const { showList } = this.props;
     return (
       <View style={styles.container}>
         <SearchBar
@@ -205,13 +219,14 @@ class HomeScreen extends Component {
           onChangeText={this.onChangeSearhKeyword}
         />
         <FlatList
+          key={showList ? 'list' : 'grid'}
           style={styles.list}
           data={this.state.products}
-          numColumns={this.state.grid ? 2 : 1}
+          numColumns={showList ? 1 : 2}
           renderItem={this.renderRow}
           keyExtractor={this.keyExtractor} 
           ItemSeparatorComponent={Divider}
-          columnWrapperStyle={this.state.grid ? styles.columnWrapperStyle : null}
+          columnWrapperStyle={showList ? null : styles.columnWrapperStyle }
           refreshControl={
             <RefreshControl
               refreshing={this.props.loading}
@@ -320,6 +335,7 @@ const mapStateToProps = state => {
     orders: state.Order.list,
     customers: state.Customer.list,
     loading: state.Product.loading,
+    showList: state.App.showList,
   }
 };
 
