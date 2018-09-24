@@ -109,7 +109,7 @@ class UserController {
           throw new AuthorizationError();
         }
         const { userId, params } = args;
-        if (params.avatar) {  
+        if (params.avatar && ImageHelper.isBase64ImageString(params.avatar)) {
           return _createAvatarFile(args.avatar)
             .then(avatarUrl => {
               params.avatar = avatarUrl;
