@@ -10,7 +10,7 @@ const store = (extra) => createStore(
   }),
   extra,
   compose(
-    applyMiddleware(thunk, logger),
+    applyMiddleware(thunk),
   )
 );
 
