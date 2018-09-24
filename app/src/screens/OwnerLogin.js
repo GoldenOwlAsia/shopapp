@@ -7,6 +7,7 @@ import {
   Alert,
   TextInput,
   ActivityIndicator,
+  AsyncStorage,
 } from 'react-native';
 import TouchableView from '../components/TouchableView';
 import { colors } from '../utils/constants';

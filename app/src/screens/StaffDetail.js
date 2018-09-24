@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
-  Image
+  Image,
+  Linking,
 } from 'react-native';
 import Button from '../components/BaseButton';
 import { MaterialIcons } from "@expo/vector-icons";
-import { BackArrow } from '../components/imageUrls';
+import { BackArrow, AvatarHolder } from '../components/imageUrls';
+import { getUserFromApi } from '../actions/user'
 
 const STATUS_SIZE = 6;
-const URL = 'https://i.ytimg.com/vi/SJrb_d7W9Ww/maxresdefault.jpg';
 
 const BasicInfo = ({ isOnline, avatarUrl, name, phone, address, onCall, onEdit }) => (
   <View style={basicInfostyles.container}>
-    <Image style={basicInfostyles.avatar} source={{ uri: avatarUrl }} resizeMode="cover" />
+    <Image style={basicInfostyles.avatar} source={avatarUrl ? { uri: avatarUrl } : AvatarHolder} resizeMode="cover" />
     <View style={basicInfostyles.content}>
       <View style={basicInfostyles.nameWrapper}>
         <Text style={basicInfostyles.name}>{name}</Text>
@@ -126,11 +128,59 @@ class StaffDetailScreen extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    const { navigation, getUserFromApi } = this.props;
+    if(navigation){
+      const { state } = navigation;
+      if(state){
+        const { params : { userId } } = state;
+        if(userId){
+          getUserFromApi(userId);
+        }
+      }
+    }
+  }
+
+  onCall = () => {
+    const { user } = this.props;
+    const url = `tel:${user.phoneNumber}`;
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        return Linking.openURL(url);
+      } else {
+        console.log('[StaffDetail.js] Current platform is not supported');
+      }
+    }).catch(error => {
+      alert(error);
+    })
+  }
+
+  onEdit = () => {
+    const { user, navigation } = this.props;
+    navigation.navigate('CreateStaff', { user });
+  }
+
   render() {
+    const { loading, error, user } = this.props;
+    if(loading){
+      return null;
+    }
+    if(error){
+      return null;
+    }
+    const { fullName, phoneNumber, avatar, address, note } = user;
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Thông tin cá nhân</Text>
-        <BasicInfo avatarUrl={URL} isOnline name="Đinh Văn Lộc" phone="0908789223" address="40E Ngô Đức Kế" />
+        <BasicInfo
+          avatarUrl={avatar}
+          isOnline
+          name={fullName}
+          phone={phoneNumber}
+          address={address}
+          onCall={this.onCall}
+          onEdit={this.onEdit}
+        />
         <View style={styles.statistic}>
           <View>
             <Text style={styles.statisticItemValue}>23.06.18</Text>
@@ -147,7 +197,7 @@ class StaffDetailScreen extends Component {
         </View>
         <View style={styles.description}>
           <Text style={styles.desTitle}>Mô tả</Text>
-          <Text style={styles.desText}>Lorem ipsum dolor sit amet, eu tota zril nec, ad has zril eirmod. Eum eu alia dolores eligendi, eligendi expetendis vis in, duis posidonium.</Text>
+          <Text style={styles.desText}>{note}</Text>
         </View>
       </View>
     )
@@ -210,4 +260,17 @@ const styles = StyleSheet.create({
   }
 });
 
-export default StaffDetailScreen;
+const mapStateToProps = (state) => ({
+  loading: state.User.loading,
+  error: state.User.error,
+  user: state.User.data,
+})
+
+const mapDispatchToProps = {
+  getUserFromApi,
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(StaffDetailScreen);
