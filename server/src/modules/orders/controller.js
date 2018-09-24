@@ -3,7 +3,7 @@ import models from '../../models';
 import AuthService from '../authentication/authService';
 import ProductService from '../products/service';
 import { ItemNotFoundError } from '../../utils/errors';
-// import reportEmitter from '../report/events';
+import reportEmitter from '../report/events';
 import userEmitter from '../users/events';
 import moment from 'moment';
 
@@ -22,8 +22,8 @@ class OrderController {
         const params = { items, customerId, subTotal, tax, grandTotal, createdBy };
         const productIds = items.map(orderItem => orderItem.id);
         let totalSoldProducts = 0;
-        // reportEmitter.emit('updateRevenue', moment().toISOString(), grandTotal);
-        // return resolve(null);
+        reportEmitter.emit('updateRevenue', moment().toISOString(), grandTotal);
+        return resolve(null);
         return _getProductsByOrderItems(productIds)
           .then(prods => {
             if (!prods.length || prods.length !== items.length) {

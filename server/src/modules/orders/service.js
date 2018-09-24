@@ -49,6 +49,24 @@ class OrderService {
     });
   }
 
+  getOrderByDateRange(startDate, endDate) {
+    return new Promise((resolve, reject) => {
+      return Order.findAll({
+        where: {
+          createdAt: {
+            $between: [startDate, endDate]
+          }
+        }
+      })
+        .then(orders => {
+          return resolve(orders);
+        })
+        .catch(err => {
+          return reject(err);
+        });
+    });
+  }
+
   styledOrder(order) {
     let items = order.items;
     if (typeof items === 'string') {

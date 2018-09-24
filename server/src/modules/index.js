@@ -4,6 +4,7 @@ import ProductRoutes from './products/routes';
 import UserRoutes from './users/routes';
 import AuthenticationRoutes from './authentication/routes';
 import OrderRoutes from './orders/routes';
+import ReportRoutes from './report/routes';
 
 const AppQuery = new GraphQLObjectType({
   name: 'AppQuery',
@@ -14,6 +15,7 @@ const AppQuery = new GraphQLObjectType({
     ...CustomerRoutes.query,
     ...ProductRoutes.query,
     ...OrderRoutes.query,
+    ...ReportRoutes.query,
   })
 });
 
@@ -25,7 +27,8 @@ const AppMutation = new GraphQLObjectType({
     ...UserRoutes.mutation,
     ...CustomerRoutes.mutation,
     ...ProductRoutes.mutation,
-    ...OrderRoutes.mutation
+    ...OrderRoutes.mutation,
+    ...ReportRoutes.mutation,
   })
 })
 
