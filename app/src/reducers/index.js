@@ -5,6 +5,7 @@ import Product from './product';
 import Customer from './customer';
 import Order from './order';
 import App from './app';
+import Staffs from './staffs';
 
 export default {
 	App,
@@ -13,5 +14,6 @@ export default {
 	Navigator,
 	Product,
 	Customer,
-	Order
+	Order,
+	Staffs,
 };
