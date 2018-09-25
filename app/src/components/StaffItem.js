@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { AvatarHolder } from './imageUrls';
 
 //TODO move to Constant file
 const ITEM_HEIGHT = 60; 
@@ -8,7 +9,9 @@ const ITEM_HEIGHT = 60;
 /* Component ==================================================================== */
 const StaffItem = (props) => {
   const { staff, onItemPress } = props;
-  const { name, avatar, phone } = staff;
+  const { fullName, avatar, phoneNumber } = staff;
+
+  const avatarSource = avatar ? { uri: avatar } : AvatarHolder;
 
   const onPress = () => {
     onItemPress(staff);
@@ -17,10 +20,10 @@ const StaffItem = (props) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.container}>
-        <Image style={styles.image} source={{ uri: avatar }} resizeMethod="resize" />
+        <Image style={styles.image} source={avatarSource} resizeMethod="resize" />
         <View style={styles.info}>
-          <Text style={styles.name}>{name}</Text>
-          <Text style={styles.phone}>{phone}</Text>
+          <Text style={styles.name}>{fullName}</Text>
+          <Text style={styles.phone}>{phoneNumber}</Text>
         </View>
       </View>
     </TouchableOpacity>

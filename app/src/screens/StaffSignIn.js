@@ -8,6 +8,7 @@ import {
   Text,
   Alert,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
@@ -118,7 +119,7 @@ class SignInScreen extends React.Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding': null} enabled>
         <AuthHeader />
         <View style={styles.contentWrapper}>
           <TextInput

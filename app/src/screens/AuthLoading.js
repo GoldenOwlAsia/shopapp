@@ -30,7 +30,7 @@ class AuthLoadingScreen extends React.Component {
     if (!userToken) {
       this.props.navigation.navigate('Auth');
     } else {
-      this.props.navigation.navigate('App');
+      this.props.navigation.navigate('Owner');
     }
   };
 
