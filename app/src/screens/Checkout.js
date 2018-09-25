@@ -16,6 +16,10 @@ import { BackArrow, UpArrow, DownArrow, Trash } from '../components/imageUrls';
 import Button from '../components/Button';
 import SlideDownView from '../components/SlideDownView';
 import NewCustomerModal from '../components/NewCustomerModal';
+import CheckoutItem from '../components/CheckoutItem';
+import TouchableView from '../components/TouchableView';
+import BaseButton from '../components/BaseButton';
+import { formatMoney } from '../utils/helpers';
 
 import { removeItemFromOrder, increaseItemQuantity, decreaseItemQuantity, checkout } from '../actions/order';
 import { CHECKOUT_SUCCESS, UPDATE_CUSTOMER_SUCCESS } from "../actions/types";
@@ -23,7 +27,6 @@ import { clearSelectedCustomer, updateCustomer } from '../actions/customer';
 
 class CheckOutScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Checkout',
     headerLeft: (
       <TouchableOpacity onPress={() => navigation.state.params.goBack()}>
         <Image
@@ -52,7 +55,7 @@ class CheckOutScreen extends Component {
   constructor(props) {
     super(props);
     const customer = props.customers.filter((c) => c.id === props.selectedCustomer)[0];
-    const items = props.orders[props.selectedCustomer];
+    const items = props.orders[props.selectedCustomer] || [];
     this.itemRefs = new Array(items.length);
     this.state = {
       tax: 0,
@@ -69,6 +72,7 @@ class CheckOutScreen extends Component {
     let items = this.props.orders[this.props.selectedCustomer].map((item) => {delete item.__typename; return item;});
     const subTotal = this.calculateSubTotal(items);
     const tax = this.calculateTax(subTotal);
+    debugger
     const grandTotal = this.calculateGrandTotal(subTotal, tax)
 
     let params = {
@@ -147,44 +151,17 @@ class CheckOutScreen extends Component {
   renderItem = ({item, index}) => {
     const totalPrice = item.price * item.quantity;
     const toggleButtonImage = item.isOpenQuantity ? UpArrow : DownArrow;
+
     return (
-      <View style={styles.itemWrapper}>
-        <View style={styles.itemInformation}>
-          <TouchableOpacity onPress={() => this.toggleItemDetail(index)}>
-            <Image
-              style={styles.toggleButton}
-              source={toggleButtonImage}
-            />
-          </TouchableOpacity>
-          <Text style={styles.itemName}>{item.name}</Text>
-          <Text style={styles.itemTotalPrice}>{totalPrice}</Text>
-        </View>
-        <SlideDownView ref={(ref) => {this.itemRefs[index] = ref}}
-          style={styles.itemQuantity}
-          startVal={0}
-          endVal={50}
-        >
-          <View style={styles.quantityBlock}>
-            <Text>Quantity: </Text>
-            <TouchableOpacity onPress={() => this.decreaseQuantity(item, index)} style={styles.itemAction}>
-              <Text>-</Text>
-            </TouchableOpacity>
-            <View style={styles.itemAction}>
-              <Text>{item.quantity}</Text>
-            </View>
-            <TouchableOpacity onPress={() => this.increaseQuantity(item, index)} style={styles.itemAction}>
-              <Text>+</Text>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity onPress={() => this.removeItem(item.id)}>
-            <Image
-              style={styles.btnRemove}
-              source={Trash}
-            />
-          </TouchableOpacity>
-        </SlideDownView>
-      </View>
-    );
+      <CheckoutItem
+        productName={item.name}
+        totalPrice={totalPrice}
+        quantity={item.quantity}
+        onDecrease={() => this.decreaseQuantity(item, index)}
+        onIncrease={() => this.increaseQuantity(item, index)}
+        onRemove={() => this.removeItem(item.id)}
+      />
+    )
   }
 
   render() {
@@ -194,164 +171,151 @@ class CheckOutScreen extends Component {
     const taxAmount = this.calculateTax(subTotal);
     const grandTotal = this.calculateGrandTotal(subTotal, taxAmount);
     return (
-      <View style={styles.containerWrapper}>
-        <ScrollView style={styles.contentWrapper}>
+      <View style={styles.container}>
+        <ScrollView style={styles.content} contentContainerStyle={{ paddingBottom: 20 }}>
+          <Text style={styles.title}>Thanh toán</Text>
+          <Divider />
           <FlatList
-            contentContainerStyle={styles.containerPadding}
             data={items}
             renderItem={this.renderItem}
-            keyExtractor={(item, index) => item.id}
+            keyExtractor={(item, index) => `${item.id}`}
+            ItemSeparatorComponent={() => (<View style={styles.listDivider} />)}
           />
-
-          <View style={[styles.summaryWrapper, styles.containerPadding]}>
-            <View style={styles.row}>
-              <Text style={styles.label}>Sub total: </Text>
-              <Text>{subTotal}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Tax: </Text>
-              <Text>{taxAmount}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={[styles.label, styles.grandTotal]}>Grand total:</Text>
-              <Text style={[styles.grandTotal, styles.blueColor]}>{grandTotal}</Text>
-            </View>
+          <Divider />
+          <View style={styles.row}>
+            <Text style={styles.label}>Tổng giá</Text>
+            <Text>{formatMoney(subTotal)} VNĐ</Text>
           </View>
-
-          <View style={[styles.customerWrapper, styles.containerPadding]}>
-            <Text style={styles.title}>Customer </Text>
-            <Text>{customer.name}</Text>
-            <Text>{customer.phoneNumber}</Text>
-            <View style={styles.row}>
-              <Text style={styles.label}>{customer.address}</Text>
-              <TouchableOpacity onPress={this.editCustomer}>
-                <Text style={[styles.blueColor]}>Edit</Text>
-              </TouchableOpacity>
+          <View style={styles.row}>
+            <Text style={styles.label}>Thuế</Text>
+            <Text>{formatMoney(taxAmount)} VNĐ</Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={[styles.grandTotal, { color: "#0F2336" }]}>Tổng cộng</Text>
+            <Text style={[{ color: '#5175FF' }, styles.grandTotal]}>{formatMoney(grandTotal)} VNĐ</Text>
+          </View>
+          <Divider />
+          <View style={styles.customerInfo}>
+            <Text style={styles.customerInfoTitle}>Thông tin khách hàng</Text>
+            <Text style={styles.customerInfoText}>{customer.name}</Text>
+            <Text style={styles.customerInfoText}>{customer.phoneNumber}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={styles.customerInfoText}>{customer.address? customer.address : ''}</Text>
+              <TouchableView onPress={this.editCustomer}>
+                <Text style={styles.editText}>Chỉnh sửa</Text>
+              </TouchableView>
             </View>
           </View>
         </ScrollView>
-        <View style={[styles.footerButton, styles.containerPadding]}>
-          <Button
-            text="Checkout"
-            primary
-            centerText
-            onPress={this.handleCheckout}
-          />
-        </View>
+        <BaseButton
+          onPress={this.handleCheckout}
+          fullWidth
+          title="Xác nhận"
+          containerStyle={styles.btnCheckout}
+        />
         <NewCustomerModal
           customer={this.state.customer}
           isOpen={this.state.isEditCustomer}
           onSubmit={this.handleUpdateCustomer}
           onRequestClose={this.closeModal}
-          submitText={'Update'}
-          cancleText={'No, do it later'}
-          title={'Update customer'}
+          submitText={'Cập nhật'}
+          cancleText={'Cập nhật sau'}
+          title={'Cập nhật thông tin khách hàng'}
         />
       </View>
     )
   }
 }
 
+const Divider = () => (
+  <View style={styles.divider} />
+)
+
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.WHITE,
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+  },
+  listDivider: {
+    height: 8,
+  },
+  divider: {
+    height: 1,
+    marginTop: 20,
+    marginBottom: 20,
+    paddingHorizontal: -20,
+    backgroundColor: '#f4f4f4',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: 10,
+  },
+  label: {
+    lineHeight: 19,
+    fontFamily: "Rubik-Regular",
+    fontSize: 14,
+    color: "#8a8a8a"
+  },
+  grandTotal: {
+    lineHeight: 19,
+    fontFamily: "Rubik-Medium",
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  customerInfo: {
+
+  },
+  customerInfoTitle: {
+    lineHeight: 30,
+    fontFamily: "Rubik-Medium",
+    fontSize: 22,
+    fontWeight: "700",
+    fontStyle: "normal",
+    color: "#666666"
+  },
+  customerInfoText: {
+    fontFamily: "Rubik-Regular",
+    fontSize: 14,
+    color: "#8a8a8a",
+    lineHeight: 24,
+  },
+  editText: {
+    lineHeight: 19,
+    fontFamily: "Rubik-Regular",
+    fontSize: 14,
+    fontWeight: "normal",
+    fontStyle: "normal",
+    letterSpacing: 0,
+    color: "#3a62ff"
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 10,
+    color: '#666666',
+    fontFamily: "Rubik-Medium",
+  },
+  btnCheckout: {
+    padding: 20,
+  },
+  title: {
+    lineHeight: 32,
+    fontFamily: "Rubik-Medium",
+    fontSize: 24,
+    fontWeight: "700",
+    fontStyle: "normal",
+    color: "#12283f"
+  },
   headerLeftIcon: {
     marginLeft: 15,
     width: 18,
     height: 13
   },
-  containerPadding: {
-    paddingLeft: 15,
-    paddingRight: 15,
-  },
-  containerWrapper: {
-    backgroundColor: colors.WHITE,
-    flex: 1
-  },
-  contentWrapper: {
-    flex: 1,
-  },
-  footerButton: {
-    marginTop: 15,
-    marginBottom: 15,
-  },
-  summaryWrapper: {
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: colors.GREY,
-    paddingTop: 20,
-    paddingBottom: 20,
-    justifyContent: 'center'
-  },
-  customerWrapper: {
-    paddingTop: 20,
-    paddingBottom: 20
-  },
-  itemWrapper: {
-    justifyContent: 'center',
-    marginTop: 15
-  },
-  itemInformation: {
-    flexDirection: 'row',
-    height: 30,
-    alignItems: 'center'
-  },
-  toggleButton: {
-    width: 16,
-    height: 10,
-    marginRight: 15
-  },
-  itemName: {
-    flex: 1,
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
-  itemTotalPrice: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    color: colors.BLUE
-  },
-  itemQuantity: {
-    backgroundColor: colors.GREY,
-    marginTop: 10,
-    marginBottom: 10,
-    padding: 15,
-    flexDirection: 'row',
-    width: '100%',
-    alignItems: 'center'
-  },
-  quantityBlock: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  itemAction: {
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  btnRemove: {
-    width: 10,
-    height: 14
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  label: {
-    flex: 1
-  },
-  grandTotal: {
-    fontWeight: 'bold',
-    fontSize: 17
-  },
-  blueColor: {
-    color: colors.BLUE
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10
-  }
 });
 
 const mapStateToProps = state => {

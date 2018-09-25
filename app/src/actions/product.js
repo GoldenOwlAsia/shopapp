@@ -8,6 +8,7 @@ import client from '../lib/client';
 import { GetAllProducts } from '../lib/queries';
 
 const handleGetProducts = (page) => dispatch => {
+  dispatch(startGetProducts());
   return client
     .query({
       query: GetAllProducts,
@@ -51,5 +52,17 @@ const handleGetProductsFail = (payload) => {
 export const getProductsFail = (response) => {
   return (dispatch, getState) => {
     return dispatch(handleGetProductsFail(response));
+  }
+}
+
+const handleStartGetProduct = (payload) => {
+  return {
+    type: GET_PRODUCTS,
+  }
+}
+
+export const startGetProducts = () => {
+  return (dispatch) => {
+    return dispatch(handleStartGetProduct());
   }
 }

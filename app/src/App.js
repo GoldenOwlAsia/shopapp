@@ -12,9 +12,14 @@ import configureStore from "./store";
 
 import Navigator from "./navigation";
 import { colors } from "./utils/constants";
+import { preloadImages, cacheFonts } from './utils/helpers';
+import * as images from '../assets/images';
 
 const LoadingView = styled.View`
-  background-color: red;
+  background-color: white;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
 `;
 
 const LoadingText = styled.Text`
@@ -26,36 +31,32 @@ const Root = styled.View`
   background-color: ${colors.BLUE_50};
 `;
 
-// const StatusBarAndroid = styled.View`
-//   height: 24;
-//   background-color: ${colors.BLUE_200};
-// `;
-
 class RootContainer extends Component {
   state = {
-    fontsAreLoaded: false
+    ready: false
   };
 
   async componentWillMount() {
-    await Font.loadAsync({
-      "Rubik-Black": require("../node_modules/@shoutem/ui/fonts/Rubik-Black.ttf"),
-      "Rubik-BlackItalic": require("../node_modules/@shoutem/ui/fonts/Rubik-BlackItalic.ttf"),
-      "Rubik-Bold": require("../node_modules/@shoutem/ui/fonts/Rubik-Bold.ttf"),
-      "Rubik-BoldItalic": require("../node_modules/@shoutem/ui/fonts/Rubik-BoldItalic.ttf"),
-      "Rubik-Italic": require("../node_modules/@shoutem/ui/fonts/Rubik-Italic.ttf"),
-      "Rubik-Light": require("../node_modules/@shoutem/ui/fonts/Rubik-Light.ttf"),
-      "Rubik-LightItalic": require("../node_modules/@shoutem/ui/fonts/Rubik-LightItalic.ttf"),
-      "Rubik-Medium": require("../node_modules/@shoutem/ui/fonts/Rubik-Medium.ttf"),
-      "Rubik-MediumItalic": require("../node_modules/@shoutem/ui/fonts/Rubik-MediumItalic.ttf"),
-      "Rubik-Regular": require("../node_modules/@shoutem/ui/fonts/Rubik-Regular.ttf"),
-      "rubicon-icon-font": require("../node_modules/@shoutem/ui/fonts/rubicon-icon-font.ttf")
-    });
-
-    this.setState({ fontsAreLoaded: true });
+    const imageAssets = preloadImages(Object.values(images));
+    const fontAssets = cacheFonts([
+      {"Rubik-Black": require("../node_modules/@shoutem/ui/fonts/Rubik-Black.ttf")},
+      {"Rubik-BlackItalic": require("../node_modules/@shoutem/ui/fonts/Rubik-BlackItalic.ttf")},
+      {"Rubik-Bold": require("../node_modules/@shoutem/ui/fonts/Rubik-Bold.ttf")},
+      {"Rubik-BoldItalic": require("../node_modules/@shoutem/ui/fonts/Rubik-BoldItalic.ttf")},
+      {"Rubik-Italic": require("../node_modules/@shoutem/ui/fonts/Rubik-Italic.ttf")},
+      {"Rubik-Light": require("../node_modules/@shoutem/ui/fonts/Rubik-Light.ttf")},
+      {"Rubik-LightItalic": require("../node_modules/@shoutem/ui/fonts/Rubik-LightItalic.ttf")},
+      {"Rubik-Medium": require("../node_modules/@shoutem/ui/fonts/Rubik-Medium.ttf")},
+      {"Rubik-MediumItalic": require("../node_modules/@shoutem/ui/fonts/Rubik-MediumItalic.ttf")},
+      {"Rubik-Regular": require("../node_modules/@shoutem/ui/fonts/Rubik-Regular.ttf")},
+      {"rubicon-icon-font": require("../node_modules/@shoutem/ui/fonts/rubicon-icon-font.ttf")}
+    ]);
+    await Promise.all([...imageAssets, ...fontAssets]);
+    this.setState({ ready: true });
   }
 
   render() {
-    if (!this.state.fontsAreLoaded) {
+    if (!this.state.ready) {
       return (
         <LoadingView>
           <LoadingText>App loading...</LoadingText>
@@ -73,9 +74,6 @@ class RootContainer extends Component {
             backgroundColor="transparent"
             translucent
           />
-          {/* {Platform.OS === "android" && Platform.Version >= 20 ? (
-            <StatusBarAndroid />
-          ) : null} */}
           <Navigator />
         </Root>
       </FormattedProvider>

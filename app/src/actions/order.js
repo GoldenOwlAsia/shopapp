@@ -84,7 +84,7 @@ const handleCheckout = (params) => dispatch => {
     })
     .catch(error => {
       console.log('checkout error: ', error);
-      debugger;
+      // debugger;
       return dispatch(checkoutFail(error));
     });
 }
@@ -111,7 +111,7 @@ export const checkoutSuccess = (params) => {
 const handleCheckoutFail = (params) => {
   return {
     type: CHECKOUT_FAIL,
-    payload: { ...params }
+    payload: params,
   }
 }
 

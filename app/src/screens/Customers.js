@@ -11,14 +11,17 @@ import {
 } from 'react-native';
 
 import { PlusIcon } from '../components/imageUrls';
-import TextInput from '../components/TextInput';
+import SearchBar from '../components/SearchBar';
+import CustomerItem from '../components/CustomerItem';
 import NewCustomerModal from '../components/NewCustomerModal';
+import { CREATE_CUSTOMER_SUCCESS } from '../actions/types';
 
 import { createCustomer, changeSelectedCustomer } from '../actions/customer';
+import { createOrder } from '../actions/order';
 
 class CustomersScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Customers',
+    title: 'Danh sách khách',
     headerRight: (
       <TouchableOpacity onPress={() => navigation.state.params.rightButtonHandler()}>
         <Image
@@ -64,7 +67,7 @@ class CustomersScreen extends Component {
 
   handleItemClick = async (customer) => {
     await this.props.changeSelectedCustomer(customer.id);
-    this.props.navigation.navigate('Home', {title: customer.name});
+    this.props.navigation.navigate('Home', {title: customer.customerName});
   }
 
   handleCreateCustomer = async (params) => {
@@ -95,44 +98,42 @@ class CustomersScreen extends Component {
     });
   }
 
-  renderItem = ({item, index}) => {
+  renderItem = ({ item }) => {
     return (
-      <TouchableOpacity key={index} style={styles.itemWrapper} onPress={() => this.handleItemClick(item)}>
-        <View style={styles.information}>
-          <Text style={styles.customerName}>{item.name}</Text>
-          <Text style={styles.itemPrice}>{item.totalQuantity} prducts - {item.subTotal} VND</Text>
-        </View>
-        <View style={styles.imagesWrapper}>
-          <Image
-            style={styles.productImage}
-            source={{uri: (item.products[0] || {}).image}}
-          />
-        </View>
-      </TouchableOpacity>
+      <CustomerItem
+        item={{
+          id: item.id,
+          customerName: item.name,
+          quantity: item.totalQuantity,
+          total: item.subTotal,
+          products: item.products,
+        }}
+        onItemClick={this.handleItemClick}
+        onDelete={() => {}}
+      />
     )
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          wrapperStyle={styles.searchWrapper}
-          placeholder="Search"
-          style={styles.searchInput}
-          value={this.state.searchKeyword}
-          onChangeText={this.onChangeSearchKeyword}
-        />
+        <SearchBar placeholder="Tìm kiếm" onChangeText={this.onChangeSearchKeyword} value={this.state.searchKeyword} />
+        
         <FlatList
+          style={styles.list}
           data={this.state.data}
           renderItem={this.renderItem}
+          keyExtractor={(item) => `${item.id}`}
+          ItemSeparatorComponent={() => (<View style={styles.divider} />)}
         />
+
         <NewCustomerModal
           isOpen={this.state.isAddNewCustomer}
           onSubmit={this.handleCreateCustomer}
           onRequestClose={this.closeModal}
-          submitText={'Create new customer'}
-          cancleText={'No, do it later'}
-          title={'New customer'}
+          submitText={'Tạo mới'}
+          cancleText={'Không, thêm khách hàng sau'}
+          title={'Thêm khách hàng mới'}
         />
       </View>
     );
@@ -142,38 +143,20 @@ class CustomersScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.WHITE
+    backgroundColor: colors.WHITE,
+    padding: 20,
+  },
+  list: {
+    marginTop: 20,
   },
   headerRightIcon: {
     marginRight: 15,
     width: 15,
     height: 15
   },
-  itemWrapper: {
-    flexDirection: 'row',
-    padding: 15,
-    alignItems: 'center'
-  },
-  information: {
-    flexDirection: 'column',
-    flex: 1
-  },
-  productImage: {
-    width: 50,
-    height: 50
-  },
-  searchWrapper: {
-    padding: 15,
-    marginBottom: 10
-  },
-  customerName: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    marginBottom: 5
-  },
-  itemPrice: {
-    color: 'grey',
-    fontSize: 16
+  divider: {
+    height: 1,
+    backgroundColor: '#f4f4f4',
   }
 });
 
@@ -187,7 +170,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   createCustomer,
-  changeSelectedCustomer
+  changeSelectedCustomer,
+  createOrder,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomersScreen);

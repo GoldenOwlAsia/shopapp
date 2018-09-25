@@ -83,17 +83,17 @@ class ChooseUserScreen extends Component {
       <View style={styles.container}>
         <AuthHeader />
         <View style={styles.contentWrapper}>
-          <Text style={{fontWeight: 'bold'}}>Hello, you are</Text>
+          <Text style={{fontWeight: 'bold'}}>Xin chào, bạn là</Text>
           <Button
             primary
-            text="Shop's Owner"
+            text="Chủ shop"
             btnStyle={styles.btnShopOwner}
             leftIcon={imageUrls.OwnerIcon}
             rightIcon={imageUrls.ArrowIcon}
             onPress={this.chooseShopOwner}
           />
           <Button
-            text="Staff"
+            text="Nhân viên"
             btnStyle={styles.btnStaff}
             leftIcon={imageUrls.StaffIcon}
             rightIcon={imageUrls.ArrowIcon}

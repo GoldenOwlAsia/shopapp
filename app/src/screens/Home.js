@@ -4,23 +4,49 @@ import { connect } from 'react-redux';
 import {
   StyleSheet,
   View,
-  Text,
   FlatList,
   TouchableOpacity,
   Image,
+  RefreshControl,
+  AsyncStorage,
+  Alert,
 } from 'react-native';
-
+import { StackActions, NavigationActions } from 'react-navigation';
 import {
   Squares,
-  Hamburger
+  Hamburger,
+  GridList,
 } from '../components/imageUrls';
-import TextInput from '../components/TextInput';
+import SearchBar from '../components/SearchBar';
 import NewCustomerModal from '../components/NewCustomerModal';
+import ProductItem from '../components/ProductItem';
 
 import { getAllProducts } from '../actions/product';
 import { createCustomer } from '../actions/customer';
 import { createOrder, updateOrderByCustomer } from '../actions/order';
+import { toggleListProducts } from '../actions/app';
 import { CREATE_CUSTOMER_SUCCESS } from "../actions/types";
+
+const mapDistch = {
+  toggleListProducts,
+}
+
+const RightButton = connect(
+  (state) => ({
+    showList: state.App.showList,
+  }),
+  mapDistch,
+)(({ navigation, toggleListProducts, showList }) => (
+  <TouchableOpacity onPress={() => {
+    toggleListProducts();
+  }}>
+    <Image
+      style={styles.headerRightIcon}
+      resizeMode="contain"
+      source={showList ? Squares : GridList}
+    />
+  </TouchableOpacity>
+))
 
 class HomeScreen extends Component {
   static navigatorStyle = {
@@ -47,17 +73,29 @@ class HomeScreen extends Component {
   };
 
   static navigationOptions = ({ navigation }) => ({
-    title: `${(navigation.state.params || {}).title || 'Product list'}`,
-    headerRight: (
-      <TouchableOpacity onPress={() => console.log('right clicked')}>
-        <Image
-          style={styles.headerRightIcon}
-          source={Squares}
-        />
-      </TouchableOpacity>
-    ),
+    title: `${(navigation.state.params || {}).title || ''}`,
+    headerRight: <RightButton navigation={navigation} />,
     headerLeft: (
-      <TouchableOpacity onPress={() => console.log('left clicked')}>
+      <TouchableOpacity onPress={() => {
+        Alert.alert(
+          'Xác Nhận',
+          'Bạn có thật sự muốn đăng xuất ?',
+          [
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'OK', onPress: async () => {
+              await AsyncStorage.clear();
+
+              navigation.dispatch(StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'AuthLoading' })],
+                key: null,
+              }));
+
+            }},
+          ],
+          { cancelable: false }
+        )
+      }}>
         <Image
           style={styles.headerLeftIcon}
           source={Hamburger}
@@ -73,7 +111,9 @@ class HomeScreen extends Component {
       searchKeyword: '',
       customerName: '',
       customerPhoneNumber: '',
-      isOpenCreateCustomerModal: false
+      isOpenCreateCustomerModal: false,
+      loading: false,
+      grid: false,
     };
   }
 
@@ -84,7 +124,7 @@ class HomeScreen extends Component {
   openModal = () => {
     const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
     if (!selectedProducts.length) {
-      alert('Please select products');
+      alert('Vui lòng chọn sản phẩm');
       return;
     } 
     if (!this.props.selectedCustomer) {
@@ -99,7 +139,7 @@ class HomeScreen extends Component {
     this.setModalVisible(false);
   }
 
-  _keyExtractor = (item, index) => item.id
+  keyExtractor = (item) => this.props.showList ?  `list-${item.id}` :  `grid-${item.id}`;
 
   onChangeSearhKeyword = (keyword) => {
     this.setState({
@@ -108,6 +148,7 @@ class HomeScreen extends Component {
   }
 
   onChangeCustomerName = (text) => this.setState({ customerName: text });
+
   onChangeCustomerPhone = (text) => this.setState({ customerPhoneNumber: text });
 
   onItemPress(itemId) {
@@ -153,60 +194,80 @@ class HomeScreen extends Component {
 
   renderRow = ({item, index}) => {
     return (
-      <TouchableOpacity key={index} onPress={this.onItemPress} style={styles.itemWrapper}>
-        <Image
-          style={styles.itemImage}
-          source={{uri: item.image}}
-        />
-        <View style={styles.itemInformation}>
-          <Text style={styles.itemTitle}>{item.name}</Text>
-          <Text style={styles.itemCategory}>{item.category}</Text>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={styles.itemPrice}>{item.price} VND</Text>
-            <Text style={styles.itemStatus}>{item.status}</Text>
-          </View>
-          <View style={styles.itemActionsWrapper}>
-            <TouchableOpacity onPress={() => this.decreaseBuyNumber(index)} style={styles.itemAction}>
-              <Text>-</Text>
-            </TouchableOpacity>
-            <View style={styles.itemAction}>
-              <Text>{item.quantity}</Text>
-            </View>
-            <TouchableOpacity onPress={() => this.increaseBuyNumber(index)} style={styles.itemAction}>
-              <Text>+</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
+      <ProductItem
+        key={`product-${item.id}`}
+        gridItem={!this.props.showList}
+        item={item}
+        onItemPress={this.onItemPress}
+        onIncrease={() => this.increaseBuyNumber(index)}
+        onDecrease={() => this.decreaseBuyNumber(index)}
+      />
+    )
+  }
+
+  onRefresh = () => {
+    this.props.getAllProducts();
   }
 
   render() {
+    const { showList } = this.props;
     return (
-      <View style={styles.pageWrapper}>
-        <View style={[styles.searchWrapper, styles.container]}>
-          <TextInput
-            wrapperStyle={{marginTop: 15}}
-            placeholder="Search"
-            value={this.state.searchKeyword}
-            onChangeText={this.onChangeSearhKeyword}
-          />
-        </View>
-        <FlatList contentContainerStyle={{paddingLeft: 15, paddingRight: 15}} data={this.state.products} renderItem={this.renderRow} keyExtractor={this._keyExtractor}/>
+      <View style={styles.container}>
+        <SearchBar
+          placeholder="Tìm kiếm"
+          value={this.state.searchKeyword}
+          onChangeText={this.onChangeSearhKeyword}
+        />
+        <FlatList
+          key={showList ? 'list' : 'grid'}
+          style={styles.list}
+          data={this.state.products}
+          numColumns={showList ? 1 : 2}
+          renderItem={this.renderRow}
+          keyExtractor={this.keyExtractor} 
+          ItemSeparatorComponent={Divider}
+          columnWrapperStyle={showList ? null : styles.columnWrapperStyle }
+          refreshControl={
+            <RefreshControl
+              refreshing={this.props.loading}
+              onRefresh={this.onRefresh}
+            />
+          }
+        />
         <NewCustomerModal
           isOpen={this.state.isOpenCreateCustomerModal}
           onSubmit={this.handleCreateCustomer}
           onRequestClose={this.closeModal}
-          submitText={'Create new customer'}
-          cancleText={'No, do it later'}
-          title={'New customer'}
+          submitText={'Tạo mới'}
+          cancleText={'Không, thêm khách hàng sau'}
+          title={'Thêm khách hàng mới'}
         />
       </View>
     );
   }
 }
 
+const Divider = () => (
+  <View style={styles.divider} />
+)
+
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 15,
+    backgroundColor: '#FFF',
+  },
+  list: {
+    marginTop: 30,
+    flex: 1,
+  },
+  columnWrapperStyle: {
+    justifyContent: 'space-between',
+  },
+  divider: {
+    width: '100%',
+    height: 30,
+  },
   headerRightIcon: {
     marginRight: 15,
     width: 15,
@@ -216,10 +277,6 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     width: 20,
     height: 12
-  },
-  container: {
-    paddingLeft: 15,
-    paddingRight: 15
   },
   pageWrapper: {
     flex: 1
@@ -277,6 +334,8 @@ const mapStateToProps = state => {
     selectedCustomer: state.Customer.selectedCustomer,
     orders: state.Order.list,
     customers: state.Customer.list,
+    loading: state.Product.loading,
+    showList: state.App.showList,
   }
 };
 
