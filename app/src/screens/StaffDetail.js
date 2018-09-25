@@ -157,10 +157,11 @@ class StaffDetailScreen extends Component {
 
   onEdit = () => {
     const { user, navigation } = this.props;
-    navigation.navigate('CreateStaff', { user });
+    navigation.navigate('CreateStaff', { user, isEdit: true });
   }
 
   render() {
+    console.log('[StaffDetail.js] xxx', this.props);
     const { loading, error, user } = this.props;
     if(loading){
       return null;
@@ -168,7 +169,7 @@ class StaffDetailScreen extends Component {
     if(error){
       return null;
     }
-    const { fullName, phoneNumber, avatar, address, note } = user;
+    const { fullName, phoneNumber, avatar, address, note, createdAt, soldProducts, revenue } = user;
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Thông tin cá nhân</Text>
@@ -183,15 +184,15 @@ class StaffDetailScreen extends Component {
         />
         <View style={styles.statistic}>
           <View>
-            <Text style={styles.statisticItemValue}>23.06.18</Text>
+            <Text style={styles.statisticItemValue}>{createdAt}</Text>
             <Text style={styles.statisticItemLabel}>Ngày bắt đầu</Text>
           </View>
           <View>
-            <Text style={styles.statisticItemValue}>48</Text>
+            <Text style={styles.statisticItemValue}>{soldProducts || 0}</Text>
             <Text style={styles.statisticItemLabel}>Sản phẩm bán được</Text>
           </View>
           <View>
-            <Text style={styles.statisticItemValue}>88,2M</Text>
+            <Text style={styles.statisticItemValue}>{revenue}</Text>
             <Text style={styles.statisticItemLabel}>Số tiền thu về</Text>
           </View>
         </View>

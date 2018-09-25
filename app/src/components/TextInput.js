@@ -62,13 +62,12 @@ class NormalTextInput extends Component {
   }
 
   render(){
-    const { label, spaceTop, ...rest } = this.props;
+    const { label, value, spaceTop, ...rest } = this.props;
     return (
       <KeyboardAvoidingView behavior="padding" enabled>
         <TextField
           {...rest}
           label={label}
-          value={this.state.phone}
           onChangeText={this.handleChange}
           containerStyle={[styles.containerStyle, spaceTop && { marginTop: 10 }]}
           tintColor="#caced4"
@@ -81,7 +80,7 @@ class NormalTextInput extends Component {
           activeLineWidth={0}
           style={styles.textInput}
           autoCapitalize={'none'}
-          value={this.state.text}
+          value={value ? value : this.state.text}
         />
       </KeyboardAvoidingView>
     )

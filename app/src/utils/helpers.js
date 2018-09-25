@@ -19,7 +19,6 @@ export function formatMoney(amount, decimalCount = 0, decimal = ".", thousands =
 
 export function preloadImages(images){
   return images.map(image => {
-    console.log('[helpers.js] image type', typeof image);
     if (typeof image === 'string') {
       return Image.prefetch(image);
     } else {
