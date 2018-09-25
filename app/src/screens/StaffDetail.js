@@ -8,6 +8,7 @@ import {
   Image,
   Linking,
 } from 'react-native';
+import format from 'date-fns/format';
 import Button from '../components/BaseButton';
 import { MaterialIcons } from "@expo/vector-icons";
 import { BackArrow, AvatarHolder } from '../components/imageUrls';
@@ -161,7 +162,6 @@ class StaffDetailScreen extends Component {
   }
 
   render() {
-    console.log('[StaffDetail.js] xxx', this.props);
     const { loading, error, user } = this.props;
     if(loading){
       return null;
@@ -183,16 +183,16 @@ class StaffDetailScreen extends Component {
           onEdit={this.onEdit}
         />
         <View style={styles.statistic}>
-          <View>
-            <Text style={styles.statisticItemValue}>{createdAt}</Text>
+          <View style={{ flex: 1, overflow: 'hidden' }}>
+            <Text style={styles.statisticItemValue}>{createdAt ? format(new Date(createdAt), 'DD.MM.YYYY') : '-'}</Text>
             <Text style={styles.statisticItemLabel}>Ngày bắt đầu</Text>
           </View>
-          <View>
+          <View style={{ flex: 1, overflow: 'hidden' }}>
             <Text style={styles.statisticItemValue}>{soldProducts || 0}</Text>
             <Text style={styles.statisticItemLabel}>Sản phẩm bán được</Text>
           </View>
-          <View>
-            <Text style={styles.statisticItemValue}>{revenue}</Text>
+          <View style={{ flex: 1, overflow: 'hidden' }}>
+            <Text style={styles.statisticItemValue}>{revenue || 0}</Text>
             <Text style={styles.statisticItemLabel}>Số tiền thu về</Text>
           </View>
         </View>

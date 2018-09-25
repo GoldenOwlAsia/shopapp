@@ -5,6 +5,9 @@ import {
   UPDATING_USER,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAILED,
+  CREATING_USER,
+  CREATE_USER_SUCCESS,
+  CREATE_USER_FAILED,
 } from '../actions/types';
 
 const initialState = {
@@ -16,13 +19,15 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case LOADING_USER: 
-    case UPDATING_USER: 
+    case UPDATING_USER:
+    case CREATING_USER:
       return {
         ...state,
         loading: true,
       }
     case LOAD_USER_SUCCESS: 
-    case UPDATE_USER_SUCCESS: 
+    case UPDATE_USER_SUCCESS:
+    case CREATE_USER_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -30,6 +35,7 @@ export default (state = initialState, action) => {
       }
     case LOAD_USER_FAILED: 
     case UPDATE_USER_FAILED: 
+    case CREATE_USER_FAILED: 
       return {
         ...state,
         loading: false,

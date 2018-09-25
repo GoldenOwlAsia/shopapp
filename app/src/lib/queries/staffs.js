@@ -19,6 +19,9 @@ export const GetAllStaffs = gql`
       CMND
       role
       code
+      createdAt
+      soldProducts
+      revenue
     }
   }
 `;
