@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   Text,
   StyleSheet,
@@ -11,6 +12,8 @@ import TextInput from '../../components/TextInput';
 import BaseButton from '../../components/BaseButton';
 import AvatarPicker from '../../components/AvatarPicker';
 import { CloseIcon } from '../../components/imageUrls';
+
+import { updateUserFromApi } from '../../actions/user';
 
 class CreateStaffScreen extends React.Component {
 
@@ -27,69 +30,98 @@ class CreateStaffScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      user: props.user,
+      isEdit: props.isEdit,
+    }
+  }
+
+  onChangeText = (field, value) => {
+    this.setState({
+      user: {
+        ...this.state.user,
+        [field]: value,
+      }
+    })
+  }
+
+  handleSubmit = () => {
+    const { isEdit, user } = this.state;
+    if(isEdit){
+      this.props.updateUserFromApi(user.id, user);
+    }
   }
 
   render() {
+    const { isEdit, user } = this.state;
     return (
       <ScrollView style={styles.container}>
         <View style={styles.content}>
-          <Text style={styles.title}>Tạo nhân viên mới</Text>
+          <Text style={styles.title}>{isEdit ? `Chỉnh sửa thông tin`: `Tạo nhân viên mới`}</Text>
           <AvatarPicker />
           <TextInput
             label="Họ tên"
-            value="Trần Hồng Hạnh"
             wrapperStyle={styles.input}
+            value={user.fullName}
+            onChangeText={(value) => this.onChangeText('fullName', value)}
           />
           <TextInput
             label="Tên đăng nhập"
-            value="hanh_sale"
             wrapperStyle={styles.input}
+            value={user.username}
+            onChangeText={(value) => this.onChangeText('username', value)}
           />
           <TextInput
             label="Mật khẩu"
-            value="123456"
+            value={user.password}
             secureTextEntry
             wrapperStyle={styles.input}
+            onChangeText={(value) => this.onChangeText('password', value)}
           />
           <TextInput
             label="Số chứng minh nhân dân"
-            value="025122333"
+            value={user.CMND}
             wrapperStyle={styles.input}
+            onChangeText={(value) => this.onChangeText('CMND', value)}
           />
           <TextInput
             label="Địa chỉ"
             value="40E Ngô Đức Kế Quận 1"
             wrapperStyle={styles.input}
+            value={user.address}
+            onChangeText={(value) => this.onChangeText('address', value)}
           />
           <TextInput
             label="Số điện thoại"
-            value="0988222112"
+            value={user.phoneNumber}
             wrapperStyle={styles.input}
+            onChangeText={(value) => this.onChangeText('phoneNumber', value)}
           />
           <View style={styles.horizontal}>
             <View style={styles.horizontalItem}>
               <TextInput
-                label="Số điện thoại"
-                value="0988222112"
+                label="Lương"
+                value="7,000,000 đ"
                 wrapperStyle={styles.input}
               />
             </View>
             <View style={styles.horizontalItem}>
               <TextInput
-                label="Số điện thoại"
-                value="0988222112"
+                label="Thưởng"
+                value="500,000 đ"
                 wrapperStyle={styles.input}
               />
             </View>
           </View>
           <TextInput
             label="Ghi chú"
-            value="Lorem ipsum dolor sit amet, eu tota zril nec, ad has zril eirmod. Eum eu alia dolores eligendi, eligendi expetendis vis in, duis posidonium."
+            value={user.note}
+            onChangeText={(value) => this.onChangeText('note', value)}
             wrapperStyle={styles.input}
             multiline = {true}
             numberOfLines = {4}
           />
-          <BaseButton onPress={() => this.props.navigation.goBack()} containerStyle={styles.btnConfirm} title="Xác nhận" />
+          <BaseButton onPress={this.handleSubmit} containerStyle={styles.btnConfirm} title="Xác nhận" />
         </View>
       </ScrollView>
     );
@@ -131,4 +163,26 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CreateStaffScreen;
+const mapStateToProps = (state, ownProps) => {
+  let user, isEdit;
+  const { navigation } = ownProps;
+  if(navigation && navigation.state && navigation.state.params){
+    user = navigation.state.params.user;
+    isEdit = navigation.state.params.isEdit;
+  }
+  return ({
+    user,
+    isEdit,
+    loading: state.User.loading,
+    error: state.User.error,
+  })
+}
+
+const mapDispatchToProps = {
+  updateUserFromApi,
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CreateStaffScreen);

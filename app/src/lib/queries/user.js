@@ -22,3 +22,26 @@ export const GetUserById = gql`
     }
   }
 `;
+
+export const UpdateUserById = gql`
+  mutation updateUserById($params: UserInput, $userId: Int!){
+    updateUserById(params: $params, userId: $userId) {
+      id
+      firstName
+      lastName
+      gender
+      username
+      dateOfBirth
+      address
+      phoneNumber
+      salary
+      fullName
+      avatar
+      bonus
+      note
+      CMND
+      role
+      code
+    }
+  }
+`;

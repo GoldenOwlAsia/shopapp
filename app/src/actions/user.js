@@ -2,10 +2,13 @@ import {
   LOADING_USER,
   LOAD_USER_SUCCESS,
   LOAD_USER_FAILED,
+  UPDATING_USER,
+  UPDATE_USER_FAILED,
+  UPDATE_USER_SUCCESS,
 } from './types';
 
 import client from '../lib/client';
-import { GetUserById } from '../lib/queries/user';
+import { GetUserById, UpdateUserById } from '../lib/queries/user';
 
 
 export const loadingUser = () => ({
@@ -39,5 +42,41 @@ export const getUserFromApi = (userId) => async (dispatch) => {
   }catch(error){
     console.log('[user.js] getUserFromApi error', error);
     dispatch(loadUserFailed(error.message));
+  }
+}
+
+export const updatingUser = () => ({
+  type: UPDATING_USER,
+});
+
+export const updateUserFailed = (error) => ({
+  type: UPDATE_USER_FAILED,
+  error,
+});
+
+export const updateUserSuccess = (user) => ({
+  type: UPDATE_USER_SUCCESS,
+  user,
+});
+
+export const updateUserFromApi = (userId, params) => async (dispatch) => {
+  dispatch(updatingUser());
+  delete params.__typename;
+  try{
+    const response = await client.mutate({
+      mutation: UpdateUserById,
+      variables: {
+        userId,
+        params,
+      }
+    });
+    const { data } = response;
+    if(data){
+      const { updateUserById } = data;
+      dispatch(updateUserSuccess(updateUserById));
+    }
+  }catch(error){
+    console.log('[user.js] updateUserFromApi error', error);
+    dispatch(updateUserFailed(error.message));
   }
 }
