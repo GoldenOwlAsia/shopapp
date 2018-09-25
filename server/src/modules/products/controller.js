@@ -39,7 +39,7 @@ class ProductController {
         if (images && images.length) {
           return _createProductImages(images)
             .then(imageUrls => {
-              params.images = JSON.stringify([ ...imageUrls ]);
+              params.images = JSON.stringify([ ...imageUrls.map(img => ImageHelper.createImageUrl(img)) ]);
               return ProductService.createProduct(params)
                 .then(prod => {
                   return resolve(ProductService.styleProductResponse(prod));
@@ -108,7 +108,7 @@ class ProductController {
         if ((newImages || []).length) {
           return _createProductImages(newImages)
             .then(imageUrls => {
-              const productImgs = [...oldImages, ...imageUrls];
+              const productImgs = [...oldImages, ...imageUrls.map(img => ImageHelper.createImageUrl(img))];
               params.images = JSON.stringify(productImgs);
               return ProductService.getProductById(productId)
             })
