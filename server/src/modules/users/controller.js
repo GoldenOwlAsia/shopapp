@@ -110,11 +110,7 @@ class UserController {
         }
         const { userId, params } = args;
         if (params.avatar && ImageHelper.isBase64ImageString(params.avatar)) {
-          return _createAvatarFile(args.avatar)
-            .then(avatarUrl => {
-              params.avatar = avatarUrl;
-              return UserService.createUser({...params, role: ROLES.STAFF});
-            })
+          return _createAvatarFile(params.avatar)
             .then(avatarUrl => {
               params.avatar = avatarUrl;
               return UserService.updateUserById(userId, params)
