@@ -4,16 +4,21 @@ import {
   Text,
   StyleSheet,
   View,
-  ScrollView,
+  Alert,
   TouchableOpacity,
   Image,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TextInput from '../../components/TextInput';
 import BaseButton from '../../components/BaseButton';
 import AvatarPicker from '../../components/AvatarPicker';
 import { CloseIcon } from '../../components/imageUrls';
 
-import { updateUserFromApi } from '../../actions/user';
+import { updateUserFromApi, createUserFromApi } from '../../actions/user';
+
+const ContainerComponent = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
 
 class CreateStaffScreen extends React.Component {
 
@@ -48,20 +53,43 @@ class CreateStaffScreen extends React.Component {
   handleSubmit = () => {
     const { isEdit, user } = this.state;
     if(isEdit){
-      this.props.updateUserFromApi(user.id, user);
+      this.props.updateUserFromApi(user.id, user)
+        .then(() => {
+          this.renderAlert('Thành công', 'Cập nhật thành công');
+        })
+    }else {
+      this.props.createUserFromApi(user).then(() => {
+        this.renderAlert('Thành công', 'Tạo nhân viên thành công.', () => {
+          this.props.navigation.goBack(null);
+        });
+      });
     }
+  }
+
+  renderAlert = (title, message, onPressOK) => (
+    Alert.alert(
+      title,
+      message,
+      [
+        {text: 'OK', onPress: onPressOK},
+      ],
+      { cancelable: true }
+    )
+  )
+
+  onPickedImage = (base64) => {
+    this.onChangeText('avatar', `data:image/jpeg;base64,${base64}`);
   }
 
   render() {
     const { isEdit, user } = this.state;
     return (
-      <ScrollView style={styles.container}>
+      <KeyboardAwareScrollView extraScrollHeight={Platform.OS === 'ios' ? 10 : 100} enableOnAndroid style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.title}>{isEdit ? `Chỉnh sửa thông tin`: `Tạo nhân viên mới`}</Text>
-          <AvatarPicker />
+          <AvatarPicker image={user.avatar} onPickedImage={this.onPickedImage} />
           <TextInput
             label="Họ tên"
-            wrapperStyle={styles.input}
             value={user.fullName}
             onChangeText={(value) => this.onChangeText('fullName', value)}
           />
@@ -83,6 +111,7 @@ class CreateStaffScreen extends React.Component {
             value={user.CMND}
             wrapperStyle={styles.input}
             onChangeText={(value) => this.onChangeText('CMND', value)}
+            keyboardType="numeric"
           />
           <TextInput
             label="Địa chỉ"
@@ -96,20 +125,23 @@ class CreateStaffScreen extends React.Component {
             value={user.phoneNumber}
             wrapperStyle={styles.input}
             onChangeText={(value) => this.onChangeText('phoneNumber', value)}
+            keyboardType="numeric"
           />
           <View style={styles.horizontal}>
             <View style={styles.horizontalItem}>
               <TextInput
                 label="Lương"
-                value="7,000,000 đ"
-                wrapperStyle={styles.input}
+                value={`${user.salary || ''}`}
+                onChangeText={(value) => this.onChangeText('salary', value)}
+                keyboardType="numeric"
               />
             </View>
             <View style={styles.horizontalItem}>
               <TextInput
                 label="Thưởng"
-                value="500,000 đ"
-                wrapperStyle={styles.input}
+                value={`${user.bonus || ''}`}
+                onChangeText={(value) => this.onChangeText('bonus', value)}
+                keyboardType="numeric"
               />
             </View>
           </View>
@@ -123,7 +155,7 @@ class CreateStaffScreen extends React.Component {
           />
           <BaseButton onPress={this.handleSubmit} containerStyle={styles.btnConfirm} title="Xác nhận" />
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -180,6 +212,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = {
   updateUserFromApi,
+  createUserFromApi,
 }
 
 export default connect(

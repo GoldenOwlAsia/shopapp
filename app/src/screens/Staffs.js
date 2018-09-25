@@ -27,7 +27,7 @@ class StaffsScreen extends Component {
       </TouchableOpacity>
     ),
     headerRight: (
-      <TouchableOpacity onPress={() => navigation.navigate('CreateStaff')}>
+      <TouchableOpacity onPress={() => navigation.navigate('CreateStaff', { user: {}, isEdit: false })}>
         <Image
           style={{ width: 16, height: 16, marginRight: 16 }}
           source={PlusIcon}

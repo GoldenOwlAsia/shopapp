@@ -25,7 +25,7 @@ class ErrorModal extends Component {
         >
           <TouchableWithoutFeedback>
             <View style={[styles.contentContainer]}>
-              <Text style={styles.title}>{title}</Text>
+              <Text style={styles.title}>{title || 'Error'}</Text>
               <Text style={styles.message}>{message}</Text>
             </View>
           </TouchableWithoutFeedback>

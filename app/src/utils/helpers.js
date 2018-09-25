@@ -30,3 +30,7 @@ export function preloadImages(images){
 export function cacheFonts(fonts) {
   return fonts.map(font => Font.loadAsync(font));
 }
+
+export function addObjectToArray(object, array, key){
+  return array.map(item => item[key] === object[key] ? object : item);
+}

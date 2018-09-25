@@ -2,7 +2,10 @@ import {
   LOADING_STAFFS,
   LOAD_STAFFS_SUCCESS,
   LOAD_STAFFS_FAILED,
+  UPDATE_USER_SUCCESS,
+  CREATE_USER_SUCCESS,
 } from '../actions/types';
+import { addObjectToArray } from '../utils/helpers';
 
 const initialState = {
   loading: false,
@@ -28,6 +31,16 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
         error: staffs.error,
+      }
+    case UPDATE_USER_SUCCESS:
+      return {
+        ...state,
+        data: addObjectToArray(action.user, state.data, 'id'),
+      }  
+    case CREATE_USER_SUCCESS:
+      return {
+        ...state,
+        data: [...state.data, ...[action.user]],
       }  
     default:
       return state
