@@ -139,7 +139,6 @@ class ReportController {
             return reject(err);
           });
       } catch(err) {
-        console.log('the error: ', err);
         return reject(err);
       }
     });

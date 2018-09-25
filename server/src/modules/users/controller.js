@@ -18,7 +18,7 @@ class UserController {
           const params = { ...args };  
           return _createAvatarFile(args.avatar)
             .then(avatarUrl => {
-              params.avatar = avatarUrl;
+              params.avatar = ImageHelper.createImageUrl(avatarUrl);
               return UserService.createUser({...params, role: ROLES.STAFF});
             })
             .then(user => {
@@ -112,7 +112,7 @@ class UserController {
         if (params.avatar && ImageHelper.isBase64ImageString(params.avatar)) {
           return _createAvatarFile(params.avatar)
             .then(avatarUrl => {
-              params.avatar = avatarUrl;
+              params.avatar = ImageHelper.createImageUrl(avatarUrl);
               return UserService.updateUserById(userId, params)
             })
             .then(updatedUser => {

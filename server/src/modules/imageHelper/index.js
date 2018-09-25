@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import configs from '../../configs';
 const IMAGE_PATH = path.join(__dirname, '../../../public/images/');
 
 class ImageHelper {
@@ -15,6 +16,10 @@ class ImageHelper {
         return reject(err);
       }
     });
+  }
+
+  createImageUrl(fileName) {
+    return `${configs.DOMAIN}/images/${fileName}`;
   }
 
   parseBase64(rootBase64) {
