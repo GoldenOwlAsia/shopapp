@@ -104,6 +104,11 @@ export default {
       description: 'Get all customer',
       resolve: Controller.getOrders
     },
+    recentOrders: {
+      type: new GraphQLList(OrderType),
+      description: 'Get orders recently',
+      resolve: Controller.getRecentOrders
+    }
   },
   mutation: {
     checkout: {

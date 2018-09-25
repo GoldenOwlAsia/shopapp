@@ -74,6 +74,33 @@ class OrderController {
       }
     });
   }
+  getRecentOrders(_, args, ctx) {
+    return new Promise((resolve, reject) => {
+      try {
+        const query = {
+          include: [{
+            model: models.User,
+            as: 'createdByStaff'
+          },{
+            model: models.Customer,
+            as: 'customer'
+          }],
+          limit: 5,
+          order: [['updatedAt', 'DESC']],
+        }
+
+        return OrderService.getOrderByQuery(query)
+          .then(orders => {
+            return resolve(orders.map(o => OrderService.styledOrder(o.toJSON())));
+          })
+          .catch(err => {
+            return reject(err);
+          })
+      } catch(err) {
+        return reject(err);
+      }
+    });
+  }
 }
 
 function _getProductsByOrderItems(productIds) {
