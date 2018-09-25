@@ -22,8 +22,6 @@ class OrderController {
         const params = { items, customerId, subTotal, tax, grandTotal, createdBy };
         const productIds = items.map(orderItem => orderItem.id);
         let totalSoldProducts = 0;
-        reportEmitter.emit('updateRevenue', moment().toISOString(), grandTotal);
-        return resolve(null);
         return _getProductsByOrderItems(productIds)
           .then(prods => {
             if (!prods.length || prods.length !== items.length) {
@@ -51,6 +49,7 @@ class OrderController {
           })
           .then(newOrder => {
             userEmitter.emit('updateUserRevenue', curUser.id, totalSoldProducts, newOrder.grandTotal);
+            reportEmitter.emit('updateRevenue', moment().toISOString(), grandTotal);
             const query = {
               where: {id: newOrder.id},
               include: [{
