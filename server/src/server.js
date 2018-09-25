@@ -6,7 +6,7 @@ import graphqlHTTP  from 'express-graphql';
 import { buildSchema } from 'graphql';
 import schema from './modules';
 import bodyParser from 'body-parser';
-import path from 'path'
+import path from 'path';
 
 const app = express();
 // cross origin config
