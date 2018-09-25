@@ -8,7 +8,6 @@ const userEvent = new UserEvent();
 
 userEvent.on('updateUserRevenue', function(userId, products, revenue) {
   console.log('start update user revenue!');
-  console.log('params: ', userId)
   UserService.getUserById(userId)
     .then(u => {
       if(!u) {
