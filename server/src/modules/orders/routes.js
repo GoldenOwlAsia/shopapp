@@ -93,6 +93,9 @@ const OrderType = new GraphQLObjectType({
     },
     grandTotal: {
       type: GraphQLFloat
+    },
+    createdAt: {
+      type: GraphQLString
     }
   })
 });
