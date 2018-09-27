@@ -7,6 +7,7 @@ import {
   Alert,
   TextInput,
   ActivityIndicator,
+  AsyncStorage,
 } from 'react-native';
 import TouchableView from '../components/TouchableView';
 import { colors } from '../utils/constants';
@@ -45,6 +46,7 @@ class OwnerLogin extends Component {
     this.setState({ loading: false });
     console.log('owner login result: ', result);
     if (result.type === OWNER_LOGIN_SUCCESS) {
+      await AsyncStorage.setItem('authToken', result.payload.authToken);
       this.props.navigation.navigate('Owner');
     }else {
       Alert.alert('Error', 'Invalid code');

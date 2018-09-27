@@ -42,7 +42,7 @@ class AvatarPicker extends React.PureComponent {
         allowsEditing: false,
         base64: true,
       });
-  
+      
       if (!cancelled) {
         this.setState({ image: uri, base64 }, () => {
           if(onPickedImage){
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   label: {
     marginTop: 8,
     fontSize: 12,
-    // fontFamily: 'Rubik-Regular',
+    fontFamily: 'Rubik-Regular',
     color: '#C1C5CB',
   },
   avatar: {

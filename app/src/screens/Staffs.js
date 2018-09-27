@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   FlatList,
   StyleSheet,
   View,
   TouchableOpacity,
   Image,
+  RefreshControl,
 } from 'react-native';
 import SearchBar from '../components/SearchBar';
 import StaffItem from '../components/StaffItem';
 import { Hamburger, PlusIcon } from '../components/imageUrls';
+
+import { getStaffsFromApi } from '../actions/staffs';
 
 class StaffsScreen extends Component {
 
@@ -23,7 +27,7 @@ class StaffsScreen extends Component {
       </TouchableOpacity>
     ),
     headerRight: (
-      <TouchableOpacity onPress={() => navigation.navigate('CreateStaff')}>
+      <TouchableOpacity onPress={() => navigation.navigate('CreateStaff', { user: {}, isEdit: false })}>
         <Image
           style={{ width: 16, height: 16, marginRight: 16 }}
           source={PlusIcon}
@@ -36,8 +40,12 @@ class StaffsScreen extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    this.props.getStaffsFromApi();
+  }
+
   onItemPress = (staff) => {
-    this.props.navigation.navigate('StaffDetail');
+    this.props.navigation.navigate('StaffDetail', { userId: staff.id });
   }
 
   renderStaffItem = ({ item }) => (
@@ -46,17 +54,12 @@ class StaffsScreen extends Component {
 
   keyExtractor = (item) => `staff-${item.id}`;
 
+  onRefresh = () => {
+    this.props.getStaffsFromApi();
+  }
+
   render() {
-    /**
-     * fake data
-     */
-    const URL = 'https://i.ytimg.com/vi/SJrb_d7W9Ww/maxresdefault.jpg';
-    const staffs = Array.from({ length : 20 }).map((item, index) => ({
-      id: index,
-      name: `Nguyễn Tiến Dũng ${index + 1}`,
-      phone: `09087892 ${index + 1}`,
-      avatar: URL,
-    }))
+    const { loading, error, staffs } = this.props;
 
     return (
       <View style={styles.container}>
@@ -67,6 +70,12 @@ class StaffsScreen extends Component {
           keyExtractor={this.keyExtractor}
           style={styles.list}
           ItemSeparatorComponent={Divider}
+          refreshControl={
+            <RefreshControl
+              refreshing={loading}
+              onRefresh={this.onRefresh}
+            />
+          }
         />
       </View>
     )
@@ -94,4 +103,17 @@ const styles = StyleSheet.create({
   }
 })
 
-export default StaffsScreen;
+const mapStateToProps = (state) => ({
+  loading: state.Staffs.loading,
+  error: state.Staffs.loading,
+  staffs: state.Staffs.data,
+});
+
+const mapDispatchToProps = {
+  getStaffsFromApi,
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(StaffsScreen);
