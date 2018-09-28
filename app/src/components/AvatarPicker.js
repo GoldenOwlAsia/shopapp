@@ -35,7 +35,7 @@ class AvatarPicker extends React.PureComponent {
   };
 
   openImageGallery = async () => {
-    const { onPickedImage } = this.props;
+    const { onPickedImage, isAvatarPicker } = this.props;
     try{
       const { cancelled, base64, uri } = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -44,11 +44,15 @@ class AvatarPicker extends React.PureComponent {
       });
       
       if (!cancelled) {
-        this.setState({ image: uri, base64 }, () => {
-          if(onPickedImage){
-            onPickedImage(base64);
-          }
-        });
+        if(isAvatarPicker){
+          this.setState({ image: uri, base64 }, () => {
+            if(onPickedImage){
+              onPickedImage(base64, uri);
+            }
+          });
+        }else {
+          onPickedImage(base64, uri);
+        }
       }
     }catch(error){
       throw error;
@@ -84,9 +88,11 @@ class AvatarPicker extends React.PureComponent {
 AvatarPicker.propTypes = {
   image: PropTypes.string,
   onPickedImage: PropTypes.func,
+  isAvatarPicker: PropTypes.bool,
 };
 AvatarPicker.defaultProps = {
   image: null,
+  isAvatarPicker: true,
 };
 AvatarPicker.componentName = 'AvatarPicker';
 

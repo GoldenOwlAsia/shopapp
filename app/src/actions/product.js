@@ -1,11 +1,13 @@
 import {
   GET_PRODUCTS,
   GET_PRODUCTS_SUCCESS,
-  GET_PRODUCTS_FAIL
+  GET_PRODUCTS_FAIL,
+  CREATE_PRODUCTS_SUCCESS,
 } from './types';
 
 import client from '../lib/client';
-import { GetAllProducts } from '../lib/queries';
+import { GetAllProducts, CreateProduct, GetAllCategories } from '../lib/queries';
+import { showAppLoading, hideAppLoading, showAppError } from './app';
 
 const handleGetProducts = (page) => dispatch => {
   dispatch(startGetProducts());
@@ -19,6 +21,10 @@ const handleGetProducts = (page) => dispatch => {
     })
     .catch(error => {
       console.log('get product error:  ', error);
+      dispatch(showAppError(error));
+      /**
+       * if you handle getProductsFail, please remove  showAppError
+       */
       return dispatch(getProductsFail(error));
     });
 }
@@ -65,4 +71,65 @@ export const startGetProducts = () => {
   return (dispatch) => {
     return dispatch(handleStartGetProduct());
   }
+}
+
+export const getCategories = () => (dispatch) => {
+  dispatch(showAppLoading());
+  return client
+    .query({
+      query: GetAllCategories,
+    })
+    .then(response => {
+      dispatch(hideAppLoading());
+      const { data } = response;
+      if(data){
+        const { getCategories } = data;
+        if(getCategories){
+          return getCategories.map(item => ({ value: item }));
+        }else {
+          return [];
+        }
+      }else {
+        dispatch(showAppError('Lấy danh sách loại sản phẩm thất bại.'));
+      }
+    })
+    .catch(error => {
+      console.log('getCategories:  ', error);
+      dispatch(hideAppLoading());
+      dispatch(showAppError(error.message));
+    });
+}
+
+export const createProductSuccess = (product) => ({
+  type: CREATE_PRODUCTS_SUCCESS,
+  payload: product,
+})
+
+export const handleCreateProduct = (product) => dispatch => {
+  dispatch(showAppLoading());
+  return client
+    .mutate({
+      mutation: CreateProduct,
+      variables: {
+        ...product,
+      }
+    })
+    .then(response => {
+      dispatch(hideAppLoading());
+      const { data } = response;
+      if(data){
+        const { createProduct } = data;
+        if(createProduct){
+          dispatch(createProductSuccess(createProduct))
+          return createProduct;
+        }
+      }else {
+        dispatch(showAppError('Tạo sản phẩm thất bại.'));
+      }
+    })
+    .catch(error => {
+      console.log('get product error:  ', error);
+      dispatch(hideAppLoading());
+      dispatch(showAppError(error.message));
+    });
 }
