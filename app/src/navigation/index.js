@@ -12,6 +12,7 @@ import AuthLoading from '../screens/AuthLoading';
 import StaffDetailStack from './StaffDetailStack';
 import CreateStaffStack from './CreateStaffStack';
 import OwnerNotificationStack from './OwnerNotificationStack';
+import CreateProductStack from './CreateProductStack';
 
 const AppNavigator = createStackNavigator(
   {
@@ -24,11 +25,11 @@ const AppNavigator = createStackNavigator(
     StaffDetail: StaffDetailStack,
     CreateStaff: CreateStaffStack,
     OwnerNotification: OwnerNotificationStack,
+    CreateProduct: CreateProductStack,
   },
   {
     initialRouteName: 'AuthLoading',
     headerMode: 'none',
-    // backBehavior: 'initialRoute',
   }
 );
 
