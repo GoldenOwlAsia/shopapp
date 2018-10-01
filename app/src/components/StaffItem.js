@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import CustomImage from './CustomImage'
 import { AvatarHolder } from './imageUrls';
 
 //TODO move to Constant file
@@ -20,7 +21,7 @@ const StaffItem = (props) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.container}>
-        <Image style={styles.image} source={avatarSource} resizeMethod="resize" />
+        <CustomImage style={styles.image} source={{ uri: avatar }} resizeMethod="resize" />
         <View style={styles.info}>
           <Text style={styles.name}>{fullName}</Text>
           <Text style={styles.phone}>{phoneNumber}</Text>

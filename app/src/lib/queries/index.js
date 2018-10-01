@@ -4,5 +4,6 @@ import { CreateCustomer, UpdateCustomer } from './customers';
 import { Checkout } from  './order';
 import { GetAllStaffs } from './staffs';
 import { GetUserById, UpdateUserById } from './user';
+import { GetNotifications } from './notifications';
 
-export { GetAllProducts, CreateProduct, GetAllCategories, Login, CreateCustomer, Checkout, UpdateCustomer, OwnerLogin, GetAllStaffs, GetUserById, UpdateUserById };
+export { GetAllProducts, CreateProduct, GetAllCategories, Login, CreateCustomer, Checkout, UpdateCustomer, OwnerLogin, GetAllStaffs, GetUserById, UpdateUserById, GetNotifications };

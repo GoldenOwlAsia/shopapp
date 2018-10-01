@@ -30,7 +30,12 @@ class AuthLoadingScreen extends React.Component {
     if (!userToken) {
       this.props.navigation.navigate('Auth');
     } else {
-      this.props.navigation.navigate('Owner');
+      const isOwner = await AsyncStorage.getItem('isOwner');
+      if(isOwner){
+        this.props.navigation.navigate('Owner');
+      }else {
+        this.props.navigation.navigate('App');
+      }
     }
   };
 

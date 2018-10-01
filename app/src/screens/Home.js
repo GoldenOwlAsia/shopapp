@@ -193,9 +193,10 @@ class HomeScreen extends Component {
   }
 
   renderRow = ({item, index}) => {
+    console.log('[Home.js] zz item', item);
     return (
       <ProductItem
-        key={`product-${item.id}`}
+        // key={`product-${item.id}`}
         gridItem={!this.props.showList}
         item={item}
         onItemPress={this.onItemPress}

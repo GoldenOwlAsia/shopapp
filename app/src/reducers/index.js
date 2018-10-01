@@ -7,6 +7,7 @@ import Order from './order';
 import App from './app';
 import Staffs from './staffs';
 import User from './user';
+import Notifications from './notifications';
 
 export default {
 	App,
@@ -18,4 +19,5 @@ export default {
 	Order,
 	Staffs,
 	User,
+	Notifications,
 };

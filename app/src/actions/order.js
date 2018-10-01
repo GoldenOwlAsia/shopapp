@@ -71,6 +71,7 @@ export const decreaseItemQuantity = (customerId, itemId) => {
 }
 
 const handleCheckout = (params) => dispatch => {
+  console.log('[order.js] params', JSON.stringify(params));
   return client
     .mutate({
       mutation: Checkout,
