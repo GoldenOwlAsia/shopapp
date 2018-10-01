@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Image, View, StyleSheet, Text, Dimensions } from 'react-native';
 import QuantityPicker from './QuantityPicker';
 import TouchableView from './TouchableView';
+import CustomImage from './CustomImage';
+import { ProductHolder } from './imageUrls';
 import { formatMoney } from '../utils/helpers';
 
 /* Component ==================================================================== */
@@ -19,11 +21,11 @@ const ProductItem = (props) => {
       <TouchableView onPress={onPress}>
         <View style={styles.gridContainer}>
           <View style={[styles.imageWrap, styles.gridImageWrap]}>
-            <Image source={{ uri: URL }} style={styles.image} />
+            <CustomImage holder={ProductHolder} source={{ uri: URL }} style={styles.image} />
           </View>
           <View style={styles.gridContent}>
             <Text style={styles.title}>{name}</Text>
-            <Text numberOfLines={1} style={styles.category}>{category}</Text>
+            <Text numberOfLines={1} style={styles.category}>{URL}</Text>
             <Text style={[styles.status, styles.gridStatus]}>{status === 'Available' ? 'Còn hàng' : 'Hết hàng'}</Text>
             <Text style={[styles.price, styles.gridPrice]}>{formatMoney(price)}</Text>
             <QuantityPicker
@@ -40,7 +42,7 @@ const ProductItem = (props) => {
       <TouchableView onPress={onPress}>
         <View style={styles.container}>
           <View style={[styles.imageWrap, styles.listImageWrap]}>
-            <Image source={{ uri: URL }} style={styles.image} />
+            <CustomImage holder={ProductHolder} source={{ uri: URL }} style={styles.image} />
           </View>
           <View style={styles.listContent}>
             <Text style={styles.title}>{name}</Text>

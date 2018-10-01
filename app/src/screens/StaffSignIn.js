@@ -7,10 +7,10 @@ import {
   Image,
   Text,
   Alert,
-  KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { StackActions, NavigationActions } from 'react-navigation';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { connect } from 'react-redux';
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   forgotPasswordText: {
-    marginTop: 20,
+    marginVertical: 20,
     fontFamily: "Rubik-Regular",
     fontSize: 14,
     fontWeight: "600",
@@ -78,7 +78,12 @@ class SignInScreen extends React.Component {
       if (result.type === LOGIN_SUCCESS) {
         await AsyncStorage.setItem('authToken', result.payload.authToken);
         this.setState({ loading: false, username: '', password: '' }, () => {
-          this.props.navigation.navigate("App");
+          const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'App' })],
+            key: null,
+          });
+          this.props.navigation.dispatch(resetAction);
         });
       }else {
         this.setState({ loading: false }, () => {
@@ -117,34 +122,53 @@ class SignInScreen extends React.Component {
     console.log('go to forgot password!');
   }
 
+  onSubmitEditing = () => {
+    this.passwordRef.input.focus()
+  }
+
+  onEndEditing = () => {
+    this.handleSignIn()
+  }
+
   render() {
     return (
-      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding': null} enabled>
-        <AuthHeader />
-        <View style={styles.contentWrapper}>
-          <TextInput
-            label="Tên đăng nhập"
-            value={this.state.username}
-            onChangeText={this.onChangeUsername}
-          />
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          contentContainerStyle={{ flex: 1 }}
+        >
+          <View style={styles.container}>
+          <AuthHeader />
+          <View style={styles.contentWrapper}>
+            <TextInput
+              label="Tên đăng nhập"
+              value={this.state.username}
+              onChangeText={this.onChangeUsername}
+              returnKeyType={"next"}
+              onSubmitEditing={this.onSubmitEditing}
+              inputRef={(ref) => this.usernameRef = ref}
+            />
 
-          <TextInput
-            label="Mật khẩu"
-            secureTextEntry
-            value={this.state.password}
-            onChangeText={this.onChangePassword}
-          />
-        </View>
-        <BaseButton
-          loading={this.state.loading}
-          onPress={this.handleSignIn}
-          IconRight={<RightIcon />}
-          fullWidth title="Đăng nhập" />
+            <TextInput
+              label="Mật khẩu"
+              secureTextEntry
+              value={this.state.password}
+              onChangeText={this.onChangePassword}
+              returnKeyType={"done"}
+              inputRef={(ref) => this.passwordRef = ref}
+              onSubmitEditing={this.onEndEditing}
+            />
+            </View>
+            <BaseButton
+              loading={this.state.loading}
+              onPress={this.handleSignIn}
+              IconRight={<RightIcon />}
+              fullWidth title="Đăng nhập" />
 
-          <TouchableView onPress={this.goToForgotPassword}>
-            <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
-          </TouchableView>  
-      </KeyboardAvoidingView>
+            <TouchableView onPress={this.goToForgotPassword}>
+              <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
+            </TouchableView>
+          </View> 
+        </KeyboardAwareScrollView>
     );
   }
 }

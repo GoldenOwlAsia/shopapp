@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
+  AsyncStorage
 } from 'react-native';
 import MenuIcon from '../components/MenuIcon';
 import { Hamburger, NotificationIcon } from '../components/imageUrls';
