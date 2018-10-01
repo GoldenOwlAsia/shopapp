@@ -1,3 +1,4 @@
+import OrderService from '../orders/service';
 import models from '../../models';
 const Notification = models.Notification;
 
@@ -24,6 +25,12 @@ class NotificationService {
           return reject(err);
         });
     });
+  }
+
+  styledNotificationResponse(notification) {
+    let result = { ...notification.toJSON() };
+    result.order = OrderService.styledOrder(result.order);
+    return result;
   }
 }
 

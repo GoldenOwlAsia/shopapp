@@ -8,6 +8,7 @@ import {
 
 import { CustomerType } from '../customers/routes';
 import { UserType } from '../users/routes';
+import { OrderType } from '../orders/routes';
 
 import Controller from './controller';
 
@@ -25,6 +26,12 @@ const NotificationType = new GraphQLObjectType({
       type: CustomerType
     },
     content: {
+      type: GraphQLString
+    },
+    order: {
+      type: OrderType
+    },
+    type: {
       type: GraphQLString
     },
     createdAt: {

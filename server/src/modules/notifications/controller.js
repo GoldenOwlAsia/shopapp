@@ -20,11 +20,14 @@ class NotificationController {
           },{
             model: models.Customer,
             as: 'customer'
+          },{
+            model: models.Order,
+            as: 'order'
           }]
         }
         return NotificationService.getNotificationsByQuery(query)
           .then(results => {
-            return resolve(results);
+            return resolve(results.map(i => NotificationService.styledNotificationResponse(i)));
           })
           .catch(err => {
             return reject(err);
