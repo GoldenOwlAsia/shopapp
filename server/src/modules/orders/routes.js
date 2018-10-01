@@ -69,7 +69,7 @@ const OrderItemInputType = new GraphQLInputObjectType({
   })
 })
 
-const OrderType = new GraphQLObjectType({
+export const OrderType = new GraphQLObjectType({
   name: "Order",
   description: "This represent an order",
   fields: () => ({
@@ -93,6 +93,9 @@ const OrderType = new GraphQLObjectType({
     },
     grandTotal: {
       type: GraphQLFloat
+    },
+    createdAt: {
+      type: GraphQLString
     }
   })
 });
