@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Image, View, StyleSheet, Text, Dimensions } from 'react-native';
 import QuantityPicker from './QuantityPicker';
 import TouchableView from './TouchableView';
+import CustomImage from './CustomImage';
+import { ProductHolder } from './imageUrls'
 import { formatMoney } from '../utils/helpers';
 
 /* Component ==================================================================== */
@@ -18,7 +20,8 @@ const ProductItem = (props) => {
     <TouchableView onPress={internalOnPress}>
       <View style={styles.container}>
         <View style={styles.imageWrap}>
-          <Image style={styles.image} resizeMode="cover" source={{ uri: URL }} />
+          {/* <Image style={styles.image} resizeMode="cover" source={{ uri: URL }} /> */}
+          <CustomImage holder={ProductHolder} style={styles.image} resizeMode="cover" source={{ uri: URL }} />
         </View>
         <View style={styles.content}>
           <Text numberOfLines={1} style={styles.title}>{name}</Text>

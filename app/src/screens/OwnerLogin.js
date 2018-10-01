@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   AsyncStorage,
 } from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
 import TouchableView from '../components/TouchableView';
 import { colors } from '../utils/constants';
 
@@ -47,7 +48,15 @@ class OwnerLogin extends Component {
     console.log('owner login result: ', result);
     if (result.type === OWNER_LOGIN_SUCCESS) {
       await AsyncStorage.setItem('authToken', result.payload.authToken);
-      this.props.navigation.navigate('Owner');
+      await AsyncStorage.setItem('isOwner', 'true');
+    
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'Owner' })],
+        key: null,
+      });
+      this.props.navigation.dispatch(resetAction);
+
     }else {
       Alert.alert('Error', 'Invalid code');
     }

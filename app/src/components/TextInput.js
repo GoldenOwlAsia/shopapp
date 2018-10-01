@@ -62,7 +62,7 @@ class NormalTextInput extends Component {
   }
 
   render(){
-    const { label, value, spaceTop, ...rest } = this.props;
+    const { label, value, spaceTop, inputRef, ...rest } = this.props;
     return (
         <TextField
           {...rest}
@@ -80,6 +80,7 @@ class NormalTextInput extends Component {
           style={styles.textInput}
           autoCapitalize={'none'}
           value={value ? value : this.state.text}
+          ref={inputRef}
         />
     )
   }

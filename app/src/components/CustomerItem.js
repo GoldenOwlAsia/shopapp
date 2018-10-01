@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Text, View, StyleSheet, Image } from 'react-native';
 import Swipeout from 'react-native-swipeout';
 import TouchableView from './TouchableView';
-import { TrashWhite } from './imageUrls';
+import CustomImage from './CustomImage'
+import { TrashWhite, ProductHolder } from './imageUrls';
 import { formatMoney } from '../utils/helpers';
 
 /* Component ==================================================================== */
@@ -42,7 +43,9 @@ class CustomerItem extends React.PureComponent {
               <Text style={styles.product}>{`${quantity} sản phẩm - ${formatMoney(total)} VNĐ`}</Text>
             </View>
             <View style={styles.imageWrap}>
-              { hasProducts && (<Image resizeMode="contain" source={{ uri: products[0].images[0] }} style={styles.image} />) }
+              { hasProducts && (
+                <CustomImage holder={ProductHolder} resizeMode="contain" source={{ uri: products[0].images[0] }} style={styles.image} />
+              ) }
             </View>
           </View>
         </TouchableView>
