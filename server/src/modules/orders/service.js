@@ -13,10 +13,10 @@ class OrderService {
 
       Order.create({ ...newOrder, items })
         .then(createdOrder => {
-          resolve(createdOrder);
+          return resolve(createdOrder);
         })
         .catch(err => {
-          reject(err);
+          return reject(err);
         });
     });
   }

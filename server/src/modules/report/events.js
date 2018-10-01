@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import ReportService from '../orders/service';
+import ReportService from './service';
 
 class ReportEvent extends EventEmitter {};
 

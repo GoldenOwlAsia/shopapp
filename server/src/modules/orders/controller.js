@@ -4,6 +4,7 @@ import AuthService from '../authentication/authService';
 import ProductService from '../products/service';
 import { ItemNotFoundError } from '../../utils/errors';
 import reportEmitter from '../report/events';
+import notificationEmiiter from '../notifications/events';
 import userEmitter from '../users/events';
 import moment from 'moment';
 
@@ -50,6 +51,7 @@ class OrderController {
           .then(newOrder => {
             userEmitter.emit('updateUserRevenue', curUser.id, totalSoldProducts, newOrder.grandTotal);
             reportEmitter.emit('updateRevenue', moment().toISOString(), grandTotal);
+            notificationEmiiter.emit('createNotification', { createdBy, customerId, content: ' vừa bán sản phẩm cho khách hàng ' });
             const query = {
               where: {id: newOrder.id},
               include: [{
@@ -66,6 +68,7 @@ class OrderController {
             return resolve(OrderService.styledOrder(orders[0].toJSON()));
           })
           .catch(err => {
+            console.log('err: ', err);
             return reject(err);
           });
       } catch(err) {
