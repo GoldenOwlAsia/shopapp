@@ -6,10 +6,12 @@ import {
   CHECKOUT_SUCCESS,
   CHECKOUT_FAIL,
   UPDATE_ORDER_BY_CUSTOMER,
+  GET_RECENT_ORDERS_SUCCESS,
 } from '../actions/types';
 
 const initialState = {
   list: {},
+  recentOrders: []
 }
 
 export default (state = initialState, action) => {
@@ -60,6 +62,9 @@ export default (state = initialState, action) => {
       list[customerId] = [...items];
       return { ...state, list }
     }
+    case GET_RECENT_ORDERS_SUCCESS:
+      console.log('payload: ', action.payload);
+      return { ...state, recentOrders: action.payload.orders }
     case CHECKOUT_SUCCESS: {
       // delete state.list[action.payload.customer.id];
       return { ...state };

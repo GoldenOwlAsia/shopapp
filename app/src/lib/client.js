@@ -26,8 +26,8 @@ const authLink = setContext(async () => {
 });
 
 const httpLink = createHttpLink({
-  uri: 'https://shop-app-backend.herokuapp.com/graphql'
-  // uri: 'http://192.168.56.1:3001/graphql'
+  // uri: 'https://shop-app-backend.herokuapp.com/graphql'
+  uri: 'http://192.168.0.52:3001/graphql'
 })
 
 const cache = new InMemoryCache();

@@ -1,10 +1,10 @@
 import {
   CREATE_ORDER, REMOVE_ITEM, INCREASE_ITEM_QUANTITY, DECREASE_ITEM_QUANTITY,
-  CHECKOUT, CHECKOUT_SUCCESS, CHECKOUT_FAIL, UPDATE_ORDER_BY_CUSTOMER
+  CHECKOUT, CHECKOUT_SUCCESS, CHECKOUT_FAIL, UPDATE_ORDER_BY_CUSTOMER, GET_RECENT_ORDERS_SUCCESS, GET_RECENT_ORDERS_FAIL
 } from './types';
 
 import client from '../lib/client';
-import { Checkout } from '../lib/queries';
+import { Checkout, RecentOrdersQuery } from '../lib/queries';
 
 const handleCreateOrder = (customerId, items) => {
   return {
@@ -134,5 +134,54 @@ const handleUpdateOrderByCustomer = ({customerId, items}) => {
 export const updateOrderByCustomer = (params) => {
   return (dispatch, getState) => {
     return dispatch(handleUpdateOrderByCustomer(params));
+  }
+}
+
+const handleGetRecentOrdersSuccess = (orders) => {
+  return {
+    type: GET_RECENT_ORDERS_SUCCESS,
+    payload: {
+      orders
+    }
+  }
+}
+
+export const getRecentOrersSuccess = (orders) => {
+  return (dispatch, getState) => {
+    return dispatch(handleGetRecentOrdersSuccess(orders))
+  }
+}
+
+const handleGetRecentOrderFail = (error) => {
+  return {
+    type: GET_RECENT_ORDERS_FAIL,
+    paylod: { error }
+  }
+}
+
+export const getRecentOrdersFail = (error) => {
+  return (dispatch, getState) => {
+    return dispatch(handleGetRecentOrderFail(error));
+  }
+}
+
+const handleGetRecentOrders = () => dispatch => {
+  return client
+    .query({
+      query: RecentOrdersQuery
+    })
+    .then(response => {
+      const orders = response.data.recentOrders;
+      return dispatch(getRecentOrersSuccess(orders));
+    })
+    .catch(error => {
+      console.log('get recent orders error: ', error);
+      return dispatch(getRecentOrdersFail(error));
+    });
+}
+
+export const getRecentOrders = () => {
+  return (dispatch, getState) => {
+    return dispatch(handleGetRecentOrders());
   }
 }

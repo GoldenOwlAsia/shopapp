@@ -9,5 +9,6 @@ export const colors = {
   BLUE: '#5175ff',
   GREY: '#f6f6f8',
   GREY_97: '#f7f7f7',
+  ORDER_ITEM_BACKGROUND_COLOR: '#5175ff',
   BUTTON_PRIMARY_COLOR: '#5175FF'
 };

@@ -20,3 +20,5 @@ export const CustomerTabIconInactive = require('../../assets/images/tab-customer
 export const CustomerTabIconActive = require('../../assets/images/tab-customer-active.png');
 export const CheckoutTabIconActive = require('../../assets/images/tab-checkout-active.png');
 export const CheckoutTabIconInactive = require('../../assets/images/tab-checkout-inactive.png');
+export const BellIcon = require('../../assets/images/bell.png');
+export const RightArrow = require('../../assets/images/right-arrow.png');
