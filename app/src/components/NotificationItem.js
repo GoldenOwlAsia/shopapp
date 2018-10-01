@@ -1,26 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity, Image, Text, StyleSheet, View } from 'react-native';
-import { PlusIcon } from './imageUrls';
+import { distanceInWords, format } from 'date-fns';
+import { MaterialIcons } from '@expo/vector-icons';
+import CustomImage from './CustomImage';
+import { ProductHolder } from './imageUrls';
 
 /* Component ==================================================================== */
 const NotificationItem = (props) => {
   const { onPress, item, selected} = props;
-  const { avatarUrl, supplier, product, customer, date } = item;
+  const { avatarUrl, createdByStaff, order, customer, createdAt } = item;
+  const { items } = order;
+  const product = items[0];
+  const { name, image } = product;
+
+  const date =  format(
+    new Date(createdAt),
+    'MM/DD/YYYY'
+  )
+
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={[styles.container, { backgroundColor: selected ? '#F7F8FE' : '#FFF' }]}>
         <View style={styles.imageWrap}>
-          <Image style={styles.image} source={{ uri: avatarUrl }} />
+          <CustomImage style={styles.image} holder={ProductHolder} source={{ uri: image }} />
         </View>
         <View style={styles.content}>
           <Text style={styles.message}>
-            <Text style={styles.supplierName}>{supplier}&nbsp;</Text>
-             vừa bán được {product} cho khách hàng {customer}
-             <Text style={styles.time}>&nbsp;{date}</Text>
+            <Text style={styles.supplierName}>{createdByStaff.fullName}&nbsp;</Text>
+             vừa bán được {name} cho khách hàng {customer.name}
           </Text>
+          <Text style={styles.time}>&nbsp;{date}</Text>
         </View>
-        <Image style={styles.rightIcon} source={PlusIcon} />
+        {/* <Image style={styles.rightIcon} source={PlusIcon} /> */}
+        <MaterialIcons color="#D3D5DA" size={18} style={styles.rightIcon} name="keyboard-arrow-right" />
       </View>
     </TouchableOpacity>
   )
@@ -61,7 +74,7 @@ const styles = StyleSheet.create({
   supplierName: {
     fontSize: 16,
     fontFamily: 'Rubik-Medium',
-    fontWeight: '700',
+    // fontWeight: '500',
     color: '#12283F',
     marginRight: 4,
   },
@@ -74,11 +87,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Rubik-Italic',
     color: '#A8A8A8',
-    marginLeft: 4,
+    marginTop: 4,
   },
   rightIcon: {
-    width: 12,
-    height: 12,
     marginLeft: 10,
   }
 

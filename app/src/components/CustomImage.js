@@ -20,7 +20,6 @@ class CustomImage extends React.PureComponent {
   }
 
   render(){
-    console.log('custom image', this.props)
     const { source: propsSource, holder, ...rest } = this.props;
     const imageHolder = holder ? holder : AvatarHolder
     const { source } = this.state;

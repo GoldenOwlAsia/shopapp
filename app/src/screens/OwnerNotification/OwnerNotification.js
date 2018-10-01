@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   View,
   StyleSheet,
@@ -7,6 +8,7 @@ import {
 import MenuIcon from '../../components/MenuIcon';
 import NotificationItem from '../../components/NotificationItem';
 import { Hamburger, NotificationIcon } from '../../components/imageUrls';
+import { getNotifications } from '../../actions/notifications'
 
 class NotificationScreen extends Component {
 
@@ -24,28 +26,22 @@ class NotificationScreen extends Component {
     super(props);
   }
 
+  async componentDidMount() {
+    this.props.getNotifications();
+  }
+
   renderNotificationItem = ({ item, index }) => (
     <NotificationItem
       item={item}
-      selected={index % 2 === 0}
+      // selected={index % 2 === 0}
     />
   )
 
-  keyExtractor = (item) => item.id
+  keyExtractor = (item) => `notification-${item.id}`
 
   render() {
-    /**
-     * fake data
-     */
-    const URL = 'https://i.ytimg.com/vi/SJrb_d7W9Ww/maxresdefault.jpg';
-    const notifications = Array.from({ length : 20 }).map((item, index) => ({
-      id: `${index}`,
-      supplier: `Đinh Văn Lộc`,
-      product: 'Nike Air Force',
-      customer: 'Trần Trúc Linh',
-      date: '15 phút trước',
-      avatarUrl: URL,
-    }))
+    const { notifications } = this.props;
+    
     return (
       <View style={styles.container}>
         <FlatList
@@ -75,4 +71,15 @@ const styles = StyleSheet.create({
   }
 });
 
-export default NotificationScreen;
+const mapStateToProps = (state) => ({
+  notifications: state.Notifications.notifications,
+})
+
+const mapDispatchToProps = {
+  getNotifications,
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NotificationScreen);
