@@ -19,6 +19,9 @@ export const GetUserById = gql`
       CMND
       role
       code
+      createdAt
+      revenue
+      soldProducts
     }
   }
 `;

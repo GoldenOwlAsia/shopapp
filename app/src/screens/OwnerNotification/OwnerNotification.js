@@ -4,10 +4,12 @@ import {
   View,
   StyleSheet,
   FlatList,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
 import MenuIcon from '../../components/MenuIcon';
 import NotificationItem from '../../components/NotificationItem';
-import { Hamburger, NotificationIcon } from '../../components/imageUrls';
+import { Hamburger, NotificationIcon, BackArrow } from '../../components/imageUrls';
 import { getNotifications } from '../../actions/notifications'
 
 class NotificationScreen extends Component {
@@ -15,7 +17,12 @@ class NotificationScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Thông báo',
     headerLeft: (
-      <MenuIcon icon={Hamburger} />
+      <TouchableOpacity onPress={() => navigation.navigate('Owner')}>
+        <Image
+          style={{ width: 24, height: 16, marginLeft: 16 }}
+          source={BackArrow}
+        />
+      </TouchableOpacity>
     ),
     headerRight: (
       <MenuIcon icon={NotificationIcon} />
