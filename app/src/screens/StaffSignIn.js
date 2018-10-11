@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
   },
   forgotPasswordText: {
     marginVertical: 20,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     fontWeight: "600",
     fontStyle: "normal",

@@ -127,14 +127,12 @@ const styles = StyleSheet.create({
   guide: {
     marginBottom: 50, 
     textAlign: 'center',
-    fontFamily: "Rubik-Regular",
     lineHeight: 22,
     fontSize: 16,
     color: "#12283f"
   },
   hint: {
     textAlign: 'center',
-    fontFamily: "Rubik-Regular",
     lineHeight: 24,
     fontSize: 18,
     color: "#868686"

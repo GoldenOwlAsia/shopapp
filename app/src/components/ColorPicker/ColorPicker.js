@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     fontSize: 14,
     color: "#12283f",
-    fontFamily: 'Rubik-Regular',
   },
   content: {
     flexDirection: 'row',

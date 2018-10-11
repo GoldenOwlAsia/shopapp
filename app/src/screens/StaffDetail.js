@@ -92,7 +92,6 @@ const basicInfostyles = StyleSheet.create({
   },
   regularText: {
     fontSize: 16,
-    fontFamily: 'Rubik-Regular',
     lineHeight: 19,
     color: '#A8A8A8',
   },
@@ -229,7 +228,6 @@ const styles = StyleSheet.create({
   statisticItemLabel: {
     fontSize: 14,
     color: '#A8A8A8',
-    fontFamily: 'Rubik-Regular',
     lineHeight: 19,
   },
   statisticItemValue: {
@@ -252,7 +250,6 @@ const styles = StyleSheet.create({
   desText: {
     fontSize: 16,
     color: '#A8A8A8',
-    fontFamily: 'Rubik-Regular',
     lineHeight: 19,
   }
 });

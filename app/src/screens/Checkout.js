@@ -257,13 +257,11 @@ const styles = StyleSheet.create({
   },
   label: {
     lineHeight: 19,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     color: "#8a8a8a"
   },
   grandTotal: {
     lineHeight: 19,
-    fontFamily: "Rubik-Medium",
     fontSize: 14,
     fontWeight: '700',
   },
@@ -272,21 +270,18 @@ const styles = StyleSheet.create({
   },
   customerInfoTitle: {
     lineHeight: 30,
-    fontFamily: "Rubik-Medium",
     fontSize: 22,
     fontWeight: "700",
     fontStyle: "normal",
     color: "#666666"
   },
   customerInfoText: {
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     color: "#8a8a8a",
     lineHeight: 24,
   },
   editText: {
     lineHeight: 19,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     fontWeight: "normal",
     fontStyle: "normal",
@@ -298,14 +293,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: 10,
     color: '#666666',
-    fontFamily: "Rubik-Medium",
   },
   btnCheckout: {
     padding: 20,
   },
   title: {
     lineHeight: 32,
-    fontFamily: "Rubik-Medium",
     fontSize: 24,
     fontWeight: "700",
     fontStyle: "normal",

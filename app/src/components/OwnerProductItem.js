@@ -12,7 +12,7 @@ const ProductItem = (props) => {
   const { item, onItemPress, onIncrease, onDecrease } = props;
   const { images, name, price, quantity } = item;
 
-  const URL = images.length > 0 ? images[0] : null;
+  const URL = (images || []).length ? images[0] : null;
 
   const internalOnPress = () => onItemPress(item);
 
@@ -72,14 +72,12 @@ const styles = StyleSheet.create({
   },
   title: {
     lineHeight: 19,
-    fontFamily: "Rubik-Medium",
     fontSize: 14,
     fontWeight: '700',
     color: '#12283f'
   },
   price: {
     lineHeight: 19,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     color: '#a8a8a8'
   },
@@ -91,13 +89,11 @@ const styles = StyleSheet.create({
   },
   quantity: {
     lineHeight: 19,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     color: '#5175ff'
   },
   lastUpdate: {
     lineHeight: 16,
-    fontFamily: 'Rubik-Regular',
     fontSize: 12,
     color: '#a8a8a8'
   }

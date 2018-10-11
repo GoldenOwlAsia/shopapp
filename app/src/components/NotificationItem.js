@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: 16,
-    fontFamily: 'Rubik-Regular',
     color: '#A8A8A8',
   },
   time: {

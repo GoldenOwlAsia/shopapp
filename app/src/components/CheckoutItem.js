@@ -80,14 +80,12 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
     lineHeight: 19,
-    // fontFamily: "Rubik-Medium",
     fontSize: 14,
     fontWeight: "700",
     color: "#12283f"
   },
   price: {
     lineHeight: 19,
-    // fontFamily: "Rubik-Medium",
     fontSize: 14,
     fontWeight: "700",
     color: "#5175ff"
@@ -103,7 +101,6 @@ const styles = StyleSheet.create({
   },
   quantityText: {
     lineHeight: 14,
-    // fontFamily: "Rubik-Regular",
     fontSize: 12,
     color: "#666666",
     marginRight: 20

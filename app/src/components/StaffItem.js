@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
   },
   phone: {
     fontSize: 14,
-    fontFamily: 'Rubik-Regular',
     lineHeight: 19,
     color: '#A8A8A8',
   }

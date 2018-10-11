@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     color: 'white',
     fontSize: 16,
-    fontFamily: 'Rubik-Regular',
     textAlign: 'center',
     padding: 8,
     ...Platform.select({

@@ -6,7 +6,6 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
-  Platform,
 } from 'react-native';
 import MenuIcon from '../../components/MenuIcon';
 import NotificationItem from '../../components/NotificationItem';
@@ -16,12 +15,7 @@ import { getNotifications } from '../../actions/notifications'
 class NotificationScreen extends Component {
 
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Thông báo',
-    headerTitleStyle: {
-        color: 'red',
-        textAlign: 'right',
-        // flexGrow: headerTitleGrow
-    },
+    title: 'Thông báo',
     headerLeft: (
       <TouchableOpacity onPress={() => navigation.navigate('Owner')}>
         <Image

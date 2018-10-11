@@ -33,17 +33,14 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     fontWeight: 'normal',
     color: "#caced4",
-    fontFamily: 'Rubik-Regular'
   },
   input: {
     width: '100%',
-    fontFamily: "Rubik-Regular",
     fontSize: 16,
     fontWeight: '600',
     color: "#12283f",
   },
   textInput: {
-    fontFamily: "Rubik-Regular",
     fontSize: 16,
     fontWeight: '600',
     color: "#12283f",
@@ -69,8 +66,8 @@ class NormalTextInput extends Component {
           label={label}
           onChangeText={this.handleChange}
           containerStyle={[styles.containerStyle, spaceTop && { marginTop: 10 }]}
-          tintColor="#caced4"
-          baseColor="#caced4"
+          tintColor="#8f8b99"
+          baseColor="#8f8b99"
           labelFontSize={14}
           titleFontSize={24}
           fontSize={16}

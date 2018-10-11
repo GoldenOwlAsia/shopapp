@@ -14,7 +14,7 @@ const ProductItem = (props) => {
 
   const category = 'Giày thể thao nam';
 
-  const URL = images.length > 0 ? images[0] : null;
+  const URL = (images || []).length ? images[0] : null;
 
   if(gridItem){
     return (
@@ -118,7 +118,6 @@ const styles = StyleSheet.create({
   },
   title: {
     lineHeight: 16,
-    fontFamily: "Rubik-Medium",
     fontSize: 14,
     fontWeight: "700",
     fontStyle: "normal",
@@ -126,14 +125,12 @@ const styles = StyleSheet.create({
   },
   category: {
     lineHeight: 18,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     color: "#bebebe",
     marginTop: 4,
   },
   price: {
     lineHeight: 16,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     color: "#666666"
   },
@@ -143,7 +140,6 @@ const styles = StyleSheet.create({
   },
   status: {
     lineHeight: 16,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     color: "#5175ff"
   },

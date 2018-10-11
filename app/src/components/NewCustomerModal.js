@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
   },
   modalTitleText: {
     lineHeight: 24,
-    fontFamily: "Rubik-Medium",
     fontSize: 18,
     fontWeight: "700",
     color: "#12283f"
@@ -116,7 +115,6 @@ const styles = StyleSheet.create({
     marginTop: 16,
     textAlign: 'center',
     lineHeight: 19,
-    fontFamily: "Rubik-Medium",
     fontSize: 14,
     color: "#12283f"
   }

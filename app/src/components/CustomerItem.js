@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
   },
   name: {
     lineHeight: 19,
-    fontFamily: "Rubik-Medium",
     fontSize: 16,
     fontWeight: "700",
     fontStyle: "normal",
@@ -97,7 +96,6 @@ const styles = StyleSheet.create({
   },
   product: {
     lineHeight: 18,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     color: "#8c8c8c"
   },

@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     lineHeight: 24,
-    fontFamily: "Rubik-Medium",
     fontSize: 18,
     fontWeight: '700',
     color: "#12283f"
@@ -59,7 +58,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: 'center',
     lineHeight: 19,
-    fontFamily: "Rubik-Regular",
     fontSize: 16,
     color: "#12283f"
   },
