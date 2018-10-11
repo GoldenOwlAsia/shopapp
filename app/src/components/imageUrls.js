@@ -23,3 +23,4 @@ export const CheckoutTabIconInactive = require('../../assets/images/tab-checkout
 export const AvatarHolder = require('../../assets/images/avatar-holder.png');
 export const NotificationIcon = require('../../assets/images/notification.png');
 export const ProductHolder = require('../../assets/images/product-holder.png');
+export const NotificationActiveIcon = require('../../assets/images/notificationActive.png');

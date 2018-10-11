@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
   },
   supplierName: {
     fontSize: 16,
-    fontFamily: 'Rubik-Medium',
     // fontWeight: '500',
     color: '#12283F',
     marginRight: 4,

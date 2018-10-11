@@ -8,6 +8,7 @@ import {
   Text,
   Alert,
   Platform,
+  Dimensions
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { StackActions, NavigationActions } from 'react-navigation';
@@ -32,7 +33,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   contentWrapper: {
-    flex: 1
+    height: Dimensions.get('window').height / 3,
+    justifyContent: 'center',
   },
   buttonWrapper: {
     paddingBottom: 10
@@ -49,7 +51,11 @@ const styles = StyleSheet.create({
   rightIcon: {
     width: 16,
     height: 16
-  }
+  },
+  headerAuth: {
+    height: Dimensions.get('window').height / 3,
+    justifyContent: 'center',
+  },
 });
 
 //TODO write a component
@@ -132,12 +138,12 @@ class SignInScreen extends React.Component {
 
   render() {
     return (
+      <View style={styles.container}>
         <KeyboardAwareScrollView
           enableOnAndroid
-          contentContainerStyle={{ flex: 1 }}
+          // contentContainerStyle={{ flex: 1 }}
         >
-          <View style={styles.container}>
-          <AuthHeader />
+          <View style={styles.headerAuth}><AuthHeader /></View>
           <View style={styles.contentWrapper}>
             <TextInput
               label="Tên đăng nhập"
@@ -157,7 +163,7 @@ class SignInScreen extends React.Component {
               inputRef={(ref) => this.passwordRef = ref}
               onSubmitEditing={this.onEndEditing}
             />
-            </View>
+          </View>
             <BaseButton
               loading={this.state.loading}
               onPress={this.handleSignIn}
@@ -167,8 +173,8 @@ class SignInScreen extends React.Component {
             <TouchableView onPress={this.goToForgotPassword}>
               <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
             </TouchableView>
-          </View> 
         </KeyboardAwareScrollView>
+      </View>
     );
   }
 }

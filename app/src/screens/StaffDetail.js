@@ -72,7 +72,6 @@ const basicInfostyles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: '700',
-    fontFamily: 'Rubik-Medium',
     lineHeight: 22,
     color: '#12283F',
   },
@@ -213,7 +212,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     color: '#12283F',
-    fontFamily: 'Rubik-Medium',
     fontWeight: '700',
     lineHeight: 32,
     margin: 24,
@@ -237,7 +235,6 @@ const styles = StyleSheet.create({
   statisticItemValue: {
     fontSize: 16,
     color: '#12283F',
-    fontFamily: 'Rubik-Medium',
     fontWeight: '700',
     lineHeight: 22,
   },
@@ -249,7 +246,6 @@ const styles = StyleSheet.create({
   desTitle: {
     fontSize: 14,
     color: '#12283F',
-    fontFamily: 'Rubik-Medium',
     fontWeight: '700',
     lineHeight: 19,
   },

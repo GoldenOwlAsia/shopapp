@@ -27,7 +27,7 @@ const ProductItem = (props) => {
             <Text style={styles.title}>{name}</Text>
             <Text numberOfLines={1} style={styles.category}>{URL}</Text>
             <Text style={[styles.status, styles.gridStatus]}>{status === 'Available' ? 'Còn hàng' : 'Hết hàng'}</Text>
-            <Text style={[styles.price, styles.gridPrice]}>{formatMoney(price)}</Text>
+            <Text style={[styles.price, styles.gridPrice]}>{formatMoney(price)} VNĐ</Text>
             <QuantityPicker
               quantity={quantity}
               onIncrease={onIncrease}

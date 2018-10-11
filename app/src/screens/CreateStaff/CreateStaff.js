@@ -171,7 +171,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     color: '#12283F',
-    fontFamily: 'Rubik-Medium',
     fontWeight: '700',
     lineHeight: 32,
     marginBottom: 23,
