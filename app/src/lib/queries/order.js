@@ -19,3 +19,28 @@ export const Checkout = gql`
     }
   }
 `;
+
+export const RecentOrders = gql`
+  query {
+    recentOrders {
+      id
+      createdByStaff {
+        id
+        fullName
+      }
+      customer {
+        id
+        name
+      }
+      items {
+        id
+        name
+        image
+      }
+      subTotal
+      tax
+      grandTotal
+      createdAt
+    }
+  }
+`;

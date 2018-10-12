@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     color: "#12283f",
   },
   textInput: {
-    fontFamily: "Rubik-Regular",
+    fontFamily: "Rubik-Medium",
     fontSize: 16,
     fontWeight: '600',
     color: "#12283f",

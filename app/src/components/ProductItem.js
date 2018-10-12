@@ -14,7 +14,7 @@ const ProductItem = (props) => {
 
   const category = 'Giày thể thao nam';
 
-  const URL = images.length > 0 ? images[0] : null;
+  const URL = (images || []).length ? images[0] : null;
 
   if(gridItem){
     return (
