@@ -8,15 +8,35 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import DashboardScreen from '../screens/Dashboard';
 import ProductsScreen from '../screens/Products';
 import StaffsScreen from '../screens/Staffs';
+import TabIcon from '../components/TabIcon';
+import {
+  TabDashboardActive,
+  TabDashboardInactive,
+  TabCartActive,
+  TabCartInactive,
+  TabOwnerProductActive,
+  TabOwnerProductInactive,
+  TabUserActive,
+  TabUserInactive,
+} from '../components/imageUrls'
 
 const DashboardStack = createStackNavigator({
   Dashboard: DashboardScreen,
 });
 
 DashboardStack.navigationOptions = {
-  tabBarLabel: 'Dashboard',
-  tabBarIcon: ({ tintColor }) => (
-    <FontAwesome name="home" size={23} color={tintColor} />
+  tabBarIcon: ({ focused }) => (
+    <TabIcon icon={focused ? TabDashboardActive : TabDashboardInactive} />
+  ),
+};
+
+const CartStack = createStackNavigator({
+  Cart: DashboardScreen,
+});
+
+CartStack.navigationOptions = {
+  tabBarIcon: ({ focused }) => (
+    <TabIcon icon={focused ? TabCartActive : TabCartInactive} />
   ),
 };
 
@@ -25,10 +45,9 @@ const ProductsStack = createStackNavigator({
 });
 
 ProductsStack.navigationOptions = {
-  tabBarLabel: "Products",
-  tabBarIcon: ({ tintColor }) => (
-    <FontAwesome name="map" size={23} color={tintColor} />
-  )
+  tabBarIcon: ({ focused }) => (
+    <TabIcon icon={focused ? TabOwnerProductActive : TabOwnerProductInactive} />
+  ),
 };
 
 const StaffsStack = createStackNavigator({
@@ -36,14 +55,18 @@ const StaffsStack = createStackNavigator({
 });
 
 StaffsStack.navigationOptions = {
-  tabBarLabel: "Staffs",
-  tabBarIcon: ({ tintColor }) => (
-    <FontAwesome name="user-circle" size={23} color={tintColor} />
+  tabBarIcon: ({ focused }) => (
+    <TabIcon icon={focused ? TabUserActive : TabUserInactive} />
   ),
 };
 
 export default createBottomTabNavigator({
   DashboardStack,
+  CartStack,
   ProductsStack,
   StaffsStack,
+}, {
+  tabBarOptions: {
+    showLabel: false,
+  }
 });

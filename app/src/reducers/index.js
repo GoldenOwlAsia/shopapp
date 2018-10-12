@@ -8,6 +8,7 @@ import App from './app';
 import Staffs from './staffs';
 import User from './user';
 import Notifications from './notifications';
+import Charts from './charts';
 
 export default {
 	App,
@@ -20,4 +21,5 @@ export default {
 	Staffs,
 	User,
 	Notifications,
+	Charts,
 };

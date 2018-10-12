@@ -12,7 +12,7 @@ const ProductItem = (props) => {
   const { item, onItemPress, onIncrease, onDecrease } = props;
   const { images, name, price, quantity } = item;
 
-  const URL = images.length > 0 ? images[0] : null;
+  const URL = (images || []).length ? images[0] : null;
 
   const internalOnPress = () => onItemPress(item);
 
@@ -20,7 +20,6 @@ const ProductItem = (props) => {
     <TouchableView onPress={internalOnPress}>
       <View style={styles.container}>
         <View style={styles.imageWrap}>
-          {/* <Image style={styles.image} resizeMode="cover" source={{ uri: URL }} /> */}
           <CustomImage holder={ProductHolder} style={styles.image} resizeMode="cover" source={{ uri: URL }} />
         </View>
         <View style={styles.content}>
