@@ -4,8 +4,6 @@ import {
   View,
   StyleSheet,
   FlatList,
-  TouchableOpacity,
-  Image,
 } from 'react-native';
 import MenuIcon from '../../components/MenuIcon';
 import NotificationItem from '../../components/NotificationItem';

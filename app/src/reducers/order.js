@@ -6,10 +6,15 @@ import {
   CHECKOUT_SUCCESS,
   CHECKOUT_FAIL,
   UPDATE_ORDER_BY_CUSTOMER,
+  LOAD_RECENT_ORDER,
+  LOAD_RECENT_ORDER_SUCCESS,
+  LOAD_RECENT_ORDER_FAILED,
 } from '../actions/types';
 
 const initialState = {
   list: {},
+  loadingRecent: false,
+  recents: [],
 }
 
 export default (state = initialState, action) => {
@@ -67,6 +72,23 @@ export default (state = initialState, action) => {
     case CHECKOUT_FAIL: {
       return state;
     }
+    case LOAD_RECENT_ORDER:
+      return {
+        ...state,
+        loadingRecent: true,
+      }
+    case LOAD_RECENT_ORDER_SUCCESS:
+      return {
+        ...state,
+        loadingRecent: false,
+        recents: action.orders,
+      }
+    case LOAD_RECENT_ORDER_FAILED:
+      return {
+        ...state,
+        loadingRecent: false,
+        recents: [],
+      }   
     default: 
       return state;
   }

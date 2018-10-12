@@ -1,10 +1,13 @@
 import {
   CREATE_ORDER, REMOVE_ITEM, INCREASE_ITEM_QUANTITY, DECREASE_ITEM_QUANTITY,
-  CHECKOUT, CHECKOUT_SUCCESS, CHECKOUT_FAIL, UPDATE_ORDER_BY_CUSTOMER
+  CHECKOUT, CHECKOUT_SUCCESS, CHECKOUT_FAIL, UPDATE_ORDER_BY_CUSTOMER,
+  LOAD_RECENT_ORDER,
+  LOAD_RECENT_ORDER_SUCCESS,
+  LOAD_RECENT_ORDER_FAILED,
 } from './types';
 
 import client from '../lib/client';
-import { Checkout } from '../lib/queries';
+import { Checkout, RecentOrders } from '../lib/queries';
 
 const handleCreateOrder = (customerId, items) => {
   return {
@@ -135,5 +138,27 @@ const handleUpdateOrderByCustomer = ({customerId, items}) => {
 export const updateOrderByCustomer = (params) => {
   return (dispatch, getState) => {
     return dispatch(handleUpdateOrderByCustomer(params));
+  }
+}
+
+export const fetchRecentOrders = () => async(dispatch) => {
+  try{
+    dispatch({
+      type: LOAD_RECENT_ORDER,
+    });
+
+    const response = await client.query({ query: RecentOrders });
+    if(response && response.data && response.data.recentOrders){
+      dispatch({
+        type: LOAD_RECENT_ORDER_SUCCESS,
+        orders: response.data.recentOrders,
+      });
+    }
+  }catch(error){
+    console.log('[order.js] fetchRecentOrders error', error)
+    dispatch({
+      type: LOAD_RECENT_ORDER_FAILED,
+      error: error.message,
+    });
   }
 }

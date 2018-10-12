@@ -20,7 +20,6 @@ const ProductItem = (props) => {
     <TouchableView onPress={internalOnPress}>
       <View style={styles.container}>
         <View style={styles.imageWrap}>
-          {/* <Image style={styles.image} resizeMode="cover" source={{ uri: URL }} /> */}
           <CustomImage holder={ProductHolder} style={styles.image} resizeMode="cover" source={{ uri: URL }} />
         </View>
         <View style={styles.content}>
