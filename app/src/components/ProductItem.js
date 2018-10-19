@@ -10,9 +10,7 @@ import { formatMoney } from '../utils/helpers';
 /* Component ==================================================================== */
 const ProductItem = (props) => {
   const { item, gridItem, onPress, onIncrease, onDecrease } = props;
-  const { images, name, price, status, quantity, description } = item;
-
-  const category = 'Giày thể thao nam';
+  const { images, name, price, status, quantity, description, category } = item;
 
   const URL = (images || []).length ? images[0] : null;
 
@@ -25,7 +23,7 @@ const ProductItem = (props) => {
           </View>
           <View style={styles.gridContent}>
             <Text style={styles.title}>{name}</Text>
-            <Text numberOfLines={1} style={styles.category}>{URL}</Text>
+            <Text numberOfLines={1} style={styles.category}>{category ? category : 'Chưa cập nhật'}</Text>
             <Text style={[styles.status, styles.gridStatus]}>{status === 'Available' ? 'Còn hàng' : 'Hết hàng'}</Text>
             <Text style={[styles.price, styles.gridPrice]}>{formatMoney(price)} VNĐ</Text>
             <QuantityPicker
@@ -46,7 +44,7 @@ const ProductItem = (props) => {
           </View>
           <View style={styles.listContent}>
             <Text style={styles.title}>{name}</Text>
-            <Text numberOfLines={1} style={styles.category}>{category}</Text>
+            <Text numberOfLines={1} style={styles.category}>{category ? category : 'Chưa cập nhật'}</Text>
             <View style={styles.horizontal}>
               <Text style={styles.price}>{formatMoney(price)} VNĐ</Text>
               <Text style={[styles.status, styles.gridStatus]}>{status === 'Available' ? 'Còn hàng' : 'Hết hàng'}</Text>

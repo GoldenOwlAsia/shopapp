@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Linking,
+  Dimensions,
 } from 'react-native';
 import format from 'date-fns/format';
 import Button from '../components/BaseButton';
@@ -24,12 +25,14 @@ const BasicInfo = ({ isOnline, avatarUrl, name, phone, address, onCall, onEdit }
         <Text style={basicInfostyles.name}>{name}</Text>
         <View style={[basicInfostyles.status, isOnline ? basicInfostyles.online : basicInfostyles.offline]} />
       </View>
-      <Text style={[basicInfostyles.regularText, basicInfostyles.topSpacing]}>{phone}</Text>
+      <View>
+        <Text style={[basicInfostyles.regularText, basicInfostyles.topSpacing]}>{phone}</Text>
+      </View>
       <View style={[basicInfostyles.nameWrapper, basicInfostyles.topSpacing]}>
         <MaterialIcons style={basicInfostyles.icon} name="location-on" />
         <Text style={basicInfostyles.regularText}>{address}</Text>
       </View>
-      <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end' }}>
+      <View style={basicInfostyles.button}>
         <Button
           title={'Gọi điện'}
           fullWidth={false}
@@ -51,9 +54,8 @@ const BasicInfo = ({ isOnline, avatarUrl, name, phone, address, onCall, onEdit }
 const basicInfostyles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    paddingLeft: 24,
-    paddingRight: 24,
-    height: 114,
+    width: Dimensions.get('window').width - 48,
+    marginLeft: 24,
   },
   content: {
     flex: 1,
@@ -62,12 +64,11 @@ const basicInfostyles = StyleSheet.create({
   },
   avatar: {
     width: 90,
-    height: '100%',
+    height: 114,
     borderRadius: 4,
   },
   nameWrapper: {
     flexDirection: 'row',
-    alignItems: 'center',
   },
   name: {
     fontSize: 16,
@@ -94,6 +95,7 @@ const basicInfostyles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: '#A8A8A8',
+    flexWrap: 'wrap',
   },
   icon: {
     color: '#5175FF',
@@ -107,6 +109,10 @@ const basicInfostyles = StyleSheet.create({
   },
   btnEdit: {
     marginLeft: 10,
+  },
+  button: {
+    flexDirection: 'row',
+    marginTop: 15,
   },
 });
 

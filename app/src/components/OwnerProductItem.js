@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Image, View, StyleSheet, Text, Dimensions } from 'react-native';
+import moment from 'moment';
 import QuantityPicker from './QuantityPicker';
 import TouchableView from './TouchableView';
 import CustomImage from './CustomImage';
@@ -10,7 +11,7 @@ import { formatMoney } from '../utils/helpers';
 /* Component ==================================================================== */
 const ProductItem = (props) => {
   const { item, onItemPress, onIncrease, onDecrease } = props;
-  const { images, name, price, quantity } = item;
+  const { images, name, price, quantity, createdAt } = item;
 
   const URL = (images || []).length ? images[0] : null;
 
@@ -27,7 +28,7 @@ const ProductItem = (props) => {
           <Text style={styles.price}>{`${formatMoney(price)} VNĐ`}</Text>
           <View style={styles.meta}>
             <Text style={styles.quantity}>{`Số lượng: ${quantity}`}</Text>
-            <Text style={styles.lastUpdate}>Cập nhật: 24.07.2018</Text>
+            <Text style={styles.lastUpdate}>Cập nhật: {moment(createdAt).format('DD-MM-YYYY')}</Text>
           </View>
         </View>
       </View>

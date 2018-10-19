@@ -19,16 +19,27 @@ import TabChartIcon from '../../components/TabChartIcon';
 import DailyChart from './DailyChart';
 import WeeklyChart from './WeeklyChart';
 import MonthlyChart from './MonthlyChart';
-import { Hamburger, NotificationIcon } from '../../components/imageUrls';
+import { NotificationIcon } from '../../components/imageUrls';
+import { LogoutIcon } from '../../components/icons';
+import { fetchRecentOrders } from '../../actions/order';
+import { LineChart, BarChart } from 'react-native-chart-kit'
 
-import { fetchRecentOrders } from '../../actions/order'; 
+const data = {
+  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  datasets: [{data: [ 20, 5, 28, 80, 99, 43, 20, 45, 28, 80, 99, 43 ]}]
+}
+
+const dataWeekly = {
+  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Pri', 'Sat', 'Sun'],
+  datasets: [{data: [ 20, 25, 30, 50, 99, 73, 60, 80 ]}]
+}
 
 class DashboardScreen extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     title: 'Thống kê',
     headerLeft: (
-      <MenuIcon onPress={() => {
+      <LogoutIcon onPress={() => {
         Alert.alert(
           'Xác Nhận',
           'Bạn có thật sự muốn đăng xuất ?',
@@ -47,7 +58,7 @@ class DashboardScreen extends Component {
           ],
           { cancelable: false }
         )
-      }} icon={Hamburger} />
+      }} />
     ),
     headerRight: (
       <MenuIcon onPress={() => navigation.navigate('OwnerNotification')} icon={NotificationIcon} />
@@ -113,21 +124,50 @@ class DashboardScreen extends Component {
     )
   }
 
+  chartConfig = {
+    backgroundGradientFrom: '#fff',
+    backgroundGradientTo: '#fff',
+    color: (opacity = 0) => `rgba(26, 67, 221, ${opacity})`,
+  };
+
+  renderWeeklyChart = () => (
+    <LineChart
+      data={dataWeekly}
+      width={Dimensions.get('window').width - 30}
+      height={Dimensions.get('window').width}
+      chartConfig={this.chartConfig}
+      style={{
+        marginBottom: 0,
+        paddingBottom: 0,
+      }}
+    />
+  )
+
+  renderMonthlyChart = () => (
+    <LineChart
+      // style={graphStyle}
+      data={data}
+      width={Dimensions.get('window').width - 30}
+      height={Dimensions.get('window').width}
+      chartConfig={this.chartConfig}
+    />
+  )
+
   render() {
     return (
       <ScrollView style={{ flex: 1, backgroundColor: 'white' }} contentContainerStyle={styles.container}>
-        <View style={{ height: 400 }}>
+        <View style={{ flex: 1 }}>
           <TabView
             navigationState={this.state}
             renderScene={SceneMap({
-              dailyChart: DailyChart,
-              weeklyChart: WeeklyChart,
-              monthlyChart: MonthlyChart,
+              dailyChart: this.renderWeeklyChart,
+              weeklyChart: this.renderWeeklyChart,
+              monthlyChart: this.renderMonthlyChart,
             })}
             swipeEnabled={false}
             renderTabBar={this.renderTabBar}
             onIndexChange={index => this.setState({ index })}
-            initialLayout={{ width: Dimensions.get('window').width, height: 400 }}
+            initialLayout={{ width: Dimensions.get('window').width, flex: 1 }}
           />
         </View>
         { this.renderRecentOrders() }    
@@ -141,7 +181,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   lastesTransContainer: {
-    marginTop: 20,
+    // marginTop: 20,
   },
   lastestTransTitle: {
     lineHeight: 19,

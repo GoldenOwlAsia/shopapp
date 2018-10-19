@@ -8,24 +8,42 @@ import {
   Image,
   RefreshControl,
   Text,
+  AsyncStorage,
+  Alert,
 } from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
 import ProductItem from '../components/OwnerProductItem';
 import SearchBar from '../components/SearchBar';
 import StaffItem from '../components/StaffItem';
 import { Hamburger, PlusIcon } from '../components/imageUrls';
 import { getAllProducts } from '../actions/product';
+import { LogoutIcon } from '../components/icons';
 
 class ProductsScreen extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     title: 'Sản phẩm',
     headerLeft: (
-      <TouchableOpacity>
-        <Image
-          style={{ width: 16, height: 16, marginLeft: 16 }}
-          source={Hamburger}
-        />
-      </TouchableOpacity>
+      <LogoutIcon onPress={() => {
+        Alert.alert(
+          'Xác Nhận',
+          'Bạn có thật sự muốn đăng xuất ?',
+          [
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'OK', onPress: async () => {
+              await AsyncStorage.clear();
+
+              navigation.dispatch(StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'AuthLoading' })],
+                key: null,
+              }));
+
+            }},
+          ],
+          { cancelable: false }
+        )
+      }} />
     ),
     headerRight: (
       <TouchableOpacity onPress={() => navigation.navigate('CreateProduct')}>
@@ -41,8 +59,8 @@ class ProductsScreen extends Component {
     super(props);
   }
 
-  componentDidMount() {
-    this.props.getAllProducts();
+async componentDidMount() {
+    await this.props.getAllProducts();
   }
 
   onItemPress = (product) => {
@@ -55,13 +73,12 @@ class ProductsScreen extends Component {
 
   keyExtractor = (item) => `product-${item.id}`;
 
-  onRefresh = () => {
-    this.props.getAllProducts();
+  onRefresh = async () => {
+    await this.props.getAllProducts();
   }
 
   render() {
     const { loading, error, products } = this.props;
-
     return (
       <View style={styles.container}>
         <SearchBar placeholder="Tìm kiếm" />

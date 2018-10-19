@@ -14,6 +14,7 @@ const handleGetProducts = (page) => dispatch => {
   return client
     .query({
       query: GetAllProducts,
+      fetchPolicy: 'network-only',
     })
     .then(response => {
       const products = response.data.products;
@@ -78,6 +79,7 @@ export const getCategories = () => (dispatch) => {
   return client
     .query({
       query: GetAllCategories,
+      fetchPolicy: 'network-only',
     })
     .then(response => {
       dispatch(hideAppLoading());

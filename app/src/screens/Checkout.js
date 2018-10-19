@@ -9,6 +9,7 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from "react-native";
 
 import PropTypes from "prop-types";
@@ -139,14 +140,29 @@ class CheckOutScreen extends Component {
   openModal = () => this.setState({isEditCustomer: true});
 
   handleUpdateCustomer = async (params) => {
-    const result = await this.props.updateCustomer({ name: params.customerName, phoneNumber: params.customerPhoneNumber, id: this.props.selectedCustomer });
-    if (result.type === UPDATE_CUSTOMER_SUCCESS) {
-      this.setState({
-        customer: { ...result.payload }
-      })
-      this.closeModal();
+    if (params.customerName === '' || params.customerPhoneNumber === '') {
+      this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin khách hàng');
+    } else {
+      const result = await this.props.updateCustomer({ name: params.customerName, phoneNumber: params.customerPhoneNumber, id: this.props.selectedCustomer });
+      if (result.type === UPDATE_CUSTOMER_SUCCESS) {
+        this.setState({
+          customer: { ...result.payload }
+        })
+        this.closeModal();
+      }
     }
   }
+
+  renderAlert = (title, message, onPressOK) => (
+    Alert.alert(
+      title,
+      message,
+      [
+        {text: 'OK', onPress: onPressOK},
+      ],
+      { cancelable: true }
+    )
+  )
 
   renderItem = ({item, index}) => {
     const totalPrice = item.price * item.quantity;

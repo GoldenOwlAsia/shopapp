@@ -8,8 +8,10 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  Alert,
+  AsyncStorage,
 } from 'react-native';
-
+import { StackActions, NavigationActions } from 'react-navigation';
 import { PlusIcon } from '../components/imageUrls';
 import SearchBar from '../components/SearchBar';
 import CustomerItem from '../components/CustomerItem';
@@ -18,6 +20,7 @@ import { CREATE_CUSTOMER_SUCCESS } from '../actions/types';
 
 import { createCustomer, changeSelectedCustomer } from '../actions/customer';
 import { createOrder } from '../actions/order';
+import { LogoutIcon } from '../components/icons';
 
 class CustomersScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -29,7 +32,29 @@ class CustomersScreen extends Component {
           source={PlusIcon}
         />
       </TouchableOpacity>
-    )
+    ),
+    headerLeft: (
+      <LogoutIcon onPress={() => {
+        Alert.alert(
+          'Xác Nhận',
+          'Bạn có thật sự muốn đăng xuất ?',
+          [
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'OK', onPress: async () => {
+              await AsyncStorage.clear();
+
+              navigation.dispatch(StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'AuthLoading' })],
+                key: null,
+              }));
+
+            }},
+          ],
+          { cancelable: false }
+        )
+      }} />
+    ),
   });
 
   static getDerivedStateFromProps= (props, state) => {
@@ -71,10 +96,14 @@ class CustomersScreen extends Component {
   }
 
   handleCreateCustomer = async (params) => {
-    const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
-    if (result.type === CREATE_CUSTOMER_SUCCESS) {
-      this.closeModal();
-      this.props.createOrder(this.props.selectedCustomer, []);
+    if (params.customerName === '' || params.customerPhoneNumber === '') {
+      this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin khách hàng');
+    } else {
+      const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
+      if (result.type === CREATE_CUSTOMER_SUCCESS) {
+        this.closeModal();
+        this.props.createOrder(this.props.selectedCustomer, []);
+      }
     }
   }
 
@@ -113,6 +142,17 @@ class CustomersScreen extends Component {
       />
     )
   }
+
+  renderAlert = (title, message, onPressOK) => (
+    Alert.alert(
+      title,
+      message,
+      [
+        {text: 'OK', onPress: onPressOK},
+      ],
+      { cancelable: true }
+    )
+  )
 
   render() {
     return (

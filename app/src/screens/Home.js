@@ -12,20 +12,16 @@ import {
   Alert,
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
-import {
-  Squares,
-  Hamburger,
-  GridList,
-} from '../components/imageUrls';
+import { Squares, GridList } from '../components/imageUrls';
 import SearchBar from '../components/SearchBar';
 import NewCustomerModal from '../components/NewCustomerModal';
 import ProductItem from '../components/ProductItem';
-
 import { getAllProducts } from '../actions/product';
 import { createCustomer } from '../actions/customer';
 import { createOrder, updateOrderByCustomer } from '../actions/order';
 import { toggleListProducts } from '../actions/app';
 import { CREATE_CUSTOMER_SUCCESS } from "../actions/types";
+import { LogoutIcon } from '../components/icons';
 
 const mapDistch = {
   toggleListProducts,
@@ -76,7 +72,7 @@ class HomeScreen extends Component {
     title: `${(navigation.state.params || {}).title || ''}`,
     headerRight: <RightButton navigation={navigation} />,
     headerLeft: (
-      <TouchableOpacity onPress={() => {
+      <LogoutIcon onPress={() => {
         Alert.alert(
           'Xác Nhận',
           'Bạn có thật sự muốn đăng xuất ?',
@@ -95,12 +91,7 @@ class HomeScreen extends Component {
           ],
           { cancelable: false }
         )
-      }}>
-        <Image
-          style={styles.headerLeftIcon}
-          source={Hamburger}
-        />
-      </TouchableOpacity>
+      }} />
     )
   });
 
@@ -124,7 +115,7 @@ class HomeScreen extends Component {
   openModal = () => {
     const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
     if (!selectedProducts.length) {
-      alert('Vui lòng chọn sản phẩm');
+      this.renderAlert('Nhắc nhở', 'Vui lòng chọn sản phẩm');
       return;
     } 
     if (!this.props.selectedCustomer) {
@@ -147,9 +138,9 @@ class HomeScreen extends Component {
     });
   }
 
-  onChangeCustomerName = (text) => this.setState({ customerName: text });
+  onChangeCustomerName = (text) => this.setState({ customerName: text.trim() });
 
-  onChangeCustomerPhone = (text) => this.setState({ customerPhoneNumber: text });
+  onChangeCustomerPhone = (text) => this.setState({ customerPhoneNumber: text.trim() });
 
   onItemPress(itemId) {
     console.log('on item pressed');
@@ -178,17 +169,32 @@ class HomeScreen extends Component {
     });
   }
 
+  renderAlert = (title, message, onPressOK) => (
+    Alert.alert(
+      title,
+      message,
+      [
+        {text: 'OK', onPress: onPressOK},
+      ],
+      { cancelable: true }
+    )
+  )
+
   setModalVisible = (isOpen) => {
     this.setState({isOpenCreateCustomerModal: isOpen});
   }
 
   handleCreateCustomer = async (params) => {
-    const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
-    const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
-    if (result.type === CREATE_CUSTOMER_SUCCESS) {
-      this.closeModal();
-      await this.props.createOrder(this.props.selectedCustomer, selectedProducts);
-      this.props.navigation.navigate("Checkout");
+    if (params.customerName === '' || params.customerPhoneNumber === '') {
+      this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin khách hàng');
+    } else {
+      const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
+      const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
+      if (result.type === CREATE_CUSTOMER_SUCCESS) {
+        this.closeModal();
+        await this.props.createOrder(this.props.selectedCustomer, selectedProducts);
+        this.props.navigation.navigate("Checkout");
+      }
     }
   }
 

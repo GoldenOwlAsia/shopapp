@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  Alert,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TextInput  from '../components/TextInput';
@@ -53,6 +54,14 @@ class CreateProduct extends Component {
       categories: [],
       product: {
         color: COLORS[0].color,
+        name: null,
+        category: null,
+        quantity: null,
+        size: null,
+        importPrice: null,
+        price: null,
+        description: null,
+        images: null,
       },
     }
   }
@@ -64,21 +73,47 @@ class CreateProduct extends Component {
     })
   }
 
+  handleValidateForm = (product) => Object.values(product).find(item => item === null);
+
   onChangeText = (field, value) => {
-    this.setState({
-      product: {
-        ...this.state.product,
-        [field]: value,
-      }
-    })
+    if (field === 'images') {
+      this.setState({
+        product: {
+          ...this.state.product,
+          [field]: value,
+        }
+      })
+    } else {
+      this.setState({
+        product: {
+          ...this.state.product,
+          [field]: value.trim() === '' ? null : value,
+        }
+      })
+    }
   }
 
   handleSubmit = () => {
-    this.props.handleCreateProduct(this.state.product)
-    .then(() => {
-      this.props.navigation.goBack(null);
-    }) 
+    if (this.handleValidateForm(this.state.product) !== undefined) {
+      this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin sản phẩm');
+    } else {
+      this.props.handleCreateProduct(this.state.product)
+      .then(() => {
+        this.props.navigation.goBack(null);
+      })
+    }
   }
+
+  renderAlert = (title, message, onPressOK) => (
+    Alert.alert(
+      title,
+      message,
+      [
+        {text: 'OK', onPress: onPressOK},
+      ],
+      { cancelable: true }
+    )
+  )
 
   render() {
     const { name, color, quantity, importPrice, price, description } = this.state.product;
