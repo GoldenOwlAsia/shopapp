@@ -88,6 +88,16 @@ class CustomersScreen extends Component {
 
   componentDidMount() {
     this.props.navigation.setParams({rightButtonHandler: this.handleAddCustomer});
+    this.props.navigation.setParams({ handler: this.openModal });
+  }
+
+  openModal = () => {
+    // const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
+    if (this.props.customers.length === 0) this.renderAlert('Nhắc nhở', 'Vui lòng tạo khách hàng');
+    else {
+      // this.props.updateOrderByCustomer({ customerId: this.props.selectedCustomer, items: selectedProducts });
+      this.props.navigation.navigate('Checkout');
+    }
   }
 
   handleItemClick = async (customer) => {

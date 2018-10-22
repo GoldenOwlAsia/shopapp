@@ -181,6 +181,7 @@ class CheckOutScreen extends Component {
   }
 
   render() {
+    console.log('abcd', this.props)
     const { customer } = this.state;
     const items = this.props.orders[customer.id];
     const subTotal = this.calculateSubTotal(items);
