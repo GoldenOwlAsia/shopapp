@@ -56,10 +56,19 @@ class StaffsScreen extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      searchKeyword: '',
+    };
   }
 
   componentDidMount() {
     this.props.getStaffsFromApi();
+  }
+
+  onChangeSearhKeyword = (keyword) => {
+    this.setState({
+      searchKeyword: keyword
+    });
   }
 
   onItemPress = (staff) => {
@@ -77,11 +86,15 @@ class StaffsScreen extends Component {
   }
 
   render() {
-    const { loading, error, staffs } = this.props;
-
+    const { loading, error } = this.props;
+    const staffs = this.props.staffs.filter(item => !this.state.searchKeyword || item.fullName.toLowerCase().includes(this.state.searchKeyword.toLowerCase()));
     return (
       <View style={styles.container}>
-        <SearchBar placeholder="Tìm kiếm" />
+        <SearchBar
+          placeholder="Tìm kiếm"
+          value={this.state.searchKeyword}
+          onChangeText={this.onChangeSearhKeyword}
+        />
         <FlatList
           data={staffs}
           renderItem={this.renderStaffItem}

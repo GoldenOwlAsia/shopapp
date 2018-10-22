@@ -218,6 +218,7 @@ class HomeScreen extends Component {
 
   render() {
     const { showList } = this.props;
+    const products = this.state.products.filter(item => !this.state.searchKeyword || item.name.toLowerCase().includes(this.state.searchKeyword.toLowerCase()));
     return (
       <View style={styles.container}>
         <SearchBar
@@ -228,7 +229,7 @@ class HomeScreen extends Component {
         <FlatList
           key={showList ? 'list' : 'grid'}
           style={styles.list}
-          data={this.state.products}
+          data={products}
           numColumns={showList ? 1 : 2}
           renderItem={this.renderRow}
           keyExtractor={this.keyExtractor} 

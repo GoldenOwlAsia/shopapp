@@ -157,8 +157,9 @@ class CustomersScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <SearchBar placeholder="Tìm kiếm" onChangeText={this.onChangeSearchKeyword} value={this.state.searchKeyword} />
-        
+        <View style={styles.containerSearchBox}>
+          <SearchBar placeholder="Tìm kiếm" onChangeText={this.onChangeSearchKeyword} value={this.state.searchKeyword} />
+        </View>
         <FlatList
           style={styles.list}
           data={this.state.data}
@@ -184,6 +185,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.WHITE,
+  },
+  containerSearchBox: {
     padding: 20,
   },
   list: {

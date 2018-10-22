@@ -57,10 +57,19 @@ class ProductsScreen extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      searchKeyword: '',
+    };
   }
 
-async componentDidMount() {
+  async componentDidMount() {
     await this.props.getAllProducts();
+  }
+
+  onChangeSearhKeyword = (keyword) => {
+    this.setState({
+      searchKeyword: keyword
+    });
   }
 
   onItemPress = (product) => {
@@ -78,10 +87,15 @@ async componentDidMount() {
   }
 
   render() {
-    const { loading, error, products } = this.props;
+    const { loading, error } = this.props;
+    const products = this.props.products.filter(item => !this.state.searchKeyword || item.name.toLowerCase().includes(this.state.searchKeyword.toLowerCase()));
     return (
       <View style={styles.container}>
-        <SearchBar placeholder="Tìm kiếm" />
+      <SearchBar
+        placeholder="Tìm kiếm"
+        value={this.state.searchKeyword}
+        onChangeText={this.onChangeSearhKeyword}
+      />
         <FlatList
           data={products}
           renderItem={this.renderProductItem}

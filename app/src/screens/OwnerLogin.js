@@ -8,8 +8,11 @@ import {
   TextInput,
   ActivityIndicator,
   AsyncStorage,
+  KeyboardAvoidingView,
+  ScrollView
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import TouchableView from '../components/TouchableView';
 import { colors } from '../utils/constants';
 
@@ -26,6 +29,12 @@ class OwnerLogin extends Component {
     }
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      this.onSelect();
+    }, 100);
+  }
+
   onChangeText = (text) => {
     this.setState({ codeValue: text, index: text.length - 1 }, () => {
       if(this.state.codeValue.length === 4){
@@ -38,7 +47,10 @@ class OwnerLogin extends Component {
   }
 
   onSelect = (index) => {
-    this.hiddenInput.focus();
+    this.hiddenInput.blur();
+    setTimeout(() => {
+      this.hiddenInput.focus();
+    }, 100);
   }
 
   handleLogin = async (code) => {
@@ -73,6 +85,7 @@ class OwnerLogin extends Component {
     }
     return (
       <View style={styles.container}>
+      <KeyboardAwareScrollView enableOnAndroid>
         <Text style={styles.guide}>
           Chúng tôi đã gửi cho bạn 4 kí tự bảo mật đến
           số điện thoại của bạn để xác nhận đăng nhập
@@ -89,6 +102,7 @@ class OwnerLogin extends Component {
         <TouchableView>
           <Text style={styles.resendText}>Gửi lại!</Text>
         </TouchableView>
+        </KeyboardAwareScrollView>
       </View>
     )
   }
