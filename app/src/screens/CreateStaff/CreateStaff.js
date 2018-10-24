@@ -47,6 +47,7 @@ class CreateStaffScreen extends React.Component {
         phoneNumber: null,
         salary: null,
         bonus: null,
+        note: null,
       } : {
         fullName: props.user.fullName,
         username: props.user.username,
@@ -54,8 +55,8 @@ class CreateStaffScreen extends React.Component {
         CMND: props.user.CMND,
         address: props.user.address,
         phoneNumber: props.user.phoneNumber,
-        salary: props.user.salary,
-        bonus: props.user.bonus,
+        salary: props.user.salary === 0 ? '0' : props.user.salary,
+        bonus: props.user.bonus === 0 ? '0' : props.user.bonus,
         note: props.user.note,
       },
       isEdit: props.isEdit,
@@ -79,9 +80,9 @@ class CreateStaffScreen extends React.Component {
       return this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin nhân viên');
     }
     if(isEdit){
-      this.props.updateUserFromApi(user.id, user)
+      this.props.updateUserFromApi(this.props.user.id, user)
         .then(() => {
-          this.renderAlert('Thành công', 'Cập nhật thành công');
+          this.renderAlert('Thành công', 'Cập nhật thành công', () => {this.props.navigation.goBack(null);});
         })
     }else {
       this.props.createUserFromApi(user).then(() => {
@@ -113,7 +114,7 @@ class CreateStaffScreen extends React.Component {
       <KeyboardAwareScrollView extraScrollHeight={Platform.OS === 'ios' ? 10 : 100} enableOnAndroid style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.title}>{isEdit ? `Chỉnh sửa thông tin`: `Tạo nhân viên mới`}</Text>
-          <AvatarPicker image={user.avatar} onPickedImage={this.onPickedImage} />
+          <AvatarPicker image={this.props.user.avatar} onPickedImage={this.onPickedImage} />
           <TextInput
             label="Họ tên"
             value={user.fullName}
@@ -157,7 +158,7 @@ class CreateStaffScreen extends React.Component {
             <View style={styles.horizontalItem}>
               <TextInput
                 label="Lương"
-                value={`${user.salary || 0}`}
+                value={`${user.salary || ''}`}
                 onChangeText={(value) => this.onChangeText('salary', value)}
                 keyboardType="numeric"
               />
@@ -165,7 +166,7 @@ class CreateStaffScreen extends React.Component {
             <View style={styles.horizontalItem}>
               <TextInput
                 label="Thưởng"
-                value={`${user.bonus || 0}`}
+                value={`${user.bonus || ''}`}
                 onChangeText={(value) => this.onChangeText('bonus', value)}
                 keyboardType="numeric"
               />

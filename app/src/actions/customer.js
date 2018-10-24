@@ -25,7 +25,6 @@ const handleCreateCustomer = (name, phoneNumber) => dispatch => {
       return dispatch(createCustomerSuccess(customer));
     })
     .catch(error => {
-      console.log('create customer error:  ', error);
       return dispatch(createCustomerFail(error));
     });
 }
@@ -75,7 +74,6 @@ const handleUpdateCustomer = (params) => dispatch => {
       return dispatch(updateCustomerSuccess(customer));
     })
     .catch(error => {
-      console.log('update customer error:  ', error);
       return dispatch(updateCustomerFail(error));
     });
 }

@@ -152,9 +152,7 @@ class StaffDetailScreen extends Component {
     Linking.canOpenURL(url).then(supported => {
       if (supported) {
         return Linking.openURL(url);
-      } else {
-        console.log('[StaffDetail.js] Current platform is not supported');
-      }
+      } else { }
     }).catch(error => {
       alert(error);
     })

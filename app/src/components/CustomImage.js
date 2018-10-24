@@ -13,6 +13,10 @@ class CustomImage extends React.PureComponent {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ source: nextProps.source })
+  }
+
   onError = () => {
     const { holder } = this.props;
     const imageHolder = holder ? holder : AvatarHolder

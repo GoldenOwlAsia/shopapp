@@ -47,8 +47,7 @@ class NotificationScreen extends Component {
   keyExtractor = (item) => `notification-${item.id}`
 
   render() {
-    const { notifications } = this.props;
-    
+    const notifications = this.props.notifications.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
     return (
       <View style={styles.container}>
         <FlatList

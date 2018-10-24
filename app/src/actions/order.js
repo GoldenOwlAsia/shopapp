@@ -74,7 +74,6 @@ export const decreaseItemQuantity = (customerId, itemId) => {
 }
 
 const handleCheckout = (params) => dispatch => {
-  console.log('[order.js] params', JSON.stringify(params));
   return client
     .mutate({
       mutation: Checkout,
@@ -87,8 +86,6 @@ const handleCheckout = (params) => dispatch => {
       return dispatch(checkoutSuccess(order));
     })
     .catch(error => {
-      console.log('checkout error: ', error);
-      // debugger;
       return dispatch(checkoutFail(error));
     });
 }
@@ -155,7 +152,6 @@ export const fetchRecentOrders = () => async(dispatch) => {
       });
     }
   }catch(error){
-    console.log('[order.js] fetchRecentOrders error', error)
     dispatch({
       type: LOAD_RECENT_ORDER_FAILED,
       error: error.message,

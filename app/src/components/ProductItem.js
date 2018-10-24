@@ -26,11 +26,15 @@ const ProductItem = (props) => {
             <Text numberOfLines={1} style={styles.category}>{category ? category : 'Chưa cập nhật'}</Text>
             <Text style={[styles.status, styles.gridStatus]}>{status === 'Available' ? 'Còn hàng' : 'Hết hàng'}</Text>
             <Text style={[styles.price, styles.gridPrice]}>{formatMoney(price)} VNĐ</Text>
-            <QuantityPicker
-              quantity={quantity}
-              onIncrease={onIncrease}
-              onDecrease={onDecrease}
-            />
+            {
+              status === 'Available' && (
+                <QuantityPicker
+                  quantity={quantity}
+                  onIncrease={onIncrease}
+                  onDecrease={onDecrease}
+                />
+              )
+            }
           </View>
         </View>
       </TouchableView>
@@ -50,11 +54,15 @@ const ProductItem = (props) => {
               <Text style={[styles.status, styles.gridStatus]}>{status === 'Available' ? 'Còn hàng' : 'Hết hàng'}</Text>
             </View>
             <View style={styles.dummy} />
-            <QuantityPicker
-              quantity={quantity}
-              onIncrease={onIncrease}
-              onDecrease={onDecrease}
-            />
+            {
+              status === 'Available' && (
+                <QuantityPicker
+                  quantity={quantity}
+                  onIncrease={onIncrease}
+                  onDecrease={onDecrease}
+                />
+              )
+            }
           </View>
         </View>
       </TouchableView>

@@ -44,7 +44,6 @@ export const getUserFromApi = (userId) => async (dispatch) => {
       dispatch(loadUserSuccess(getUserById));
     }
   }catch(error){
-    console.log('[user.js] getUserFromApi error', error);
     dispatch(loadUserFailed(error.message));
   }
 }
@@ -77,7 +76,6 @@ export const updateUserFromApi = (userId, params) => async (dispatch) => {
     });
     dispatch(hideAppLoading());
     const { data } = response;
-    console.log('update user success', data);
     if(data){
       const { updateUserById } = data;
       dispatch(updateUserSuccess(updateUserById));
@@ -88,7 +86,6 @@ export const updateUserFromApi = (userId, params) => async (dispatch) => {
     dispatch(showAppError({
       message: error.message,
     }));
-    console.log('[user.js] updateUserFromApi error', error);
     dispatch(updateUserFailed(error.message));
   }
 }
@@ -112,7 +109,6 @@ export const createUserFromApi = (params) => async (dispatch) => {
   dispatch(creatingUser());
   delete params.__typename;
   // params.dateOfBirth = new Date().toDateString();
-  console.log('[create user.js] params', params)
 
   try {
     const response = await client.mutate({
@@ -123,7 +119,6 @@ export const createUserFromApi = (params) => async (dispatch) => {
     });
     dispatch(hideAppLoading());
     const { data } = response;
-    console.log('create user success', data);
     if(data){
       const { createUser } = data;
       dispatch(createUserSuccess(createUser));
@@ -134,7 +129,6 @@ export const createUserFromApi = (params) => async (dispatch) => {
     dispatch(showAppError({
       message: error.message,
     }));
-    console.log('[user.js] updateUserFromApi error', error);
     dispatch(createUserFailed(error.message));
   }
 }

@@ -35,7 +35,6 @@ export const getStaffsFromApi = () => async (dispatch) => {
       dispatch(loadStaffsSuccess(getStaffs || []));
     }
   }catch(error){
-    console.log('[staffs.js] getStaffsFromApi error', error);
     dispatch(loadStaffsFailed(error.message));
   }
 }

@@ -77,7 +77,7 @@ class HomeScreen extends Component {
           'Xác Nhận',
           'Bạn có thật sự muốn đăng xuất ?',
           [
-            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'Cancel', onPress: () => {}, style: 'cancel'},
             {text: 'OK', onPress: async () => {
               await AsyncStorage.clear();
 
@@ -142,9 +142,7 @@ class HomeScreen extends Component {
 
   onChangeCustomerPhone = (text) => this.setState({ customerPhoneNumber: text.trim() });
 
-  onItemPress(itemId) {
-    console.log('on item pressed');
-  }
+  onItemPress(itemId) {}
 
   increaseBuyNumber = (index) => {
     const products = this.state.products;
@@ -199,7 +197,6 @@ class HomeScreen extends Component {
   }
 
   renderRow = ({item, index}) => {
-    console.log('[Home.js] zz item', item);
     return (
       <ProductItem
         // key={`product-${item.id}`}

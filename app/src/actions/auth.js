@@ -61,7 +61,6 @@ export const loginFail = (response) => {
 }
 
 const handleOwnerLogin = ({ code }) => dispatch => {
-  console.log('come here???');
   return client
     .mutate({
       mutation: OwnerLogin,
@@ -74,7 +73,6 @@ const handleOwnerLogin = ({ code }) => dispatch => {
       return dispatch(ownerLoginSuccess({ authToken, isOwner: true }));
     })
     .catch(error => {
-      console.log('owner login error: ', error);
       return dispatch(loginFail(error));
     });
 }

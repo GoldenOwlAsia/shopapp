@@ -28,7 +28,7 @@ class StaffsScreen extends Component {
           'Xác Nhận',
           'Bạn có thật sự muốn đăng xuất ?',
           [
-            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'Cancel', onPress: () => {}, style: 'cancel'},
             {text: 'OK', onPress: async () => {
               await AsyncStorage.clear();
 

@@ -21,7 +21,6 @@ const handleGetProducts = (page) => dispatch => {
       return dispatch(getProductsSuccess(products));
     })
     .catch(error => {
-      console.log('get product error:  ', error);
       dispatch(showAppError(error));
       /**
        * if you handle getProductsFail, please remove  showAppError
@@ -96,7 +95,6 @@ export const getCategories = () => (dispatch) => {
       }
     })
     .catch(error => {
-      console.log('getCategories:  ', error);
       dispatch(hideAppLoading());
       dispatch(showAppError(error.message));
     });
@@ -130,7 +128,6 @@ export const handleCreateProduct = (product) => dispatch => {
       }
     })
     .catch(error => {
-      console.log('get product error:  ', error);
       dispatch(hideAppLoading());
       dispatch(showAppError(error.message));
     });

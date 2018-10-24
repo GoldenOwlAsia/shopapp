@@ -42,7 +42,6 @@ export const fetchDailyReport = () => async(dispatch) => {
       )) 
     }
   }catch(error){
-    console.log('[charts.js] fetchDailyReport error', error);
     dispatch(loadChartDataFailed(error.message));
   }
 }
@@ -64,7 +63,6 @@ export const fetchWeeklyReport = () => async(dispatch) => {
       )) 
     }
   }catch(error){
-    console.log('[charts.js] fetchWeeklyReport error', error);
     dispatch(loadChartDataFailed(error.message));
   }
 }
@@ -86,7 +84,6 @@ export const fetchMonthlyReport = () => async(dispatch) => {
       )) 
     }
   }catch(error){
-    console.log('[charts.js] fetchMonthlyReport error', error);
     dispatch(loadChartDataFailed(error.message));
   }
 }

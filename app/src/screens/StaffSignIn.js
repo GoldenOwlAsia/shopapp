@@ -123,9 +123,7 @@ class SignInScreen extends React.Component {
     });
   }
 
-  goToForgotPassword = () => {
-    console.log('go to forgot password!');
-  }
+  goToForgotPassword = () => {}
 
   onSubmitEditing = () => {
     this.passwordRef.input.focus()

@@ -77,20 +77,20 @@ class Button extends Component {
 }
 
 Button.propTypes = {
-  text: PropTypes.string.required,
-  leftIcon: PropTypes.oneOfType([
-    PropTypes.string,
-  ]),
-  rightIcon: PropTypes.string,
-  btnStyle: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.number
-  ]),
-  onPress: PropTypes.func.required,
-  textStyle: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.number
-  ]),
+  // text: PropTypes.string.required,
+  // leftIcon: PropTypes.oneOfType([
+  //   PropTypes.string,
+  // ]),
+  // rightIcon: PropTypes.string,
+  // btnStyle: PropTypes.oneOfType([
+  //   PropTypes.object,
+  //   PropTypes.number
+  // ]),
+  // onPress: PropTypes.func.required,
+  // textStyle: PropTypes.oneOfType([
+  //   PropTypes.object,
+  //   PropTypes.number
+  // ]),
 }
 
 export default Button;

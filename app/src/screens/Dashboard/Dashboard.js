@@ -44,7 +44,7 @@ class DashboardScreen extends Component {
           'Xác Nhận',
           'Bạn có thật sự muốn đăng xuất ?',
           [
-            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+            {text: 'Cancel', onPress: () => {}, style: 'cancel'},
             {text: 'OK', onPress: async () => {
               await AsyncStorage.clear();
 
@@ -167,7 +167,7 @@ class DashboardScreen extends Component {
             swipeEnabled={false}
             renderTabBar={this.renderTabBar}
             onIndexChange={index => this.setState({ index })}
-            initialLayout={{ width: Dimensions.get('window').width, flex: 1 }}
+            initialLayout={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width }}
           />
         </View>
         { this.renderRecentOrders() }    

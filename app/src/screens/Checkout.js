@@ -73,7 +73,6 @@ class CheckOutScreen extends Component {
     let items = this.props.orders[this.props.selectedCustomer].map((item) => {delete item.__typename; return item;});
     const subTotal = this.calculateSubTotal(items);
     const tax = this.calculateTax(subTotal);
-    debugger
     const grandTotal = this.calculateGrandTotal(subTotal, tax)
 
     let params = {
@@ -181,7 +180,6 @@ class CheckOutScreen extends Component {
   }
 
   render() {
-    console.log('abcd', this.props)
     const { customer } = this.state;
     const items = this.props.orders[customer.id];
     const subTotal = this.calculateSubTotal(items);

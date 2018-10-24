@@ -36,7 +36,7 @@ class OwnerLogin extends Component {
   }
 
   onChangeText = (text) => {
-    this.setState({ codeValue: text, index: text.length - 1 }, () => {
+    this.setState({ codeValue: text, index: text.length }, () => {
       if(this.state.codeValue.length === 4){
         this.hiddenInput.blur();  
         setTimeout(() => {
@@ -57,7 +57,6 @@ class OwnerLogin extends Component {
     this.setState({ loading: true });
     const result = await this.props.ownerLogin({ code });
     this.setState({ loading: false });
-    console.log('owner login result: ', result);
     if (result.type === OWNER_LOGIN_SUCCESS) {
       await AsyncStorage.setItem('authToken', result.payload.authToken);
       await AsyncStorage.setItem('isOwner', 'true');
@@ -71,6 +70,7 @@ class OwnerLogin extends Component {
 
     }else {
       Alert.alert('Error', 'Invalid code');
+      this.setState({ codeValue: '', index: 0 })
     }
   }
 
