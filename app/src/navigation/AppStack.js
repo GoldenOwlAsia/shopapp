@@ -4,16 +4,9 @@ import {
   createStackNavigator,
   createBottomTabNavigator
 } from 'react-navigation'
-
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import HomeScreen from '../screens/Home';
 import CustomersScreen from '../screens/Customers';
 import CheckoutScreen from '../screens/Checkout';
-
-import { HamburgerIcon, SettingsIcon, BackIcon } from '../components/icons';
-import TouchableView from '../components/TouchableView';
-import { CustomDrawerContent } from '../components';
-import { colors } from '../utils/constants';
 import { CheckoutTabIconActive, CheckoutTabIconInactive, HomeTabIconActive, HomeTabIconInactive, CustomerTabIconActive, CustomerTabIconInactive } from '../components/imageUrls';
 
 const TabIcon = ({ icon }) => (
@@ -46,7 +39,6 @@ CheckoutStack.navigationOptions = {
     } else {
       let parentNavigation = navigation.dangerouslyGetParent();
       let prevRoute = parentNavigation.state.routes[parentNavigation.state.index];
-      let nextRoute = navigation.state;
       const route = prevRoute.routes && prevRoute.routes[0]
       if (route && (route.params || {}).handler) {
         route.params.handler();

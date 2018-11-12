@@ -92,7 +92,7 @@ class HomeScreen extends Component {
           { cancelable: false }
         )
       }} />
-    )
+    ),
   });
 
   constructor(props) {
@@ -105,6 +105,7 @@ class HomeScreen extends Component {
       isOpenCreateCustomerModal: false,
       loading: false,
       grid: false,
+      selectedProducts: [],
     };
   }
 
@@ -144,26 +145,46 @@ class HomeScreen extends Component {
 
   onItemPress(itemId) {}
 
-  increaseBuyNumber = (index) => {
+  increaseBuyNumber = (itemSelected, index) => {
     const products = this.state.products;
-    let item = products[index];
+    const selectedProducts = this.state.selectedProducts;
+    let item = itemSelected;
     item.quantity++;
-    products[index] = item;
+    const indexSelect = selectedProducts.findIndex(item => item.id === itemSelected.id);
+    if (indexSelect !== -1) {
+      selectedProducts[indexSelect] = item
+    } else {
+      selectedProducts.push(item);
+    }
+    // products[index] = item;
+    products.map(p => {
+      if (p.id === itemSelected.id) p = item;
+    });
     this.setState({
-      products
+      products,
+      selectedProducts
     });
   }
 
-  decreaseBuyNumber = (index) => {
+  decreaseBuyNumber = (itemSelected, index) => {
     const products = this.state.products;
-    let item = products[index];
+    const selectedProducts = this.state.selectedProducts;
+    const indexSelect = selectedProducts.findIndex(item => item.id === itemSelected.id);
+    let item = itemSelected;
     item.quantity--;
-    if (item.quantity < 0) {
+    if (item.quantity < 0 && indexSelect !== -1) {
       item.quantity = 0;
+      selectedProducts.splice(indexSelect, 1);
+    } else if (item.quantity > 0 && indexSelect !== -1) {
+      selectedProducts[indexSelect] = item;
     }
-    products[index] = item;
+    // products[index] = item;
+    products.map(p => {
+      if (p.id === itemSelected.id) p = item;
+    });
     this.setState({
-      products
+      products,
+      selectedProducts
     });
   }
 
@@ -186,7 +207,8 @@ class HomeScreen extends Component {
     if (params.customerName === '' || params.customerPhoneNumber === '') {
       this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin khách hàng');
     } else {
-      const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
+      // const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
+      const selectedProducts = this.state.selectedProducts;
       const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
       if (result.type === CREATE_CUSTOMER_SUCCESS) {
         this.closeModal();
@@ -196,6 +218,18 @@ class HomeScreen extends Component {
     }
   }
 
+  // handleCreateCustomer = async (params) => {
+  //   if (params.customerName === '' || params.customerPhoneNumber === '') {
+  //     this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin khách hàng');
+  //   } else {
+  //     const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
+  //     if (result.type === CREATE_CUSTOMER_SUCCESS) {
+  //       this.closeModal();
+  //       this.props.createOrder(this.props.selectedCustomer, []);
+  //     }
+  //   }
+  // }
+
   renderRow = ({item, index}) => {
     return (
       <ProductItem
@@ -203,8 +237,8 @@ class HomeScreen extends Component {
         gridItem={!this.props.showList}
         item={item}
         onItemPress={this.onItemPress}
-        onIncrease={() => this.increaseBuyNumber(index)}
-        onDecrease={() => this.decreaseBuyNumber(index)}
+        onIncrease={() => this.increaseBuyNumber(item, index)}
+        onDecrease={() => this.decreaseBuyNumber(item, index)}
       />
     )
   }

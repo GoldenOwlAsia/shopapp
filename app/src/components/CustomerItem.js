@@ -24,7 +24,7 @@ class CustomerItem extends React.PureComponent {
 
   onDelete = () => {
     const { item, onDelete } = this.props;
-    onDelete(item);
+    onDelete();
   }
 
   render(){

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, Image, View, Dimensions } from 'react-native';
 import TouchableView from './TouchableView';
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -37,7 +37,7 @@ RemovableImage.componentName = 'RemovableImage';
 /* Style */
 const styles = StyleSheet.create({
   container: {
-    width: 116,
+    width: (Dimensions.get('window').width - 80) / 3,
     height: 80,
     marginRight: 20,
     marginBottom: 10,
@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
   },
   btnRemoveWrap: {
     position: 'absolute',
-    width: 24,
-    height: 24,
+    width: 22,
+    height: 22,
     borderRadius: 12,
     right: -12,
     top: -12,

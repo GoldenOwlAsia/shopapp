@@ -24,7 +24,7 @@ import { formatMoney } from '../utils/helpers';
 
 import { removeItemFromOrder, increaseItemQuantity, decreaseItemQuantity, checkout } from '../actions/order';
 import { CHECKOUT_SUCCESS, UPDATE_CUSTOMER_SUCCESS } from "../actions/types";
-import { clearSelectedCustomer, updateCustomer } from '../actions/customer';
+import { clearSelectedCustomer, updateCustomer, removeCustomer } from '../actions/customer';
 
 class CheckOutScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -87,7 +87,10 @@ class CheckOutScreen extends Component {
     const result = await this.props.checkout(params);
     if (result.type === CHECKOUT_SUCCESS) {
       this.props.clearSelectedCustomer();
-      this.props.navigation.navigate('Home', {title: ''});
+      this.props.removeCustomer(this.state.customer.id);
+      this.renderAlert('Thành công', 'Thực hiện thanh toán thành công', () => {
+        this.props.navigation.navigate('Home', {title: ''});
+      });
     }
   }
 
@@ -340,7 +343,8 @@ const mapDispatchToProps = {
   removeItemFromOrder,
   checkout,
   clearSelectedCustomer,
-  updateCustomer
+  updateCustomer,
+  removeCustomer
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CheckOutScreen);

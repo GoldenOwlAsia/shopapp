@@ -4,7 +4,8 @@ import {
   CREATE_CUSTOMER_FAIL,
   CLEAR_SELECTED_CUSTOMER,
   CHANGE_SELECTED_CUSTOMER,
-  UPDATE_CUSTOMER_SUCCESS
+  UPDATE_CUSTOMER_SUCCESS,
+  REMOVE_CUSTOMER
 } from '../actions/types';
 
 const initialState = {
@@ -27,6 +28,17 @@ export default (state = initialState, action) => {
       const customerIndex = customers.findIndex((customer) => customer.id === action.payload.id);
       if (customerIndex > -1) customers[customerIndex] = { ...action.payload }
       return { ...state,  list: [...customers] }
+    }
+    case REMOVE_CUSTOMER: {
+      const customers = state.list;
+      const customerIndex = customers.findIndex((customer) => customer.id === action.payload);
+      customers.splice(customerIndex, 1);
+      return {
+        ...state,
+        list: customers,
+        selectedCustomer: null
+        // selectedCustomer: customers.length === 0 ? null : customers[0].id
+      }
     }
     default:
       return state

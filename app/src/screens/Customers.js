@@ -18,7 +18,7 @@ import CustomerItem from '../components/CustomerItem';
 import NewCustomerModal from '../components/NewCustomerModal';
 import { CREATE_CUSTOMER_SUCCESS } from '../actions/types';
 
-import { createCustomer, changeSelectedCustomer } from '../actions/customer';
+import { createCustomer, changeSelectedCustomer, removeCustomer } from '../actions/customer';
 import { createOrder } from '../actions/order';
 import { LogoutIcon } from '../components/icons';
 
@@ -137,6 +137,11 @@ class CustomersScreen extends Component {
     });
   }
 
+  handleRemoveCustomer = async (customerId) => {
+    await this.props.removeCustomer(customerId);
+    this.renderAlert('Thành công', 'Xoá khách hàng thành công!',);
+  }
+
   renderItem = ({ item }) => {
     return (
       <CustomerItem
@@ -148,7 +153,7 @@ class CustomersScreen extends Component {
           products: item.products,
         }}
         onItemClick={this.handleItemClick}
-        onDelete={() => {}}
+        onDelete={() => this.handleRemoveCustomer(item.id)}
       />
     )
   }
@@ -225,6 +230,7 @@ const mapDispatchToProps = {
   createCustomer,
   changeSelectedCustomer,
   createOrder,
+  removeCustomer,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomersScreen);

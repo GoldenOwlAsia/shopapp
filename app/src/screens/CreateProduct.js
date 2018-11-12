@@ -18,6 +18,7 @@ import SelectSize from '../components/SelectSize';
 import ListImagePicker from '../components/ListImagePicker';
 import { CloseIcon } from '../components/imageUrls';
 import { handleCreateProduct, getCategories } from '../actions/product';
+import { renderAlert, validateAddProductForm } from './../utils/helpers';
 
 const COLORS = [
   { id: 1, color: 'white' },
@@ -61,7 +62,7 @@ class CreateProduct extends Component {
         importPrice: null,
         price: null,
         description: null,
-        images: null,
+        images: [],
       },
     }
   }
@@ -93,27 +94,18 @@ class CreateProduct extends Component {
     }
   }
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     if (this.handleValidateForm(this.state.product) !== undefined) {
-      this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin sản phẩm');
-    } else {
-      this.props.handleCreateProduct(this.state.product)
-      .then(() => {
-        this.props.navigation.goBack(null);
-      })
+      return renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin sản phẩm');
     }
+    const resultValidate = await validateAddProductForm(this.state.product);
+    if (resultValidate.isValidate === true) {
+      return renderAlert('Nhắc nhở', resultValidate.messageValidate);
+    }
+    this.props.handleCreateProduct(this.state.product).then(() => {
+      renderAlert('Thành công', 'Tạo sản phẩm thành công', () => {this.props.navigation.goBack()});
+    })
   }
-
-  renderAlert = (title, message, onPressOK) => (
-    Alert.alert(
-      title,
-      message,
-      [
-        {text: 'OK', onPress: onPressOK},
-      ],
-      { cancelable: true }
-    )
-  )
 
   render() {
     const { name, color, quantity, importPrice, price, description } = this.state.product;

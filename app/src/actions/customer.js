@@ -5,7 +5,8 @@ import {
   CLEAR_SELECTED_CUSTOMER,
   CHANGE_SELECTED_CUSTOMER,
   UPDATE_CUSTOMER_SUCCESS,
-  UPDATE_CUSTOMER_FAIL
+  UPDATE_CUSTOMER_FAIL,
+  REMOVE_CUSTOMER
 } from './types';
 
 import client from '../lib/client';
@@ -125,6 +126,13 @@ export const clearSelectedCustomer = () => {
     return dispatch(handleClearSelectedCustomer());
   }
 }
+
+const handleremoveCustomer = (params) => ({
+  type: REMOVE_CUSTOMER,
+  payload: params
+})
+
+export const removeCustomer = (customerId) => dispatch => dispatch(handleremoveCustomer(customerId))
 
 const handleChangeSelectedCustomer = (customerId) => {
   return {

@@ -17,6 +17,7 @@ class ErrorModal extends Component {
       <Modal
         animationType="fade"
         visible={visible}
+        onRequestClose={() => {}}
         transparent={true}>
         <TouchableOpacity 
           style={styles.modalContainer} 

@@ -30,6 +30,10 @@ class NewCustomerModal extends Component {
 
   handleSubmit = () => {
     this.props.onSubmit(this.state);
+    this.setState({
+      customerName: '',
+      customerPhoneNumber: '',
+    })
   }
 
   render() {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ImagePicker, Permissions } from 'expo';
-import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, Text, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { PickAvatarIcon, EditIcon } from './imageUrls';
 
 /* Component ==================================================================== */
@@ -99,7 +99,7 @@ AvatarPicker.componentName = 'AvatarPicker';
 /* Style */
 const styles = StyleSheet.create({
   container: {
-    width: 116,
+    width: (Dimensions.get('window').width - 80) / 3,
     height: 80,
     backgroundColor: '#F6F6F8',
     borderRadius: 6,
