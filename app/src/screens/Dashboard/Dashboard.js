@@ -19,17 +19,6 @@ import WeeklyChart from './WeeklyChart';
 import MonthlyChart from './MonthlyChart';
 import { NotificationIcon, Hamburger } from '../../components/imageUrls';
 import { fetchRecentOrders } from '../../actions/order';
-import { LineChart, BarChart } from 'react-native-chart-kit'
-
-const data = {
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-  datasets: [{data: [ 20, 5, 28, 80, 99, 43, 20, 45, 28, 80, 99, 43 ]}]
-}
-
-const dataWeekly = {
-  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Pri', 'Sat', 'Sun'],
-  datasets: [{data: [ 20, 25, 30, 50, 99, 73, 60, 80 ]}]
-}
 
 class DashboardScreen extends Component {
 
@@ -45,7 +34,10 @@ class DashboardScreen extends Component {
     ),
     headerRight: (
       <MenuIcon onPress={() => navigation.navigate('OwnerNotification')} icon={NotificationIcon} />
-    )
+    ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   constructor(props) {
@@ -107,35 +99,6 @@ class DashboardScreen extends Component {
     )
   }
 
-  chartConfig = {
-    backgroundGradientFrom: '#fff',
-    backgroundGradientTo: '#fff',
-    color: (opacity = 0) => `rgba(26, 67, 221, ${opacity})`,
-  };
-
-  renderWeeklyChart = () => (
-    <LineChart
-      data={dataWeekly}
-      width={Dimensions.get('window').width - 30}
-      height={Dimensions.get('window').width}
-      chartConfig={this.chartConfig}
-      style={{
-        marginBottom: 0,
-        paddingBottom: 0,
-      }}
-    />
-  )
-
-  renderMonthlyChart = () => (
-    <LineChart
-      // style={graphStyle}
-      data={data}
-      width={Dimensions.get('window').width - 30}
-      height={Dimensions.get('window').width}
-      chartConfig={this.chartConfig}
-    />
-  )
-
   render() {
     return (
       <ScrollView style={{ flex: 1, backgroundColor: 'white' }} contentContainerStyle={styles.container}>
@@ -143,14 +106,17 @@ class DashboardScreen extends Component {
           <TabView
             navigationState={this.state}
             renderScene={SceneMap({
-              dailyChart: this.renderWeeklyChart,
-              weeklyChart: this.renderWeeklyChart,
-              monthlyChart: this.renderMonthlyChart,
+              dailyChart: DailyChart,
+              weeklyChart: WeeklyChart,
+              monthlyChart: MonthlyChart,
             })}
             swipeEnabled={false}
             renderTabBar={this.renderTabBar}
             onIndexChange={index => this.setState({ index })}
-            initialLayout={{ width: Dimensions.get('window').width, height: Dimensions.get('window').width }}
+            initialLayout={{
+              width: Dimensions.get('window').width,
+              height: Dimensions.get('window').width
+            }}
           />
         </View>
         { this.renderRecentOrders() }    
@@ -161,10 +127,10 @@ class DashboardScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingHorizontal: 20,
   },
   lastesTransContainer: {
-    // marginTop: 20,
+    marginTop: 20,
   },
   lastestTransTitle: {
     lineHeight: 19,

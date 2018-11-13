@@ -62,7 +62,7 @@ StaffsStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   DashboardStack,
-  CartStack,
+  // CartStack,
   ProductsStack,
   StaffsStack,
 }, {
