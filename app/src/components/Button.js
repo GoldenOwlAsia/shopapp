@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap'
   },
   btnText: {
-    fontSize: 16,
+    fontSize: 18,
+    letterSpacing: -0.5,
     color: colors.WHITE,
     flex: 1
   },
@@ -38,8 +39,8 @@ const styles = StyleSheet.create({
     height: 22
   },
   rightIcon: {
-    width: 28,
-    height: 20
+    width: 15,
+    height: 12
   },
 });
 

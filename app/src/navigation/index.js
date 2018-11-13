@@ -1,5 +1,6 @@
+import React from 'react';
 import {
-  createSwitchNavigator,
+  createDrawerNavigator,
   createStackNavigator,
 } from "react-navigation";
 
@@ -13,15 +14,32 @@ import StaffDetailStack from './StaffDetailStack';
 import CreateStaffStack from './CreateStaffStack';
 import CreateProductStack from './CreateProductStack';
 import OwnerNotificationStack from './OwnerNotificationStack';
+import { CustomDrawerContent } from '../components';
+
+const AppOwnerDrawer = createDrawerNavigator(
+  {
+    Owner: OwnerStack,
+  },{
+      contentComponent: props => <CustomDrawerContent {...props} />,
+  }
+);
+
+const AppStaffDrawer = createDrawerNavigator(
+  {
+    App: AppStack,
+  },{
+      contentComponent: props => <CustomDrawerContent {...props} />,
+  }
+);
 
 const AppNavigator = createStackNavigator(
   {
     // You could add another route here for authentication.
     // Read more at https://reactnavigation.org/docs/en/auth-flow.html
     AuthLoading: AuthLoading,
-    Owner: OwnerStack,
-    App: AppStack,
     Auth: AuthStack,
+    MainOwner: AppOwnerDrawer,
+    MainStaff: AppStaffDrawer,
     StaffDetail: StaffDetailStack,
     CreateStaff: CreateStaffStack,
     OwnerNotification: OwnerNotificationStack,

@@ -147,7 +147,8 @@ const styles = StyleSheet.create({
     // flex: 1,
     backgroundColor: 'transparent',
     color: 'white',
-    fontSize: 16,
+    fontSize: 18,
+    letterSpacing: -0.5,
     textAlign: 'center',
     padding: 8,
     ...Platform.select({

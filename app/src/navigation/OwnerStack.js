@@ -68,5 +68,9 @@ export default createBottomTabNavigator({
 }, {
   tabBarOptions: {
     showLabel: false,
+    style: {
+        borderTopWidth: 1,
+        borderTopColor: '#F4F4F4'
+    },
   }
 });

@@ -10,7 +10,7 @@ const IconLeftContainer = styled.TouchableOpacity`
 
 const Hamburger = ({ onPress }) => (
   <IconLeftContainer onPress={onPress}>
-    <Ionicons name="ios-menu" size={25} color='white' />
+    <Ionicons name="ios-menu" size={25} />
   </IconLeftContainer>
 );
 

@@ -13,6 +13,10 @@ const TabIcon = ({ icon }) => (
     <Image resizeMode="contain" source={icon} style={{ width: 28, height: 28 }} />
 )
 
+const TabIconCart = ({ icon }) => (
+  <Image resizeMode="contain" source={icon} style={{ width: 42, height: 42 }} />
+)
+
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
 });
@@ -30,7 +34,7 @@ const CheckoutStack = createStackNavigator({
 
 CheckoutStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
-    <TabIcon icon={focused ? CheckoutTabIconActive : CheckoutTabIconInactive} />
+    <TabIconCart icon={focused ? CheckoutTabIconActive : CheckoutTabIconInactive} />
   ),
   tabBarOnPress: ({ navigation, defaultHandler }) => {
     // defaultHandler();
@@ -67,5 +71,9 @@ export default createBottomTabNavigator({
 }, {
   tabBarOptions: {
     showLabel: false,
+    style: {
+        borderTopWidth: 1,
+        borderTopColor: '#F4F4F4'
+    },
   }
 });

@@ -8,18 +8,32 @@ import {
   TextInput,
   ActivityIndicator,
   AsyncStorage,
-  KeyboardAvoidingView,
-  ScrollView
+  TouchableOpacity,
+  Image,
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import TouchableView from '../components/TouchableView';
-import { colors } from '../utils/constants';
-
+import { BackArrow } from '../components/imageUrls';
 import { ownerLogin } from '../actions/auth';
 import { OWNER_LOGIN_SUCCESS } from '../actions/types';
 
 class OwnerLogin extends Component {
+
+  static navigationOptions = ({ navigation }) => ({
+    headerLeft: (
+      <TouchableOpacity onPress={() => navigation.goBack(null)}>
+        <Image
+          style={{ width: 24, height: 16, marginLeft: 16 }}
+          source={BackArrow}
+        />
+      </TouchableOpacity>
+    ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
+  });
+
   constructor(props) {
     super(props);
     this.state = {
@@ -63,7 +77,7 @@ class OwnerLogin extends Component {
     
       const resetAction = StackActions.reset({
         index: 0,
-        actions: [NavigationActions.navigate({ routeName: 'Owner' })],
+        actions: [NavigationActions.navigate({ routeName: 'MainOwner' })],
         key: null,
       });
       this.props.navigation.dispatch(resetAction);
@@ -98,7 +112,7 @@ class OwnerLogin extends Component {
           <CodeElement onSelect={this.onSelect} index={3} value={codeValue.charAt(3)} editing={index === 3} />
         </View>
         <TextInput value={this.state.codeValue} style={styles.hiddenInput} ref={(ref)=>{this.hiddenInput = ref}} returnKeyType="done" maxLength={4} keyboardType="numeric" onChangeText={this.onChangeText} autoFocus />
-        <Text style={styles.hint}>Không nhận được tin nhắn.</Text>
+        <Text style={styles.notMessage}>Không nhận được tin nhắn.</Text>
         <TouchableView>
           <Text style={styles.resendText}>Gửi lại!</Text>
         </TouchableView>
@@ -110,14 +124,10 @@ class OwnerLogin extends Component {
 
 const CodeElement = (props) => {
   const { index, value, editing, onSelect } = props;
-
   const _onSelect = () => onSelect(index);
-
   return (
-    <TouchableView onPress={_onSelect}>
-      <View style={[styles.codeWrap, editing && styles.codeWrapEditing]}>
-          <Text>{value}</Text>
-      </View>
+    <TouchableView onPress={_onSelect} style={[styles.codeWrap, editing && styles.codeWrapEditing]}>
+      <Text style={styles.valueCode}>{value}</Text>
     </TouchableView>
   )
 }
@@ -125,7 +135,7 @@ const CodeElement = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
     paddingVertical: 40,
     backgroundColor: '#FFF',
   },
@@ -143,12 +153,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 22,
     fontSize: 16,
-    color: "#12283f"
+    // color: "#12283f",
   },
   hint: {
     textAlign: 'center',
     lineHeight: 24,
     fontSize: 18,
+    color: "#868686"
+  },
+  notMessage: {
+    textAlign: 'center',
+    lineHeight: 24,
+    fontSize: 14,
     color: "#868686"
   },
   codeContainer: {
@@ -162,20 +178,25 @@ const styles = StyleSheet.create({
     height: 60,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: 10,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#F7F7F7',
-    backgroundColor: '#F7F7F7',
+    borderColor: '#EEEEEE',
+    backgroundColor: '#EEEEEE',
   },
   codeWrapEditing: {
-    borderColor: '#eeeeee',
-    backgroundColor: '#FFF',
+    borderColor: '#EEEEEE',
+    backgroundColor: '#FFFFFF',
+    // shadowColor: '#EDF1FF'
+  },
+  valueCode: {
+    fontSize: 24,
+    fontWeight: '600'
   },
   resendText: {
-    color: 'green',
+    color: '#5175FF',
     alignSelf: 'center',
-    padding: 8,
+    fontSize: 16,
   },
   hiddenInput: {
     width: 0,

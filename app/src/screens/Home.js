@@ -8,11 +8,9 @@ import {
   TouchableOpacity,
   Image,
   RefreshControl,
-  AsyncStorage,
   Alert,
 } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
-import { Squares, GridList } from '../components/imageUrls';
+import { Squares, GridList, Hamburger } from '../components/imageUrls';
 import SearchBar from '../components/SearchBar';
 import NewCustomerModal from '../components/NewCustomerModal';
 import ProductItem from '../components/ProductItem';
@@ -21,7 +19,6 @@ import { createCustomer } from '../actions/customer';
 import { createOrder, updateOrderByCustomer } from '../actions/order';
 import { toggleListProducts } from '../actions/app';
 import { CREATE_CUSTOMER_SUCCESS } from "../actions/types";
-import { LogoutIcon } from '../components/icons';
 
 const mapDistch = {
   toggleListProducts,
@@ -72,27 +69,16 @@ class HomeScreen extends Component {
     title: `${(navigation.state.params || {}).title || ''}`,
     headerRight: <RightButton navigation={navigation} />,
     headerLeft: (
-      <LogoutIcon onPress={() => {
-        Alert.alert(
-          'Xác Nhận',
-          'Bạn có thật sự muốn đăng xuất ?',
-          [
-            {text: 'Cancel', onPress: () => {}, style: 'cancel'},
-            {text: 'OK', onPress: async () => {
-              await AsyncStorage.clear();
-
-              navigation.dispatch(StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'AuthLoading' })],
-                key: null,
-              }));
-
-            }},
-          ],
-          { cancelable: false }
-        )
-      }} />
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <Image
+          style={{ width: 16, height: 12, marginLeft: 12 }}
+          source={Hamburger}
+        />
+      </TouchableOpacity>
     ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   constructor(props) {
@@ -257,30 +243,32 @@ class HomeScreen extends Component {
           value={this.state.searchKeyword}
           onChangeText={this.onChangeSearhKeyword}
         />
-        <FlatList
-          key={showList ? 'list' : 'grid'}
-          style={styles.list}
-          data={products}
-          numColumns={showList ? 1 : 2}
-          renderItem={this.renderRow}
-          keyExtractor={this.keyExtractor} 
-          ItemSeparatorComponent={Divider}
-          columnWrapperStyle={showList ? null : styles.columnWrapperStyle }
-          refreshControl={
-            <RefreshControl
-              refreshing={this.props.loading}
-              onRefresh={this.onRefresh}
-            />
-          }
-        />
-        <NewCustomerModal
-          isOpen={this.state.isOpenCreateCustomerModal}
-          onSubmit={this.handleCreateCustomer}
-          onRequestClose={this.closeModal}
-          submitText={'Tạo mới'}
-          cancleText={'Không, thêm khách hàng sau'}
-          title={'Thêm khách hàng mới'}
-        />
+        <View style={styles.content}>
+          <FlatList
+            key={showList ? 'list' : 'grid'}
+            style={styles.list}
+            data={products}
+            numColumns={showList ? 1 : 2}
+            renderItem={this.renderRow}
+            keyExtractor={this.keyExtractor} 
+            ItemSeparatorComponent={Divider}
+            columnWrapperStyle={showList ? null : styles.columnWrapperStyle }
+            refreshControl={
+              <RefreshControl
+                refreshing={this.props.loading}
+                onRefresh={this.onRefresh}
+              />
+            }
+          />
+          <NewCustomerModal
+            isOpen={this.state.isOpenCreateCustomerModal}
+            onSubmit={this.handleCreateCustomer}
+            onRequestClose={this.closeModal}
+            submitText={'Tạo mới'}
+            cancleText={'Không, thêm khách hàng sau'}
+            title={'Thêm khách hàng mới'}
+          />
+        </View>
       </View>
     );
   }
@@ -293,7 +281,12 @@ const Divider = () => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15,
+    paddingHorizontal: 12,
+    backgroundColor: '#FFF',
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 8,
     backgroundColor: '#FFF',
   },
   list: {
@@ -308,9 +301,9 @@ const styles = StyleSheet.create({
     height: 30,
   },
   headerRightIcon: {
-    marginRight: 15,
-    width: 15,
-    height: 15
+    marginRight: 12,
+    width: 20,
+    height: 20
   },
   headerLeftIcon: {
     marginLeft: 15,

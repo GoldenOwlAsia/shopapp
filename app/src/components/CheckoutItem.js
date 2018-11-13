@@ -62,9 +62,6 @@ const Content = ({ quantity, onDecrease, onIncrease, onRemove }) => (
 
 /* Style */
 const styles = StyleSheet.create({
-  content: {
-    
-  },
   header: {
     flexDirection: 'row',
     alignItems: 'center', 
@@ -72,8 +69,8 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   arrow: {
-    width: 16,
-    height: 16,
+    width: 12,
+    height: 6,
   },
   title: {
     flex: 1,
@@ -98,6 +95,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
     paddingBottom: 10,
+    borderRadius: 4,
   },
   quantityText: {
     lineHeight: 14,

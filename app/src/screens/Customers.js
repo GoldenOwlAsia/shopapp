@@ -4,15 +4,12 @@ import { colors } from "../utils/constants";
 import {
   StyleSheet,
   View,
-  Text,
   TouchableOpacity,
   Image,
   FlatList,
   Alert,
-  AsyncStorage,
 } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
-import { PlusIcon } from '../components/imageUrls';
+import { PlusIcon, Hamburger } from '../components/imageUrls';
 import SearchBar from '../components/SearchBar';
 import CustomerItem from '../components/CustomerItem';
 import NewCustomerModal from '../components/NewCustomerModal';
@@ -20,7 +17,6 @@ import { CREATE_CUSTOMER_SUCCESS } from '../actions/types';
 
 import { createCustomer, changeSelectedCustomer, removeCustomer } from '../actions/customer';
 import { createOrder } from '../actions/order';
-import { LogoutIcon } from '../components/icons';
 
 class CustomersScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -34,27 +30,16 @@ class CustomersScreen extends Component {
       </TouchableOpacity>
     ),
     headerLeft: (
-      <LogoutIcon onPress={() => {
-        Alert.alert(
-          'Xác Nhận',
-          'Bạn có thật sự muốn đăng xuất ?',
-          [
-            {text: 'Cancel', onPress: () => {}, style: 'cancel'},
-            {text: 'OK', onPress: async () => {
-              await AsyncStorage.clear();
-
-              navigation.dispatch(StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'AuthLoading' })],
-                key: null,
-              }));
-
-            }},
-          ],
-          { cancelable: false }
-        )
-      }} />
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <Image
+          style={{ width: 16, height: 12, marginLeft: 12 }}
+          source={Hamburger}
+        />
+      </TouchableOpacity>
     ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   static getDerivedStateFromProps= (props, state) => {
@@ -202,13 +187,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.WHITE,
   },
   containerSearchBox: {
-    padding: 20,
+    paddingHorizontal: 12,
   },
   list: {
-    marginTop: 20,
+    marginTop: 24,
   },
   headerRightIcon: {
-    marginRight: 15,
+    marginRight: 12,
     width: 15,
     height: 15
   },

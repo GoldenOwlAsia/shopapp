@@ -35,7 +35,10 @@ class CheckOutScreen extends Component {
           source={BackArrow}
         />
       </TouchableOpacity>
-    )
+    ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   static getDerivedStateFromProps= (props, state) => {
@@ -193,12 +196,14 @@ class CheckOutScreen extends Component {
         <ScrollView style={styles.content} contentContainerStyle={{ paddingBottom: 20 }}>
           <Text style={styles.title}>Thanh toán</Text>
           <Divider />
-          <FlatList
-            data={items}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => `${item.id}`}
-            ItemSeparatorComponent={() => (<View style={styles.listDivider} />)}
-          />
+          <View style={{paddingHorizontal: 20}}>
+            <FlatList
+              data={items}
+              renderItem={this.renderItem}
+              keyExtractor={(item, index) => `${item.id}`}
+              ItemSeparatorComponent={() => (<View style={styles.listDivider} />)}
+            />
+          </View>
           <Divider />
           <View style={styles.row}>
             <Text style={styles.label}>Tổng giá</Text>
@@ -256,7 +261,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: 20,
   },
   listDivider: {
     height: 8,
@@ -265,13 +269,13 @@ const styles = StyleSheet.create({
     height: 1,
     marginTop: 20,
     marginBottom: 20,
-    paddingHorizontal: -20,
     backgroundColor: '#f4f4f4',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingTop: 10,
+    paddingHorizontal: 20,
   },
   label: {
     lineHeight: 19,
@@ -284,7 +288,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   customerInfo: {
-
+    paddingHorizontal: 20,
   },
   customerInfoTitle: {
     lineHeight: 30,
@@ -309,18 +313,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    marginBottom: 10,
-    color: '#666666',
+    paddingLeft: 20,
+    paddingTop: 10
   },
   btnCheckout: {
     padding: 20,
-  },
-  title: {
-    lineHeight: 32,
-    fontSize: 24,
-    fontWeight: "700",
-    fontStyle: "normal",
-    color: "#12283f"
   },
   headerLeftIcon: {
     marginLeft: 15,

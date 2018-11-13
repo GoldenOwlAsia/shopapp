@@ -6,7 +6,7 @@ import ColorItem from './Color';
 /* Style */
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
+    marginVertical: 10,
   },
   label: {
     lineHeight: 19,

@@ -4,7 +4,7 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 
 const IconLeftContainer = styled.TouchableOpacity`
   height: 100%;
-  paddingLeft: 15;
+  paddingLeft: 12;
   justifyContent: center;
 `;
 

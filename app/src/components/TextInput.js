@@ -13,32 +13,13 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 1,
     borderColor: "#eeeeee",
-    paddingLeft: 16,
-    paddingRight: 16,
-  },
-  container: {
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: 10,
-    paddingBottom: 10,
-    height: 60,
-    borderRadius: 6,
-    backgroundColor: "#f6f6f8",
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "#eeeeee"
+    paddingHorizontal: 16,
   },
   label: {
     fontSize: 14,
     lineHeight: 19,
     fontWeight: 'normal',
     color: "#caced4",
-  },
-  input: {
-    width: '100%',
-    fontSize: 16,
-    fontWeight: '600',
-    color: "#12283f",
   },
   textInput: {
     fontSize: 16,

@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
   lastUpdate: {
     lineHeight: 16,
     fontSize: 12,
-    color: '#a8a8a8'
+    color: '#a8a8a8',
+    paddingRight: 5
   }
   
 

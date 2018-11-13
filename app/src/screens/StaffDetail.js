@@ -127,6 +127,9 @@ class StaffDetailScreen extends Component {
         />
       </TouchableOpacity>
     ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   constructor(props) {
@@ -226,7 +229,7 @@ const styles = StyleSheet.create({
     paddingTop: 14,
     paddingBottom: 14,
     flexDirection: 'row',
-    backgroundColor: '#DADADC',
+    backgroundColor: '#F6F6F8',
     justifyContent: 'space-around',
   },
   statisticItemLabel: {

@@ -7,52 +7,36 @@ import {
   TouchableOpacity,
   Image,
   RefreshControl,
-  Text,
-  AsyncStorage,
-  Alert,
 } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
 import ProductItem from '../components/OwnerProductItem';
 import SearchBar from '../components/SearchBar';
 import StaffItem from '../components/StaffItem';
 import { Hamburger, PlusIcon } from '../components/imageUrls';
 import { getAllProducts } from '../actions/product';
-import { LogoutIcon } from '../components/icons';
 
 class ProductsScreen extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     title: 'Sản phẩm',
     headerLeft: (
-      <LogoutIcon onPress={() => {
-        Alert.alert(
-          'Xác Nhận',
-          'Bạn có thật sự muốn đăng xuất ?',
-          [
-            {text: 'Cancel', onPress: () => {}, style: 'cancel'},
-            {text: 'OK', onPress: async () => {
-              await AsyncStorage.clear();
-
-              navigation.dispatch(StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'AuthLoading' })],
-                key: null,
-              }));
-
-            }},
-          ],
-          { cancelable: false }
-        )
-      }} />
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <Image
+          style={{ width: 16, height: 12, marginLeft: 12 }}
+          source={Hamburger}
+        />
+      </TouchableOpacity>
     ),
     headerRight: (
       <TouchableOpacity onPress={() => navigation.navigate('CreateProduct')}>
         <Image
-          style={{ width: 16, height: 16, marginRight: 16 }}
+          style={{ width: 16, height: 16, marginRight: 12 }}
           source={PlusIcon}
         />
       </TouchableOpacity>
-    )
+    ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   constructor(props) {
@@ -91,11 +75,13 @@ class ProductsScreen extends Component {
     const products = this.props.products.filter(item => !this.state.searchKeyword || item.name.toLowerCase().includes(this.state.searchKeyword.toLowerCase()));
     return (
       <View style={styles.container}>
-      <SearchBar
-        placeholder="Tìm kiếm"
-        value={this.state.searchKeyword}
-        onChangeText={this.onChangeSearhKeyword}
-      />
+        <View style={{paddingHorizontal: 12}}>
+            <SearchBar
+            placeholder="Tìm kiếm"
+            value={this.state.searchKeyword}
+            onChangeText={this.onChangeSearhKeyword}
+          />
+        </View>
         <FlatList
           data={products}
           renderItem={this.renderProductItem}
@@ -122,11 +108,11 @@ const Divider = () => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#FFF',
   },
   list: {
     marginTop: 27,
+    paddingLeft: 18
   },
   divider: {
     height: 1,

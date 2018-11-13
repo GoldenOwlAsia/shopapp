@@ -47,6 +47,9 @@ class CreateProduct extends Component {
         />
       </TouchableOpacity>
     ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   constructor(props) {
@@ -111,9 +114,9 @@ class CreateProduct extends Component {
     const { name, color, quantity, importPrice, price, description } = this.state.product;
 
     return (
-      <KeyboardAwareScrollView extraScrollHeight={Platform.OS === 'ios' ? 10 : 100} enableOnAndroid style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.title}>Tạo sản phẩm mới</Text>
+      <View style={styles.container}>
+        <Text style={styles.title}>Tạo sản phẩm mới</Text>
+        <KeyboardAwareScrollView extraScrollHeight={Platform.OS === 'ios' ? 10 : 100} enableOnAndroid style={styles.content}>
           <ListImagePicker onImagesChange={(value) => this.onChangeText('images', value)} />
           <ColorPicker
             colorList={COLORS}
@@ -125,10 +128,12 @@ class CreateProduct extends Component {
             value={name}
             onChangeText={(value) => this.onChangeText('name', value)}
           />
+          <View style={{height: 5}} />
           <SelectSize
             onSelectedChange={(value) => this.onChangeText('category', value)}
             label={'Loại sản phẩm'} data={this.state.categories}
           />
+          <View style={{height: 5}} />
           <View style={styles.horizontal}>
             <View style={styles.horizontalItem}>
               <TextInput
@@ -145,6 +150,7 @@ class CreateProduct extends Component {
               />
             </View>
           </View>
+          <View style={{height: 5}} />
           <View style={styles.horizontal}>
             <View style={styles.horizontalItem}>
               <TextInput
@@ -163,6 +169,7 @@ class CreateProduct extends Component {
               />
             </View>
           </View>
+          <View style={{height: 5}} />
           <TextInput
             label="Ghi chú"
             value={description}
@@ -170,9 +177,11 @@ class CreateProduct extends Component {
             multiline = {true}
             numberOfLines = {4}
           />
+        </KeyboardAwareScrollView>
+        <View style={{marginHorizontal: 24, alignItems: 'center'}}>
           <BaseButton onPress={this.handleSubmit} containerStyle={styles.btnConfirm} title="Xác nhận" />
         </View>
-      </KeyboardAwareScrollView>
+      </View>
     )
   }
 }
@@ -190,7 +199,9 @@ const styles = StyleSheet.create({
     color: '#12283F',
     fontWeight: '700',
     lineHeight: 32,
-    marginBottom: 23,
+    paddingLeft: 24,
+    paddingBottom: 10,
+    paddingTop: 24
   },
   input: {
     marginTop: 20,
@@ -206,8 +217,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   btnConfirm: {
-    marginTop: 30,
-    marginBottom: 30,
+    marginTop: 15,
+    marginBottom: 20,
   }
 });
 

@@ -37,19 +37,21 @@ const styles = StyleSheet.create({
     flex: 0.6
   },
   logo: {
-    maxWidth: 100,
-    maxHeight: 100
+    maxWidth: 70,
+    maxHeight: 70
   },
   titleTextWrapper: {
     paddingLeft: 15,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'flex-start'
   },
   title: {
-    fontSize: 32
+    fontSize: 36,
+    letterSpacing: -1.0
   },
   subTitle: {
-    fontSize: 16
+    fontSize: 16,
+    letterSpacing: -1.0
   }
 });
 

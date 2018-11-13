@@ -29,6 +29,9 @@ class CreateStaffScreen extends React.Component {
         />
       </TouchableOpacity>
     ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   constructor(props) {
@@ -102,21 +105,23 @@ class CreateStaffScreen extends React.Component {
   render() {
     const { isEdit, user } = this.state;
     return (
-      <KeyboardAwareScrollView extraScrollHeight={Platform.OS === 'ios' ? 10 : 100} enableOnAndroid style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.title}>{isEdit ? `Chỉnh sửa thông tin`: `Tạo nhân viên mới`}</Text>
+      <View style={styles.container}>
+        <Text style={styles.title}>{isEdit ? `Chỉnh sửa thông tin`: `Tạo nhân viên mới`}</Text>
+        <KeyboardAwareScrollView extraScrollHeight={Platform.OS === 'ios' ? 10 : 100} enableOnAndroid style={styles.content}>
           <AvatarPicker image={this.props.user.avatar} onPickedImage={this.onPickedImage} />
           <TextInput
             label="Họ tên"
             value={user.fullName}
             onChangeText={(value) => this.onChangeText('fullName', value)}
           />
+          <View style={{height: 5}} />
           <TextInput
             label="Tên đăng nhập"
             wrapperStyle={styles.input}
             value={user.username}
             onChangeText={(value) => this.onChangeText('username', value)}
           />
+          <View style={{height: 5}} />
           <TextInput
             label="Mật khẩu"
             value={user.password}
@@ -124,6 +129,7 @@ class CreateStaffScreen extends React.Component {
             wrapperStyle={styles.input}
             onChangeText={(value) => this.onChangeText('password', value)}
           />
+          <View style={{height: 5}} />
           <TextInput
             label="Số chứng minh nhân dân"
             value={user.CMND}
@@ -131,6 +137,7 @@ class CreateStaffScreen extends React.Component {
             onChangeText={(value) => this.onChangeText('CMND', value)}
             keyboardType="numeric"
           />
+          <View style={{height: 5}} />
           <TextInput
             label="Địa chỉ"
             value="40E Ngô Đức Kế Quận 1"
@@ -138,6 +145,7 @@ class CreateStaffScreen extends React.Component {
             value={user.address}
             onChangeText={(value) => this.onChangeText('address', value)}
           />
+          <View style={{height: 5}} />
           <TextInput
             label="Số điện thoại"
             value={user.phoneNumber}
@@ -145,6 +153,7 @@ class CreateStaffScreen extends React.Component {
             onChangeText={(value) => this.onChangeText('phoneNumber', value)}
             keyboardType="numeric"
           />
+          <View style={{height: 5}} />
           <View style={styles.horizontal}>
             <View style={styles.horizontalItem}>
               <TextInput
@@ -163,6 +172,7 @@ class CreateStaffScreen extends React.Component {
               />
             </View>
           </View>
+          <View style={{height: 5}} />
           <TextInput
             label="Ghi chú"
             value={user.note}
@@ -171,9 +181,11 @@ class CreateStaffScreen extends React.Component {
             multiline = {true}
             numberOfLines = {4}
           />
+        </KeyboardAwareScrollView>
+        <View style={{marginHorizontal: 24, alignItems: 'center'}}>
           <BaseButton onPress={this.handleSubmit} containerStyle={styles.btnConfirm} title="Xác nhận" />
         </View>
-      </KeyboardAwareScrollView>
+      </View>
     );
   }
 }
@@ -191,7 +203,9 @@ const styles = StyleSheet.create({
     color: '#12283F',
     fontWeight: '700',
     lineHeight: 32,
-    marginBottom: 23,
+    paddingLeft: 24,
+    paddingBottom: 10,
+    paddingTop: 24
   },
   input: {
     marginTop: 20,
@@ -207,8 +221,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   btnConfirm: {
-    marginTop: 30,
-    marginBottom: 30,
+    marginTop: 15,
+    marginBottom: 20,
   }
 });
 

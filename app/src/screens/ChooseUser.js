@@ -17,8 +17,8 @@ import Button from '../components/Button';
 
 const styles = StyleSheet.create({
   container: {
-    marginLeft: 15,
-    marginRight: 15,
+    marginLeft: 30,
+    marginRight: 30,
     flex: 1
   },
   contentWrapper: {
@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap'
   },
   btnShopOwner: {
-    marginBottom: 15,
-    marginTop: 15,
+    marginBottom: 8,
+    marginTop: 25,
   },
   btnText: {
     marginLeft: 15,
@@ -58,6 +58,10 @@ const styles = StyleSheet.create({
   },
   btnStaff: {
     backgroundColor: '#3E4A89',
+  },
+  titleWelcome: {
+    fontSize: 18,
+    letterSpacing: -0.5,
   }
 });
 
@@ -83,7 +87,7 @@ class ChooseUserScreen extends Component {
       <View style={styles.container}>
         <AuthHeader />
         <View style={styles.contentWrapper}>
-          <Text style={{fontWeight: 'bold'}}>Xin chào, bạn là</Text>
+          <Text style={styles.titleWelcome}>Xin chào, bạn là</Text>
           <Button
             primary
             text="Chủ shop"

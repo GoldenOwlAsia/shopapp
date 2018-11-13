@@ -4,13 +4,11 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  Button,
   ScrollView,
   ActivityIndicator,
-  Alert,
-  AsyncStorage,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import MenuIcon from '../../components/MenuIcon';
@@ -19,8 +17,7 @@ import TabChartIcon from '../../components/TabChartIcon';
 import DailyChart from './DailyChart';
 import WeeklyChart from './WeeklyChart';
 import MonthlyChart from './MonthlyChart';
-import { NotificationIcon } from '../../components/imageUrls';
-import { LogoutIcon } from '../../components/icons';
+import { NotificationIcon, Hamburger } from '../../components/imageUrls';
 import { fetchRecentOrders } from '../../actions/order';
 import { LineChart, BarChart } from 'react-native-chart-kit'
 
@@ -39,26 +36,12 @@ class DashboardScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Thống kê',
     headerLeft: (
-      <LogoutIcon onPress={() => {
-        Alert.alert(
-          'Xác Nhận',
-          'Bạn có thật sự muốn đăng xuất ?',
-          [
-            {text: 'Cancel', onPress: () => {}, style: 'cancel'},
-            {text: 'OK', onPress: async () => {
-              await AsyncStorage.clear();
-
-              navigation.dispatch(StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'AuthLoading' })],
-                key: null,
-              }));
-
-            }},
-          ],
-          { cancelable: false }
-        )
-      }} />
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <Image
+          style={{ width: 16, height: 12, marginLeft: 12 }}
+          source={Hamburger}
+        />
+      </TouchableOpacity>
     ),
     headerRight: (
       <MenuIcon onPress={() => navigation.navigate('OwnerNotification')} icon={NotificationIcon} />
