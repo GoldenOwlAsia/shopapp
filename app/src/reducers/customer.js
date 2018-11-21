@@ -30,12 +30,10 @@ export default (state = initialState, action) => {
       return { ...state,  list: [...customers] }
     }
     case REMOVE_CUSTOMER: {
-      const customers = state.list;
-      const customerIndex = customers.findIndex((customer) => customer.id === action.payload);
-      customers.splice(customerIndex, 1);
+      const customers = state.list.filter(item => item.id !== action.payload)
       return {
         ...state,
-        list: customers,
+        list: [...customers],
         selectedCustomer: null
         // selectedCustomer: customers.length === 0 ? null : customers[0].id
       }

@@ -43,7 +43,7 @@ class CustomerItem extends React.PureComponent {
 
     return (
       <Swipeout
-        disabled={!hasProducts}
+        // disabled={!hasProducts}
         autoClose backgroundColor={'#FFF'}
         onOpen={() => this.setState({ isSwipe: true })}
         onClose={() => this.setState({ isSwipe: false })}

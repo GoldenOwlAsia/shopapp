@@ -108,7 +108,7 @@ class HomeScreen extends Component {
     if (!this.props.selectedCustomer) {
       this.setModalVisible(true);
     } else {
-      this.props.updateOrderByCustomer({ customerId: this.props.selectedCustomer, items: selectedProducts });
+      this.props.updateOrderByCustomer(this.props.selectedCustomer, selectedProducts );
       this.props.navigation.navigate('Checkout');
     }
   }

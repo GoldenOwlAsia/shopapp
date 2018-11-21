@@ -122,7 +122,7 @@ export const checkoutFail = (params) => {
   }
 }
 
-const handleUpdateOrderByCustomer = ({customerId, items}) => {
+const handleUpdateOrderByCustomer = (customerId, items) => {
   return {
     type: UPDATE_ORDER_BY_CUSTOMER,
     payload: {
@@ -132,9 +132,9 @@ const handleUpdateOrderByCustomer = ({customerId, items}) => {
   }
 }
 
-export const updateOrderByCustomer = (params) => {
+export const updateOrderByCustomer = (customerId, items) => {
   return (dispatch, getState) => {
-    return dispatch(handleUpdateOrderByCustomer(params));
+    return dispatch(handleUpdateOrderByCustomer(customerId, items));
   }
 }
 

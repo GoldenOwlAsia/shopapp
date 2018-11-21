@@ -127,12 +127,18 @@ export const clearSelectedCustomer = () => {
   }
 }
 
-const handleremoveCustomer = (params) => ({
-  type: REMOVE_CUSTOMER,
-  payload: params
-})
+const handleremoveCustomer = (params) => {
+  return {
+    type: REMOVE_CUSTOMER,
+    payload: params
+  }
+}
 
-export const removeCustomer = (customerId) => dispatch => dispatch(handleremoveCustomer(customerId))
+export const removeCustomer = (customerId) => {
+  return (dispatch, getState) => {
+    return dispatch(handleremoveCustomer(customerId))
+  }
+}
 
 const handleChangeSelectedCustomer = (customerId) => {
   return {
