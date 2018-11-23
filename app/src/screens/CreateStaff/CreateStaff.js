@@ -16,7 +16,7 @@ import AvatarPicker from '../../components/AvatarPicker';
 import { CloseIcon } from '../../components/imageUrls';
 import { updateUserFromApi, createUserFromApi } from '../../actions/user';
 // import { number, password, username, name } from '../../utils/validator';
-import { renderAlert, validateAddUserForm } from '../../utils/helpers';
+import { validateAddUserForm } from '../../utils/helpers';
 
 class CreateStaffScreen extends React.Component {
 
@@ -78,25 +78,36 @@ class CreateStaffScreen extends React.Component {
   handleSubmit = async() => {
     const { isEdit, user } = this.state;
     if (this.handleValidateForm(user) !== undefined) {
-      return renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin nhân viên');
+      return this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin nhân viên');
     }
     const resultValidate = await validateAddUserForm(user);
     if (resultValidate.isValidate === true) {
-      return renderAlert('Nhắc nhở', resultValidate.messageValidate);
+      return this.renderAlert('Nhắc nhở', resultValidate.messageValidate);
     }
     if(isEdit){
       this.props.updateUserFromApi(this.props.user.id, user)
         .then(() => {
-          renderAlert('Thành công', 'Cập nhật thành công', () => {this.props.navigation.goBack(null);});
+          this.renderAlert('Thành công', 'Cập nhật thành công', () => {this.props.navigation.goBack(null);});
         })
     }else {
       this.props.createUserFromApi(user).then(() => {
-        renderAlert('Thành công', 'Tạo nhân viên thành công.', () => {
+        this.renderAlert('Thành công', 'Tạo nhân viên thành công.', () => {
           this.props.navigation.goBack(null);
         });
       });
     }
   }
+
+  renderAlert = (title, message, onPressOK) => (
+    Alert.alert(
+      title,
+      message,
+      [
+        {text: 'OK', onPress: onPressOK},
+      ],
+      { cancelable: true }
+    )
+  )
 
   onPickedImage = (base64) => {
     this.onChangeText('avatar', `data:image/jpeg;base64,${base64}`);

@@ -25,21 +25,25 @@ class NewCustomerModal extends Component {
     };
   }
 
+  static getDerivedStateFromProps= (props, state) => {
+    state = {
+      customerName: props.customer?  (props.customer || {}).name : '',
+      customerPhoneNumber: props.customer ? (props.customer || {}).phoneNumber : '',
+    }
+    return state;
+  };
+
   onChangeCustomerName = (text) => this.setState({ customerName: text });
   onChangeCustomerPhone = (text) => this.setState({ customerPhoneNumber: text });
 
   handleSubmit = () => {
     this.props.onSubmit(this.state);
-    this.setState({
-      customerName: '',
-      customerPhoneNumber: '',
-    })
   }
 
   render() {
     return (
       <Modal
-        animationType="slide"
+        animationType="fade"
         visible={this.props.isOpen}
         transparent={true}
         onRequestClose={this.props.onRequestClose}>
