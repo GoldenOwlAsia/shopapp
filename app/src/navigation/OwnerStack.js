@@ -7,7 +7,6 @@ import {
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import DashboardScreen from '../screens/Dashboard';
 import ProductsScreen from '../screens/Products';
-import ProductDetailScreen from '../screens/ProductDetail';
 import StaffsScreen from '../screens/Staffs';
 import TabIcon from '../components/TabIcon';
 import {
@@ -43,7 +42,6 @@ CartStack.navigationOptions = {
 
 const ProductsStack = createStackNavigator({
   Products: ProductsScreen,
-  ProductDetail: ProductDetailScreen,
 });
 
 ProductsStack.navigationOptions = {

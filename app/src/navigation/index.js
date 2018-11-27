@@ -15,6 +15,8 @@ import CreateStaffStack from './CreateStaffStack';
 import CreateProductStack from './CreateProductStack';
 import OwnerNotificationStack from './OwnerNotificationStack';
 import { CustomDrawerContent } from '../components';
+import ProductDetailScreen from '../screens/ProductDetail';
+import EditProductScreen from '../screens/EditProduct';
 
 const AppOwnerDrawer = createDrawerNavigator(
   {
@@ -32,6 +34,11 @@ const AppStaffDrawer = createDrawerNavigator(
   }
 );
 
+const ProductDetailStack = createStackNavigator({
+  ProductDetail: ProductDetailScreen,
+  EditProduct: EditProductScreen,
+});
+
 const AppNavigator = createStackNavigator(
   {
     // You could add another route here for authentication.
@@ -44,6 +51,7 @@ const AppNavigator = createStackNavigator(
     CreateStaff: CreateStaffStack,
     OwnerNotification: OwnerNotificationStack,
     CreateProduct: CreateProductStack,
+    ProductDetail: ProductDetailStack,
   },
   {
     initialRouteName: 'AuthLoading',

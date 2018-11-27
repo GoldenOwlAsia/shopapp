@@ -15,7 +15,7 @@ import formatNumber from 'simple-format-number';
 class ProductDetailScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerLeft: (
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity onPress={() => navigation.goBack(null)}>
         <Image
           style={styles.headerLeftIcon}
           source={BackArrow}
@@ -39,6 +39,7 @@ class ProductDetailScreen extends Component {
               <Text style={styles.description}>Cập nhật {moment(product.createdAt).format('DD/MM/YYYY')}</Text>
             </View>
             <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('EditProduct', { product })}
               style={styles.editButton}>
               <Text style={styles.editButtonText}>Chỉnh sửa</Text>
             </TouchableOpacity>
