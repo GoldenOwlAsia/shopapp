@@ -133,7 +133,7 @@ class HomeScreen extends Component {
 
   increaseBuyNumber = (itemSelected, index) => {
     const products = this.state.products;
-    const selectedProducts = this.state.selectedProducts;
+    const selectedProducts = [ ...this.state.selectedProducts];
     let item = itemSelected;
     item.quantity++;
     const indexSelect = selectedProducts.findIndex(item => item.id === itemSelected.id);
@@ -154,7 +154,7 @@ class HomeScreen extends Component {
 
   decreaseBuyNumber = (itemSelected, index) => {
     const products = this.state.products;
-    const selectedProducts = this.state.selectedProducts;
+    const selectedProducts = [ ...this.state.selectedProducts];
     const indexSelect = selectedProducts.findIndex(item => item.id === itemSelected.id);
     let item = itemSelected;
     item.quantity--;
