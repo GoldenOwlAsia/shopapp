@@ -57,7 +57,7 @@ class ProductsScreen extends Component {
   }
 
   onItemPress = (product) => {
-    // this.props.navigation.navigate('CreateProduct', { product });
+    this.props.navigation.navigate('ProductDetail', { product });
   }
 
   renderProductItem = ({ item }) => (
