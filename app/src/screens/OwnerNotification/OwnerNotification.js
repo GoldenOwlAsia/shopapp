@@ -4,10 +4,12 @@ import {
   View,
   StyleSheet,
   FlatList,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
 import MenuIcon from '../../components/MenuIcon';
 import NotificationItem from '../../components/NotificationItem';
-import { Hamburger, NotificationIcon } from '../../components/imageUrls';
+import { NotificationActiveIcon, CloseIcon } from '../../components/imageUrls';
 import { getNotifications } from '../../actions/notifications'
 
 class NotificationScreen extends Component {
@@ -15,10 +17,15 @@ class NotificationScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Thông báo',
     headerLeft: (
-      <MenuIcon icon={Hamburger} />
+      <TouchableOpacity onPress={() => navigation.navigate('Owner')}>
+        <Image
+          style={{ width: 16, height: 16, marginLeft: 16 }}
+          source={CloseIcon}
+        />
+      </TouchableOpacity>
     ),
     headerRight: (
-      <MenuIcon icon={NotificationIcon} />
+      <MenuIcon icon={NotificationActiveIcon} />
     )
   });
 
@@ -40,8 +47,7 @@ class NotificationScreen extends Component {
   keyExtractor = (item) => `notification-${item.id}`
 
   render() {
-    const { notifications } = this.props;
-    
+    const notifications = this.props.notifications.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
     return (
       <View style={styles.container}>
         <FlatList

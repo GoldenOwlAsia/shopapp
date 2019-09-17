@@ -4,20 +4,17 @@ import {
   createStackNavigator,
   createBottomTabNavigator
 } from 'react-navigation'
-
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import HomeScreen from '../screens/Home';
 import CustomersScreen from '../screens/Customers';
 import CheckoutScreen from '../screens/Checkout';
-
-import { HamburgerIcon, SettingsIcon, BackIcon } from '../components/icons';
-import TouchableView from '../components/TouchableView';
-import { CustomDrawerContent } from '../components';
-import { colors } from '../utils/constants';
 import { CheckoutTabIconActive, CheckoutTabIconInactive, HomeTabIconActive, HomeTabIconInactive, CustomerTabIconActive, CustomerTabIconInactive } from '../components/imageUrls';
 
 const TabIcon = ({ icon }) => (
     <Image resizeMode="contain" source={icon} style={{ width: 28, height: 28 }} />
+)
+
+const TabIconCart = ({ icon }) => (
+  <Image resizeMode="contain" source={icon} style={{ width: 42, height: 42 }} />
 )
 
 const HomeStack = createStackNavigator({
@@ -37,7 +34,7 @@ const CheckoutStack = createStackNavigator({
 
 CheckoutStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
-    <TabIcon icon={focused ? CheckoutTabIconActive : CheckoutTabIconInactive} />
+    <TabIconCart icon={focused ? CheckoutTabIconActive : CheckoutTabIconInactive} />
   ),
   tabBarOnPress: ({ navigation, defaultHandler }) => {
     // defaultHandler();
@@ -46,7 +43,6 @@ CheckoutStack.navigationOptions = {
     } else {
       let parentNavigation = navigation.dangerouslyGetParent();
       let prevRoute = parentNavigation.state.routes[parentNavigation.state.index];
-      let nextRoute = navigation.state;
       const route = prevRoute.routes && prevRoute.routes[0]
       if (route && (route.params || {}).handler) {
         route.params.handler();
@@ -75,5 +71,9 @@ export default createBottomTabNavigator({
 }, {
   tabBarOptions: {
     showLabel: false,
+    style: {
+        borderTopWidth: 1,
+        borderTopColor: '#F4F4F4'
+    },
   }
 });

@@ -8,19 +8,12 @@ import {
   TouchableOpacity,
   Image,
   RefreshControl,
-  AsyncStorage,
   Alert,
 } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
-import {
-  Squares,
-  Hamburger,
-  GridList,
-} from '../components/imageUrls';
+import { Squares, GridList, Hamburger } from '../components/imageUrls';
 import SearchBar from '../components/SearchBar';
 import NewCustomerModal from '../components/NewCustomerModal';
 import ProductItem from '../components/ProductItem';
-
 import { getAllProducts } from '../actions/product';
 import { createCustomer } from '../actions/customer';
 import { createOrder, updateOrderByCustomer } from '../actions/order';
@@ -76,32 +69,16 @@ class HomeScreen extends Component {
     title: `${(navigation.state.params || {}).title || ''}`,
     headerRight: <RightButton navigation={navigation} />,
     headerLeft: (
-      <TouchableOpacity onPress={() => {
-        Alert.alert(
-          'Xác Nhận',
-          'Bạn có thật sự muốn đăng xuất ?',
-          [
-            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-            {text: 'OK', onPress: async () => {
-              await AsyncStorage.clear();
-
-              navigation.dispatch(StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'AuthLoading' })],
-                key: null,
-              }));
-
-            }},
-          ],
-          { cancelable: false }
-        )
-      }}>
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
         <Image
-          style={styles.headerLeftIcon}
+          style={{ width: 16, height: 12, marginLeft: 12 }}
           source={Hamburger}
         />
       </TouchableOpacity>
-    )
+    ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   constructor(props) {
@@ -114,6 +91,7 @@ class HomeScreen extends Component {
       isOpenCreateCustomerModal: false,
       loading: false,
       grid: false,
+      selectedProducts: [],
     };
   }
 
@@ -124,13 +102,13 @@ class HomeScreen extends Component {
   openModal = () => {
     const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
     if (!selectedProducts.length) {
-      alert('Vui lòng chọn sản phẩm');
+      this.renderAlert('Nhắc nhở', 'Vui lòng chọn sản phẩm');
       return;
     } 
     if (!this.props.selectedCustomer) {
       this.setModalVisible(true);
     } else {
-      this.props.updateOrderByCustomer({ customerId: this.props.selectedCustomer, items: selectedProducts });
+      this.props.updateOrderByCustomer(this.props.selectedCustomer, selectedProducts );
       this.props.navigation.navigate('Checkout');
     }
   }
@@ -147,61 +125,106 @@ class HomeScreen extends Component {
     });
   }
 
-  onChangeCustomerName = (text) => this.setState({ customerName: text });
+  onChangeCustomerName = (text) => this.setState({ customerName: text.trim() });
 
-  onChangeCustomerPhone = (text) => this.setState({ customerPhoneNumber: text });
+  onChangeCustomerPhone = (text) => this.setState({ customerPhoneNumber: text.trim() });
 
-  onItemPress(itemId) {
-    console.log('on item pressed');
-  }
+  onItemPress(itemId) {}
 
-  increaseBuyNumber = (index) => {
+  increaseBuyNumber = (itemSelected, index) => {
     const products = this.state.products;
-    let item = products[index];
+    const selectedProducts = [ ...this.state.selectedProducts];
+    let item = itemSelected;
     item.quantity++;
-    products[index] = item;
+    const indexSelect = selectedProducts.findIndex(item => item.id === itemSelected.id);
+    if (indexSelect !== -1) {
+      selectedProducts[indexSelect] = item
+    } else {
+      selectedProducts.push(item);
+    }
+    // products[index] = item;
+    products.map(p => {
+      if (p.id === itemSelected.id) p = item;
+    });
     this.setState({
-      products
+      products,
+      selectedProducts
     });
   }
 
-  decreaseBuyNumber = (index) => {
+  decreaseBuyNumber = (itemSelected, index) => {
     const products = this.state.products;
-    let item = products[index];
+    const selectedProducts = [ ...this.state.selectedProducts];
+    const indexSelect = selectedProducts.findIndex(item => item.id === itemSelected.id);
+    let item = itemSelected;
     item.quantity--;
-    if (item.quantity < 0) {
+    if (item.quantity < 0 && indexSelect !== -1) {
       item.quantity = 0;
+      selectedProducts.splice(indexSelect, 1);
+    } else if (item.quantity > 0 && indexSelect !== -1) {
+      selectedProducts[indexSelect] = item;
     }
-    products[index] = item;
+    // products[index] = item;
+    products.map(p => {
+      if (p.id === itemSelected.id) p = item;
+    });
     this.setState({
-      products
+      products,
+      selectedProducts
     });
   }
+
+  renderAlert = (title, message, onPressOK) => (
+    Alert.alert(
+      title,
+      message,
+      [
+        {text: 'OK', onPress: onPressOK},
+      ],
+      { cancelable: true }
+    )
+  )
 
   setModalVisible = (isOpen) => {
     this.setState({isOpenCreateCustomerModal: isOpen});
   }
 
   handleCreateCustomer = async (params) => {
-    const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
-    const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
-    if (result.type === CREATE_CUSTOMER_SUCCESS) {
-      this.closeModal();
-      await this.props.createOrder(this.props.selectedCustomer, selectedProducts);
-      this.props.navigation.navigate("Checkout");
+    if (params.customerName === '' || params.customerPhoneNumber === '') {
+      this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin khách hàng');
+    } else {
+      // const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
+      const selectedProducts = this.state.selectedProducts;
+      const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
+      if (result.type === CREATE_CUSTOMER_SUCCESS) {
+        this.closeModal();
+        await this.props.createOrder(this.props.selectedCustomer, selectedProducts);
+        this.props.navigation.navigate("Checkout");
+      }
     }
   }
 
+  // handleCreateCustomer = async (params) => {
+  //   if (params.customerName === '' || params.customerPhoneNumber === '') {
+  //     this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin khách hàng');
+  //   } else {
+  //     const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
+  //     if (result.type === CREATE_CUSTOMER_SUCCESS) {
+  //       this.closeModal();
+  //       this.props.createOrder(this.props.selectedCustomer, []);
+  //     }
+  //   }
+  // }
+
   renderRow = ({item, index}) => {
-    console.log('[Home.js] zz item', item);
     return (
       <ProductItem
         // key={`product-${item.id}`}
         gridItem={!this.props.showList}
         item={item}
         onItemPress={this.onItemPress}
-        onIncrease={() => this.increaseBuyNumber(index)}
-        onDecrease={() => this.decreaseBuyNumber(index)}
+        onIncrease={() => this.increaseBuyNumber(item, index)}
+        onDecrease={() => this.decreaseBuyNumber(item, index)}
       />
     )
   }
@@ -212,6 +235,7 @@ class HomeScreen extends Component {
 
   render() {
     const { showList } = this.props;
+    const products = this.state.products.filter(item => !this.state.searchKeyword || item.name.toLowerCase().includes(this.state.searchKeyword.toLowerCase()));
     return (
       <View style={styles.container}>
         <SearchBar
@@ -219,30 +243,32 @@ class HomeScreen extends Component {
           value={this.state.searchKeyword}
           onChangeText={this.onChangeSearhKeyword}
         />
-        <FlatList
-          key={showList ? 'list' : 'grid'}
-          style={styles.list}
-          data={this.state.products}
-          numColumns={showList ? 1 : 2}
-          renderItem={this.renderRow}
-          keyExtractor={this.keyExtractor} 
-          ItemSeparatorComponent={Divider}
-          columnWrapperStyle={showList ? null : styles.columnWrapperStyle }
-          refreshControl={
-            <RefreshControl
-              refreshing={this.props.loading}
-              onRefresh={this.onRefresh}
-            />
-          }
-        />
-        <NewCustomerModal
-          isOpen={this.state.isOpenCreateCustomerModal}
-          onSubmit={this.handleCreateCustomer}
-          onRequestClose={this.closeModal}
-          submitText={'Tạo mới'}
-          cancleText={'Không, thêm khách hàng sau'}
-          title={'Thêm khách hàng mới'}
-        />
+        <View style={styles.content}>
+          <FlatList
+            key={showList ? 'list' : 'grid'}
+            style={styles.list}
+            data={products}
+            numColumns={showList ? 1 : 2}
+            renderItem={this.renderRow}
+            keyExtractor={this.keyExtractor} 
+            ItemSeparatorComponent={Divider}
+            columnWrapperStyle={showList ? null : styles.columnWrapperStyle }
+            refreshControl={
+              <RefreshControl
+                refreshing={this.props.loading}
+                onRefresh={this.onRefresh}
+              />
+            }
+          />
+          <NewCustomerModal
+            isOpen={this.state.isOpenCreateCustomerModal}
+            onSubmit={this.handleCreateCustomer}
+            onRequestClose={this.closeModal}
+            submitText={'Tạo mới'}
+            cancleText={'Không, thêm khách hàng sau'}
+            title={'Thêm khách hàng mới'}
+          />
+        </View>
       </View>
     );
   }
@@ -255,7 +281,12 @@ const Divider = () => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15,
+    paddingHorizontal: 12,
+    backgroundColor: '#FFF',
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 8,
     backgroundColor: '#FFF',
   },
   list: {
@@ -270,9 +301,9 @@ const styles = StyleSheet.create({
     height: 30,
   },
   headerRightIcon: {
-    marginRight: 15,
-    width: 15,
-    height: 15
+    marginRight: 12,
+    width: 20,
+    height: 20
   },
   headerLeftIcon: {
     marginLeft: 15,

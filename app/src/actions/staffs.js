@@ -25,14 +25,16 @@ export const loadStaffsSuccess = (staffs) => ({
 export const getStaffsFromApi = () => async (dispatch) => {
   dispatch(loadingStaffs());
   try{
-    const response = await client.query({ query: GetAllStaffs });
+    const response = await client.query({
+      query: GetAllStaffs,
+      fetchPolicy: 'network-only',
+    });
     const { data } = response;
     if(data){
       const { getStaffs } = data;
       dispatch(loadStaffsSuccess(getStaffs || []));
     }
   }catch(error){
-    console.log('[staffs.js] getStaffsFromApi error', error);
     dispatch(loadStaffsFailed(error.message));
   }
 }

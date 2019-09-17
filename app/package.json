@@ -19,6 +19,7 @@
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "lodash": "^4.17.11",
+    "moment": "^2.22.2",
     "prop-types": "^15.6.2",
     "react": "16.8.3",
     "react-apollo": "2.1.11",
@@ -40,6 +41,7 @@
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
+    "simple-format-number": "^0.1.2",
     "styled-components": "^3.4.4",
     "whatwg-fetch": "2.0.4"
   },

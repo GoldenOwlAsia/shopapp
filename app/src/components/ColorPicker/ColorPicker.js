@@ -6,13 +6,12 @@ import ColorItem from './Color';
 /* Style */
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
+    marginVertical: 10,
   },
   label: {
     lineHeight: 19,
     fontSize: 14,
     color: "#12283f",
-    fontFamily: 'Rubik-Regular',
   },
   content: {
     flexDirection: 'row',

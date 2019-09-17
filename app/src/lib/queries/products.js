@@ -10,7 +10,8 @@ export const GetAllProducts = gql`
       images,
       status,
       description,
-      quantity
+      quantity,
+      createdAt,
     }
   }
 `;
@@ -24,6 +25,7 @@ export const GetAllCategories = gql`
 export const CreateProduct = gql`
   mutation createProduct(
     $name: String!, 
+    $category: String!, 
     $importPrice: Float, 
     $price: Float, 
     $description: String,
@@ -34,6 +36,7 @@ export const CreateProduct = gql`
   ){
     createProduct(
       name: $name, 
+      category: $category, 
       importPrice: $importPrice, 
       price: $price, 
       description: $description,

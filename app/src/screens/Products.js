@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Image,
   RefreshControl,
-  Text,
 } from 'react-native';
 import ProductItem from '../components/OwnerProductItem';
 import SearchBar from '../components/SearchBar';
@@ -20,9 +19,9 @@ class ProductsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Sản phẩm',
     headerLeft: (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
         <Image
-          style={{ width: 16, height: 16, marginLeft: 16 }}
+          style={{ width: 16, height: 12, marginLeft: 12 }}
           source={Hamburger}
         />
       </TouchableOpacity>
@@ -30,23 +29,35 @@ class ProductsScreen extends Component {
     headerRight: (
       <TouchableOpacity onPress={() => navigation.navigate('CreateProduct')}>
         <Image
-          style={{ width: 16, height: 16, marginRight: 16 }}
+          style={{ width: 16, height: 16, marginRight: 12 }}
           source={PlusIcon}
         />
       </TouchableOpacity>
-    )
+    ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   constructor(props) {
     super(props);
+    this.state = {
+      searchKeyword: '',
+    };
   }
 
-  componentDidMount() {
-    this.props.getAllProducts();
+  async componentDidMount() {
+    await this.props.getAllProducts();
+  }
+
+  onChangeSearhKeyword = (keyword) => {
+    this.setState({
+      searchKeyword: keyword
+    });
   }
 
   onItemPress = (product) => {
-    // this.props.navigation.navigate('CreateProduct', { product });
+    this.props.navigation.navigate('ProductDetail', { product });
   }
 
   renderProductItem = ({ item }) => (
@@ -55,16 +66,22 @@ class ProductsScreen extends Component {
 
   keyExtractor = (item) => `product-${item.id}`;
 
-  onRefresh = () => {
-    this.props.getAllProducts();
+  onRefresh = async () => {
+    await this.props.getAllProducts();
   }
 
   render() {
-    const { loading, error, products } = this.props;
-
+    const { loading, error } = this.props;
+    const products = this.props.products.filter(item => !this.state.searchKeyword || item.name.toLowerCase().includes(this.state.searchKeyword.toLowerCase()));
     return (
       <View style={styles.container}>
-        <SearchBar placeholder="Tìm kiếm" />
+        <View style={{paddingHorizontal: 12}}>
+            <SearchBar
+            placeholder="Tìm kiếm"
+            value={this.state.searchKeyword}
+            onChangeText={this.onChangeSearhKeyword}
+          />
+        </View>
         <FlatList
           data={products}
           renderItem={this.renderProductItem}
@@ -91,11 +108,11 @@ const Divider = () => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#FFF',
   },
   list: {
     marginTop: 27,
+    paddingLeft: 18
   },
   divider: {
     height: 1,

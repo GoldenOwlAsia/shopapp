@@ -20,14 +20,22 @@ const initialState = {
 export default (state = initialState, action) => {
   switch(action.type) {
     case CREATE_ORDER: {
-      let list = { ...state.list };
-      list[action.payload.customerId] = action.payload.items;
-      return { ...state, list };
+      return {
+        ...state,
+        list: {
+          ...state.list,
+          [action.payload.customerId]: action.payload.items,
+        }
+      };
     }
     case UPDATE_ORDER_BY_CUSTOMER: {
-      let list = { ...state.list };
-      list[action.payload.customerId] = action.payload.items;
-      return { ...state, list }
+      return {
+        ...state,
+        list: {
+          ...state.list, 
+          [action.payload.customerId]: action.payload.items
+        }
+      }
     }
     case REMOVE_ITEM: {
       let list = { ...state.list };

@@ -60,21 +60,18 @@ export const validateAddUserForm = (user) => {
       isValidate: true
     }
   }
-
   if (!password(user.password)) {
     return {
       messageValidate: 'Mật khẩu không được chứa khoảng trắng.\nVui lòng nhập lại!',
       isValidate: true
     }
   }
-
   if (!number(user.CMND)) {
     return {
       messageValidate: 'CMND chỉ chấp nhận số.\nVui lòng nhập lại!',
       isValidate: true
     }
   }
-
   if (!number(user.phoneNumber)) {
     return {
       messageValidate: 'Số điện thoại chỉ chấp nhận số.\nVui lòng nhập lại!',
@@ -88,7 +85,6 @@ export const validateAddUserForm = (user) => {
       isValidate: true
     }
   }
-
   if (!number(user.bonus)) {
     return {
       messageValidate: 'Bonus chỉ chấp nhận số.\nVui lòng nhập lại!',
@@ -119,7 +115,6 @@ export const validateAddProductForm = (product) => {
       isValidate: true
     }
   }
-
   if (!number(product.price)) {
     return {
       messageValidate: 'Giá bán chỉ chấp nhận số.\nVui lòng nhập lại!',

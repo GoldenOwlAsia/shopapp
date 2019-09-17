@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
   },
   quantity: {
     fontSize: 16,
-    fontFamily: "Rubik-Regular",
     color: "#c1c5cb",
     paddingHorizontal: 16,
   },

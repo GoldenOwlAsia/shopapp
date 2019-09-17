@@ -11,7 +11,6 @@ import { AsyncStorage } from 'react-native';
 //     const authen_token = await AsyncStorage.getItem('authen_token');
 //     return authen_token;
 //   } catch (error) {
-//     console.log(`Something went wrong with the AsyncStorage: ${error.messages}`);
 //     return null;
 //   }
 // }

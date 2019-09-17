@@ -62,11 +62,15 @@ StaffsStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   DashboardStack,
-  CartStack,
+  // CartStack,
   ProductsStack,
   StaffsStack,
 }, {
   tabBarOptions: {
     showLabel: false,
+    style: {
+        borderTopWidth: 1,
+        borderTopColor: '#F4F4F4'
+    },
   }
 });

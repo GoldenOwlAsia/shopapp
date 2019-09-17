@@ -17,7 +17,6 @@ import ColorPicker from '../components/ColorPicker';
 import SelectSize from '../components/SelectSize';
 import ListImagePicker from '../components/ListImagePicker';
 import { CloseIcon } from '../components/imageUrls';
-import { handleCreateProduct, getCategories } from '../actions/product';
 import { validateAddProductForm } from './../utils/helpers';
 
 const COLORS = [
@@ -36,8 +35,7 @@ const SIZES = [
   { value: '12 (EU)'},
 ]
 
-class CreateProduct extends Component {
-
+class EditProduct extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerLeft: (
       <TouchableOpacity onPress={() => navigation.goBack(null)}>
@@ -68,13 +66,6 @@ class CreateProduct extends Component {
         images: [],
       },
     }
-  }
-
-  componentDidMount() {
-    this.props.getCategories()
-    .then(categories => {
-      this.setState({ categories })
-    })
   }
 
   handleValidateForm = (product) => Object.values(product).find(item => item === null);
@@ -116,7 +107,7 @@ class CreateProduct extends Component {
     if (resultValidate.isValidate === true) {
       return this.renderAlert('Nhắc nhở', resultValidate.messageValidate);
     }
-    this.props.handleCreateProduct(this.state.product).then(() => {
+    this.props.handleEditProduct(this.state.product).then(() => {
       this.renderAlert('Thành công', 'Tạo sản phẩm thành công', () => {
         this.props.navigation.goBack(null);
       });
@@ -128,7 +119,7 @@ class CreateProduct extends Component {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Tạo sản phẩm mới</Text>
+        <Text style={styles.title}>Chỉnh sửa thông tin</Text>
         <KeyboardAwareScrollView extraScrollHeight={Platform.OS === 'ios' ? 10 : 100} enableOnAndroid style={styles.content}>
           <ListImagePicker onImagesChange={(value) => this.onChangeText('images', value)} />
           <ColorPicker
@@ -192,7 +183,7 @@ class CreateProduct extends Component {
           />
         </KeyboardAwareScrollView>
         <View style={{marginHorizontal: 24, alignItems: 'center'}}>
-          <BaseButton onPress={this.handleSubmit} containerStyle={styles.btnConfirm} title="Xác nhận" />
+          <BaseButton onPress={this.handleSubmit} containerStyle={styles.btnConfirm} title="Lưu thay đổi" />
         </View>
       </View>
     )
@@ -235,9 +226,10 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapDispatchToProps = {
-  handleCreateProduct,
-  getCategories,
-}
+const mapStateToProps = (state, props) => ({
+  product: props.navigation.state.params.product
+})
 
-export default connect(null, mapDispatchToProps)(CreateProduct);
+const mapDispatchToProps = {}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditProduct);

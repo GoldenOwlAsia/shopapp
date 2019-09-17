@@ -25,6 +25,14 @@ class NewCustomerModal extends Component {
     };
   }
 
+  static getDerivedStateFromProps= (props, state) => {
+    state = {
+      customerName: props.customer?  (props.customer || {}).name : '',
+      customerPhoneNumber: props.customer ? (props.customer || {}).phoneNumber : '',
+    }
+    return state;
+  };
+
   onChangeCustomerName = (text) => this.setState({ customerName: text });
   onChangeCustomerPhone = (text) => this.setState({ customerPhoneNumber: text });
 
@@ -35,7 +43,7 @@ class NewCustomerModal extends Component {
   render() {
     return (
       <Modal
-        animationType="slide"
+        animationType="fade"
         visible={this.props.isOpen}
         transparent={true}
         onRequestClose={this.props.onRequestClose}>
@@ -100,7 +108,6 @@ const styles = StyleSheet.create({
   },
   modalTitleText: {
     lineHeight: 24,
-    fontFamily: "Rubik-Medium",
     fontSize: 18,
     fontWeight: "700",
     color: "#12283f"
@@ -116,7 +123,6 @@ const styles = StyleSheet.create({
     marginTop: 16,
     textAlign: 'center',
     lineHeight: 19,
-    fontFamily: "Rubik-Medium",
     fontSize: 14,
     color: "#12283f"
   }

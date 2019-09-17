@@ -21,7 +21,6 @@ export const getNotifications = () => async (dispatch) => {
       dispatch(showAppError(response.message));
     }
   }catch(error){
-    console.log('[notifications.js] xxxx', error)
     dispatch(hideAppLoading());
     dispatch(showAppError(error.message));
   }

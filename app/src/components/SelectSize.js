@@ -20,10 +20,13 @@ const styles = StyleSheet.create({
   },
   label: {
     lineHeight: 19,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     color: "#8f8b99"
-  }
+  },
+  textItem: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });
 
 /* Component ==================================================================== */
@@ -48,9 +51,10 @@ class SelectSize extends Component {
           data={data}
           rippleOpacity={0}
           labelFontSize={14}
-          fontSize={14}
+          fontSize={16}
           value={value}
           onChangeText={onSelectedChange}
+          style={styles.textItem}
         />
       </View>
     )

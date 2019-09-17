@@ -4,13 +4,11 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  Button,
   ScrollView,
   ActivityIndicator,
-  Alert,
-  AsyncStorage,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import MenuIcon from '../../components/MenuIcon';
@@ -19,39 +17,27 @@ import TabChartIcon from '../../components/TabChartIcon';
 import DailyChart from './DailyChart';
 import WeeklyChart from './WeeklyChart';
 import MonthlyChart from './MonthlyChart';
-import { Hamburger, NotificationIcon } from '../../components/imageUrls';
-
-import { fetchRecentOrders } from '../../actions/order'; 
+import { NotificationIcon, Hamburger } from '../../components/imageUrls';
+import { fetchRecentOrders } from '../../actions/order';
 
 class DashboardScreen extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     title: 'Thống kê',
     headerLeft: (
-      <MenuIcon onPress={() => {
-        Alert.alert(
-          'Xác Nhận',
-          'Bạn có thật sự muốn đăng xuất ?',
-          [
-            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-            {text: 'OK', onPress: async () => {
-              await AsyncStorage.clear();
-
-              navigation.dispatch(StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'AuthLoading' })],
-                key: null,
-              }));
-
-            }},
-          ],
-          { cancelable: false }
-        )
-      }} icon={Hamburger} />
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <Image
+          style={{ width: 16, height: 12, marginLeft: 12 }}
+          source={Hamburger}
+        />
+      </TouchableOpacity>
     ),
     headerRight: (
       <MenuIcon onPress={() => navigation.navigate('OwnerNotification')} icon={NotificationIcon} />
-    )
+    ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   constructor(props) {
@@ -116,7 +102,7 @@ class DashboardScreen extends Component {
   render() {
     return (
       <ScrollView style={{ flex: 1, backgroundColor: 'white' }} contentContainerStyle={styles.container}>
-        <View style={{ height: 400 }}>
+        <View style={{ flex: 1 }}>
           <TabView
             navigationState={this.state}
             renderScene={SceneMap({
@@ -127,7 +113,10 @@ class DashboardScreen extends Component {
             swipeEnabled={false}
             renderTabBar={this.renderTabBar}
             onIndexChange={index => this.setState({ index })}
-            initialLayout={{ width: Dimensions.get('window').width, height: 400 }}
+            initialLayout={{
+              width: Dimensions.get('window').width,
+              height: Dimensions.get('window').width
+            }}
           />
         </View>
         { this.renderRecentOrders() }    
@@ -138,7 +127,7 @@ class DashboardScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingHorizontal: 20,
   },
   lastesTransContainer: {
     marginTop: 20,

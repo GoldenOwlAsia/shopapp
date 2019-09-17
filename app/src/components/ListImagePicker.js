@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ImagePicker, Permissions } from 'expo';
-import { Image, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, Text, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import AvatarPicker from './AvatarPicker';
 import RemovableImage from './RemovableImage';
 import { PickAvatarIcon, EditIcon } from './imageUrls';
@@ -32,6 +32,7 @@ class ListImagePicker extends React.PureComponent {
   onRemoveImage = (id) => {
     const newArray = this.state.images.filter(item => item.id !== id);
     this.setState({ images: newArray });
+    this.props.onImagesChange(newArray);
   }
 
   render(){
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    width: (Dimensions.get('window').width - 20),
   },
   
 });

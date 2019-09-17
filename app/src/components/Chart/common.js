@@ -248,7 +248,6 @@ const defaultYAxisLabelStyle = {
 }
 
 export const drawYAxisLabels = (arr, height, minValue, style = defaultYAxisLabelStyle) => {
-  console.log('xxxx v[]', arr);
   return (
     <View style={{
       width: 33,

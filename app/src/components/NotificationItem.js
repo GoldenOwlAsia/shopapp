@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { TouchableOpacity, Image, Text, StyleSheet, View } from 'react-native';
 import { distanceInWords, format } from 'date-fns';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -30,7 +31,7 @@ const NotificationItem = (props) => {
             <Text style={styles.supplierName}>{createdByStaff.fullName}&nbsp;</Text>
              vừa bán được {name} cho khách hàng {customer.name}
           </Text>
-          <Text style={styles.time}>&nbsp;{date}</Text>
+          <Text style={styles.time}>&nbsp;{moment(date).fromNow()}</Text>
         </View>
         {/* <Image style={styles.rightIcon} source={PlusIcon} /> */}
         <MaterialIcons color="#D3D5DA" size={18} style={styles.rightIcon} name="keyboard-arrow-right" />
@@ -73,14 +74,12 @@ const styles = StyleSheet.create({
   },
   supplierName: {
     fontSize: 16,
-    fontFamily: 'Rubik-Medium',
     // fontWeight: '500',
     color: '#12283F',
     marginRight: 4,
   },
   message: {
     fontSize: 16,
-    fontFamily: 'Rubik-Regular',
     color: '#A8A8A8',
   },
   time: {

@@ -7,39 +7,36 @@ import {
   Image,
   Text,
   Alert,
-  Platform,
+  TouchableOpacity
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { StackActions, NavigationActions } from 'react-navigation';
-import { MaterialIcons } from '@expo/vector-icons';
-
 import { connect } from 'react-redux';
-
 import AuthHeader from '../components/AuthHeader';
 import TextInput from '../components/TextInput';
-import Button from '../components/Button';
+import { BackArrow } from '../components/imageUrls';
 import BaseButton from '../components/BaseButton';
 import TouchableView from '../components/TouchableView';
 import { ArrowIcon } from '../components/imageUrls';
-
 import { login } from '../actions/auth';
 import { LOGIN_SUCCESS } from '../actions/types';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15,
+    padding: 30,
     backgroundColor: '#FFF',
   },
   contentWrapper: {
-    flex: 1
+    // height: Dimensions.get('window').height / 3,
+    justifyContent: 'center',
+    marginBottom: 90
   },
   buttonWrapper: {
     paddingBottom: 10
   },
   forgotPasswordText: {
-    marginVertical: 20,
-    fontFamily: "Rubik-Regular",
+    marginTop: 16,
     fontSize: 14,
     fontWeight: "600",
     fontStyle: "normal",
@@ -49,7 +46,13 @@ const styles = StyleSheet.create({
   rightIcon: {
     width: 16,
     height: 16
-  }
+  },
+  headerAuth: {
+    // height: Dimensions.get('window').height / 3,
+    justifyContent: 'center',
+    paddingTop: 50,
+    paddingBottom: 80
+  },
 });
 
 //TODO write a component
@@ -58,6 +61,21 @@ const RightIcon = () => (
 )
 
 class SignInScreen extends React.Component {
+
+  static navigationOptions = ({ navigation }) => ({
+    headerLeft: (
+      <TouchableOpacity onPress={() => navigation.goBack(null)}>
+        <Image
+          style={{ width: 24, height: 16, marginLeft: 16 }}
+          source={BackArrow}
+        />
+      </TouchableOpacity>
+    ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
+  });
+
   constructor(props) {
     super(props);
     this.state = {
@@ -66,10 +84,6 @@ class SignInScreen extends React.Component {
       loading: false,
     }
   }
-
-  static navigationOptions = {
-    title: '',
-  };
 
   handleSignIn = async () => {
     try{
@@ -80,7 +94,7 @@ class SignInScreen extends React.Component {
         this.setState({ loading: false, username: '', password: '' }, () => {
           const resetAction = StackActions.reset({
             index: 0,
-            actions: [NavigationActions.navigate({ routeName: 'App' })],
+            actions: [NavigationActions.navigate({ routeName: 'MainStaff' })],
             key: null,
           });
           this.props.navigation.dispatch(resetAction);
@@ -118,9 +132,7 @@ class SignInScreen extends React.Component {
     });
   }
 
-  goToForgotPassword = () => {
-    console.log('go to forgot password!');
-  }
+  goToForgotPassword = () => {}
 
   onSubmitEditing = () => {
     this.passwordRef.input.focus()
@@ -132,12 +144,12 @@ class SignInScreen extends React.Component {
 
   render() {
     return (
+      <View style={styles.container}>
         <KeyboardAwareScrollView
           enableOnAndroid
-          contentContainerStyle={{ flex: 1 }}
+          // contentContainerStyle={{ flex: 1 }}
         >
-          <View style={styles.container}>
-          <AuthHeader />
+          <View style={styles.headerAuth}><AuthHeader /></View>
           <View style={styles.contentWrapper}>
             <TextInput
               label="Tên đăng nhập"
@@ -146,6 +158,7 @@ class SignInScreen extends React.Component {
               returnKeyType={"next"}
               onSubmitEditing={this.onSubmitEditing}
               inputRef={(ref) => this.usernameRef = ref}
+              style={{marginBottom: 10}}
             />
 
             <TextInput
@@ -157,7 +170,7 @@ class SignInScreen extends React.Component {
               inputRef={(ref) => this.passwordRef = ref}
               onSubmitEditing={this.onEndEditing}
             />
-            </View>
+          </View>
             <BaseButton
               loading={this.state.loading}
               onPress={this.handleSignIn}
@@ -167,8 +180,8 @@ class SignInScreen extends React.Component {
             <TouchableView onPress={this.goToForgotPassword}>
               <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
             </TouchableView>
-          </View> 
         </KeyboardAwareScrollView>
+      </View>
     );
   }
 }
