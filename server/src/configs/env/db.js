@@ -1,6 +1,6 @@
 const MYSQL_HOST = process.env.MYSQL_HOST || "localhost";
 const MYSQL_USER = process.env.MYSQL_USER || "root";
-const MYSQL_PASS = process.env.MYSQL_PASS || "123456";
+const MYSQL_PASS = process.env.MYSQL_PASS || "password";
 const MYSQL_DATABASE = process.env.MYSQL_DATABASE || "shopApp";
 const MYSQL_DATABASE_TEST = process.env.MYSQL_DATABASE_TEST || "shopAppTest";
 const MYSQL_PORT = process.env.MYSQL_PORT || "3306";

@@ -5,7 +5,6 @@ import { FormattedProvider, FormattedMessage } from "react-native-globalize";
 import {
   Button,
   Title,
-  ListView,
   View,
   Tile,
   ImageBackground,

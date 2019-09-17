@@ -1,7 +1,7 @@
-import Expo from 'expo';
+import { registerRootComponent } from 'expo';
 
 import App from './src/App';
 
 import StoryBook from './storybook';
 
-Expo.registerRootComponent(App);
+registerRootComponent(App);
