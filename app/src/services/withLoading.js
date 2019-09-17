@@ -31,11 +31,11 @@ const withLoading = () => WrappedComponent => {
       return (
         <View style={{ flex: 1, position: 'relative' }}>
           <WrappedComponent  {...this.props} />
-          { loading && (
+          {loading && (
             <View style={{ backgroundColor: '#00000063', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
               <ActivityIndicator color="white" size="large" animating />
             </View>
-          ) }
+          )}
           <ErrorModal onHideModal={this.onHideModal} {...error} />
         </View>
       );
@@ -54,6 +54,6 @@ const mapDispatch = {
 }
 
 const withSpinner = () =>
-  compose(connect(mapState, mapDispatch, null, { withRef: true }), withLoading());
+  compose(connect(mapState, mapDispatch, null, { forwardRef: true }), withLoading());
 
 export default withSpinner;

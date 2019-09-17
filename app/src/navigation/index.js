@@ -1,8 +1,9 @@
 import React from 'react';
 import {
   createDrawerNavigator,
-  createStackNavigator,
-} from "react-navigation";
+} from "react-navigation-drawer";
+import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
 
 import { AsyncStorage } from "react-native"
 
@@ -21,17 +22,17 @@ import EditProductScreen from '../screens/EditProduct';
 const AppOwnerDrawer = createDrawerNavigator(
   {
     Owner: OwnerStack,
-  },{
-      contentComponent: props => <CustomDrawerContent {...props} />,
-  }
+  }, {
+  contentComponent: props => <CustomDrawerContent {...props} />,
+}
 );
 
 const AppStaffDrawer = createDrawerNavigator(
   {
     App: AppStack,
-  },{
-      contentComponent: props => <CustomDrawerContent {...props} />,
-  }
+  }, {
+  contentComponent: props => <CustomDrawerContent {...props} />,
+}
 );
 
 const ProductDetailStack = createStackNavigator({
@@ -59,4 +60,4 @@ const AppNavigator = createStackNavigator(
   }
 );
 
-export default AppNavigator;
+export default createAppContainer(AppNavigator);

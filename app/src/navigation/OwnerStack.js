@@ -1,8 +1,9 @@
 import React from "react";
 import {
-  createStackNavigator,
   createBottomTabNavigator
-} from 'react-navigation'
+} from 'react-navigation-tabs'
+
+import { createStackNavigator } from 'react-navigation-stack'
 
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import DashboardScreen from '../screens/Dashboard';
@@ -69,8 +70,8 @@ export default createBottomTabNavigator({
   tabBarOptions: {
     showLabel: false,
     style: {
-        borderTopWidth: 1,
-        borderTopColor: '#F4F4F4'
+      borderTopWidth: 1,
+      borderTopColor: '#F4F4F4'
     },
   }
 });

@@ -1,16 +1,16 @@
 import React from "react";
 import { Image } from 'react-native';
 import {
-  createStackNavigator,
   createBottomTabNavigator
-} from 'react-navigation'
+} from 'react-navigation-tabs'
+import { createStackNavigator } from 'react-navigation-stack'
 import HomeScreen from '../screens/Home';
 import CustomersScreen from '../screens/Customers';
 import CheckoutScreen from '../screens/Checkout';
 import { CheckoutTabIconActive, CheckoutTabIconInactive, HomeTabIconActive, HomeTabIconInactive, CustomerTabIconActive, CustomerTabIconInactive } from '../components/imageUrls';
 
 const TabIcon = ({ icon }) => (
-    <Image resizeMode="contain" source={icon} style={{ width: 28, height: 28 }} />
+  <Image resizeMode="contain" source={icon} style={{ width: 28, height: 28 }} />
 )
 
 const TabIconCart = ({ icon }) => (
@@ -49,7 +49,7 @@ CheckoutStack.navigationOptions = {
       } else {
         defaultHandler();
       }
-    } 
+    }
   },
   tabBarVisible: false,
 };
@@ -72,8 +72,8 @@ export default createBottomTabNavigator({
   tabBarOptions: {
     showLabel: false,
     style: {
-        borderTopWidth: 1,
-        borderTopColor: '#F4F4F4'
+      borderTopWidth: 1,
+      borderTopColor: '#F4F4F4'
     },
   }
 });

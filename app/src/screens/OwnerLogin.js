@@ -51,8 +51,8 @@ class OwnerLogin extends Component {
 
   onChangeText = (text) => {
     this.setState({ codeValue: text, index: text.length }, () => {
-      if(this.state.codeValue.length === 4){
-        this.hiddenInput.blur();  
+      if (this.state.codeValue.length === 4) {
+        this.hiddenInput.blur();
         setTimeout(() => {
           this.handleLogin(this.state.codeValue);
         }, 500);
@@ -74,7 +74,7 @@ class OwnerLogin extends Component {
     if (result.type === OWNER_LOGIN_SUCCESS) {
       await AsyncStorage.setItem('authToken', result.payload.authToken);
       await AsyncStorage.setItem('isOwner', 'true');
-    
+
       const resetAction = StackActions.reset({
         index: 0,
         actions: [NavigationActions.navigate({ routeName: 'MainOwner' })],
@@ -82,7 +82,7 @@ class OwnerLogin extends Component {
       });
       this.props.navigation.dispatch(resetAction);
 
-    }else {
+    } else {
       Alert.alert('Error', 'Invalid code');
       this.setState({ codeValue: '', index: 0 })
     }
@@ -90,7 +90,7 @@ class OwnerLogin extends Component {
 
   render() {
     const { codeValue, index, loading } = this.state;
-    if(loading){
+    if (loading) {
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator animating size="large" />
@@ -99,23 +99,23 @@ class OwnerLogin extends Component {
     }
     return (
       <View style={styles.container}>
-      <KeyboardAwareScrollView enableOnAndroid>
-        <Text style={styles.guide}>
-          Chúng tôi đã gửi cho bạn 4 kí tự bảo mật đến
-          số điện thoại của bạn để xác nhận đăng nhập
+        <KeyboardAwareScrollView enableOnAndroid>
+          <Text style={styles.guide}>
+            Chúng tôi đã gửi cho bạn 4 kí tự bảo mật đến
+            số điện thoại của bạn để xác nhận đăng nhập
         </Text>
-        <Text style={styles.hint}>Nhập mã bảo mật ở đây</Text>
-        <View style={styles.codeContainer}>
-          <CodeElement onSelect={this.onSelect} index={0} value={codeValue.charAt(0)} editing={index === 0} />
-          <CodeElement onSelect={this.onSelect} index={1} value={codeValue.charAt(1)} editing={index === 1} />
-          <CodeElement onSelect={this.onSelect} index={2} value={codeValue.charAt(2)} editing={index === 2} />
-          <CodeElement onSelect={this.onSelect} index={3} value={codeValue.charAt(3)} editing={index === 3} />
-        </View>
-        <TextInput value={this.state.codeValue} style={styles.hiddenInput} ref={(ref)=>{this.hiddenInput = ref}} returnKeyType="done" maxLength={4} keyboardType="numeric" onChangeText={this.onChangeText} autoFocus />
-        <Text style={styles.notMessage}>Không nhận được tin nhắn.</Text>
-        <TouchableView>
-          <Text style={styles.resendText}>Gửi lại!</Text>
-        </TouchableView>
+          <Text style={styles.hint}>Nhập mã bảo mật ở đây</Text>
+          <View style={styles.codeContainer}>
+            <CodeElement onSelect={this.onSelect} index={0} value={codeValue.charAt(0)} editing={index === 0} />
+            <CodeElement onSelect={this.onSelect} index={1} value={codeValue.charAt(1)} editing={index === 1} />
+            <CodeElement onSelect={this.onSelect} index={2} value={codeValue.charAt(2)} editing={index === 2} />
+            <CodeElement onSelect={this.onSelect} index={3} value={codeValue.charAt(3)} editing={index === 3} />
+          </View>
+          <TextInput value={this.state.codeValue} style={styles.hiddenInput} ref={(ref) => { this.hiddenInput = ref }} returnKeyType="done" maxLength={4} keyboardType="numeric" onChangeText={this.onChangeText} autoFocus />
+          <Text style={styles.notMessage}>Không nhận được tin nhắn.</Text>
+          <TouchableView>
+            <Text style={styles.resendText}>Gửi lại!</Text>
+          </TouchableView>
         </KeyboardAwareScrollView>
       </View>
     )
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   guide: {
-    marginBottom: 50, 
+    marginBottom: 50,
     textAlign: 'center',
     lineHeight: 22,
     fontSize: 16,

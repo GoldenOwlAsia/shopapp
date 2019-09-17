@@ -75,8 +75,8 @@ class ProductsScreen extends Component {
     const products = this.props.products.filter(item => !this.state.searchKeyword || item.name.toLowerCase().includes(this.state.searchKeyword.toLowerCase()));
     return (
       <View style={styles.container}>
-        <View style={{paddingHorizontal: 12}}>
-            <SearchBar
+        <View style={{ paddingHorizontal: 12 }}>
+          <SearchBar
             placeholder="Tìm kiếm"
             value={this.state.searchKeyword}
             onChangeText={this.onChangeSearhKeyword}
