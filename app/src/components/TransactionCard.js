@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import format from 'date-fns/format';
+import { format } from 'date-fns'
 import TouchableView from './TouchableView';
 import { CardTransactionIcon } from './imageUrls';
 import { formatMoney } from '../utils/helpers';
@@ -55,19 +55,19 @@ const TransactionCard = ({ selected, onPress, order }) => {
         <View style={styles.content}>
           <Text style={[styles.primary, selected && styles.selectedTextColor]}>{formatMoney(grandTotal)} đ</Text>
           <Text style={[styles.primary, selected && styles.selectedTextColor]}>{fullName}</Text>
-          <Text style={[styles.secondary, selected && styles.selectedTextColor]}>{format(createdAt, 'DD/MM/YYYY')}</Text>
+          <Text style={[styles.secondary, selected && styles.selectedTextColor]}>{format(new Date(createdAt), 'dd/MM/yyyy')}</Text>
         </View>
         <Image style={styles.icon} source={CardTransactionIcon} resizeMode="contain" />
       </View>
     </TouchableView>
   )
 }
- 
+
 TransactionCard.propTypes = {
 };
 TransactionCard.defaultProps = {
 };
 TransactionCard.componentName = 'TransactionCard';
- 
+
 /* Export Component ==================================================================== */
 export default TransactionCard;
