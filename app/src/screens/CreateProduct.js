@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import TextInput  from '../components/TextInput';
+import TextInput from '../components/TextInput';
 import AvatarPicker from '../components/AvatarPicker';
 import BaseButton from '../components/BaseButton';
 import ColorPicker from '../components/ColorPicker';
@@ -31,9 +31,9 @@ const COLORS = [
 ]
 
 const SIZES = [
-  { value: '8 (EU)'},
-  { value: '10 (EU)'},
-  { value: '12 (EU)'},
+  { value: '8 (EU)' },
+  { value: '10 (EU)' },
+  { value: '12 (EU)' },
 ]
 
 class CreateProduct extends Component {
@@ -72,9 +72,9 @@ class CreateProduct extends Component {
 
   componentDidMount() {
     this.props.getCategories()
-    .then(categories => {
-      this.setState({ categories })
-    })
+      .then(categories => {
+        this.setState({ categories })
+      })
   }
 
   handleValidateForm = (product) => Object.values(product).find(item => item === null);
@@ -102,7 +102,7 @@ class CreateProduct extends Component {
       title,
       message,
       [
-        {text: 'OK', onPress: onPressOK},
+        { text: 'OK', onPress: onPressOK },
       ],
       { cancelable: true }
     )
@@ -141,12 +141,12 @@ class CreateProduct extends Component {
             value={name}
             onChangeText={(value) => this.onChangeText('name', value)}
           />
-          <View style={{height: 5}} />
+          <View style={{ height: 5 }} />
           <SelectSize
             onSelectedChange={(value) => this.onChangeText('category', value)}
             label={'Loại sản phẩm'} data={this.state.categories}
           />
-          <View style={{height: 5}} />
+          <View style={{ height: 5 }} />
           <View style={styles.horizontal}>
             <View style={styles.horizontalItem}>
               <TextInput
@@ -163,7 +163,7 @@ class CreateProduct extends Component {
               />
             </View>
           </View>
-          <View style={{height: 5}} />
+          <View style={{ height: 5 }} />
           <View style={styles.horizontal}>
             <View style={styles.horizontalItem}>
               <TextInput
@@ -182,16 +182,16 @@ class CreateProduct extends Component {
               />
             </View>
           </View>
-          <View style={{height: 5}} />
+          <View style={{ height: 5 }} />
           <TextInput
             label="Ghi chú"
             value={description}
             onChangeText={(value) => this.onChangeText('description', value)}
-            multiline = {true}
-            numberOfLines = {4}
+            multiline={true}
+            numberOfLines={4}
           />
         </KeyboardAwareScrollView>
-        <View style={{marginHorizontal: 24, alignItems: 'center'}}>
+        <View style={{ marginHorizontal: 24, alignItems: 'center' }}>
           <BaseButton onPress={this.handleSubmit} containerStyle={styles.btnConfirm} title="Xác nhận" />
         </View>
       </View>

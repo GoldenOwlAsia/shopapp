@@ -22,7 +22,8 @@ import {
   Row,
   Icon
 } from "@shoutem/ui";
-import { BarCodeScanner, Permissions } from "expo";
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import * as Permissions from 'expo-permissions'
 
 const ContainerView = styled.View`
   flex: 1;
