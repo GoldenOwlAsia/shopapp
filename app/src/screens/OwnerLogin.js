@@ -9,17 +9,16 @@ import {
   ActivityIndicator,
   AsyncStorage,
   TouchableOpacity,
-  Image,
+  Image
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import TouchableView from '../components/TouchableView';
 import { BackArrow } from '../components/imageUrls';
 import { ownerLogin } from '../actions/auth';
 import { OWNER_LOGIN_SUCCESS } from '../actions/types';
 
 class OwnerLogin extends Component {
-
   static navigationOptions = ({ navigation }) => ({
     headerLeft: (
       <TouchableOpacity onPress={() => navigation.goBack(null)}>
@@ -30,8 +29,8 @@ class OwnerLogin extends Component {
       </TouchableOpacity>
     ),
     headerStyle: {
-      borderBottomWidth: 0,
-    },
+      borderBottomWidth: 0
+    }
   });
 
   constructor(props) {
@@ -39,8 +38,9 @@ class OwnerLogin extends Component {
     this.state = {
       codeValue: '',
       index: 0,
-      loading: false,
-    }
+      loading: false
+    };
+    this.hiddenInputRef = React.createRef();
   }
 
   componentDidMount() {
@@ -49,25 +49,25 @@ class OwnerLogin extends Component {
     }, 100);
   }
 
-  onChangeText = (text) => {
+  onChangeText = text => {
     this.setState({ codeValue: text, index: text.length }, () => {
       if (this.state.codeValue.length === 4) {
-        this.hiddenInput.blur();
+        this.hiddenInputRef.current.blur();
         setTimeout(() => {
           this.handleLogin(this.state.codeValue);
         }, 500);
       }
     });
-  }
+  };
 
-  onSelect = (index) => {
-    this.hiddenInput.blur();
+  onSelect = index => {
+    this.hiddenInputRef.current.blur();
     setTimeout(() => {
-      this.hiddenInput.focus();
+      this.hiddenInputRef.current.focus();
     }, 100);
-  }
+  };
 
-  handleLogin = async (code) => {
+  handleLogin = async code => {
     this.setState({ loading: true });
     const result = await this.props.ownerLogin({ code });
     this.setState({ loading: false });
@@ -78,15 +78,14 @@ class OwnerLogin extends Component {
       const resetAction = StackActions.reset({
         index: 0,
         actions: [NavigationActions.navigate({ routeName: 'MainOwner' })],
-        key: null,
+        key: null
       });
       this.props.navigation.dispatch(resetAction);
-
     } else {
       Alert.alert('Error', 'Invalid code');
-      this.setState({ codeValue: '', index: 0 })
+      this.setState({ codeValue: '', index: 0 });
     }
-  }
+  };
 
   render() {
     const { codeValue, index, loading } = this.state;
@@ -95,49 +94,81 @@ class OwnerLogin extends Component {
         <View style={styles.loadingContainer}>
           <ActivityIndicator animating size="large" />
         </View>
-      )
+      );
     }
     return (
       <View style={styles.container}>
         <KeyboardAwareScrollView enableOnAndroid>
           <Text style={styles.guide}>
-            Chúng tôi đã gửi cho bạn 4 kí tự bảo mật đến
-            số điện thoại của bạn để xác nhận đăng nhập
-        </Text>
+            Chúng tôi đã gửi cho bạn 4 kí tự bảo mật đến số điện thoại của bạn
+            để xác nhận đăng nhập
+          </Text>
           <Text style={styles.hint}>Nhập mã bảo mật ở đây</Text>
           <View style={styles.codeContainer}>
-            <CodeElement onSelect={this.onSelect} index={0} value={codeValue.charAt(0)} editing={index === 0} />
-            <CodeElement onSelect={this.onSelect} index={1} value={codeValue.charAt(1)} editing={index === 1} />
-            <CodeElement onSelect={this.onSelect} index={2} value={codeValue.charAt(2)} editing={index === 2} />
-            <CodeElement onSelect={this.onSelect} index={3} value={codeValue.charAt(3)} editing={index === 3} />
+            <CodeElement
+              onSelect={this.onSelect}
+              index={0}
+              value={codeValue.charAt(0)}
+              editing={index === 0}
+            />
+            <CodeElement
+              onSelect={this.onSelect}
+              index={1}
+              value={codeValue.charAt(1)}
+              editing={index === 1}
+            />
+            <CodeElement
+              onSelect={this.onSelect}
+              index={2}
+              value={codeValue.charAt(2)}
+              editing={index === 2}
+            />
+            <CodeElement
+              onSelect={this.onSelect}
+              index={3}
+              value={codeValue.charAt(3)}
+              editing={index === 3}
+            />
           </View>
-          <TextInput value={this.state.codeValue} style={styles.hiddenInput} ref={(ref) => { this.hiddenInput = ref }} returnKeyType="done" maxLength={4} keyboardType="numeric" onChangeText={this.onChangeText} autoFocus />
+          <TextInput
+            value={this.state.codeValue}
+            style={styles.hiddenInput}
+            ref={this.hiddenInputRef}
+            returnKeyType="done"
+            maxLength={4}
+            keyboardType="numeric"
+            onChangeText={this.onChangeText}
+            autoFocus
+          />
           <Text style={styles.notMessage}>Không nhận được tin nhắn.</Text>
           <TouchableView>
             <Text style={styles.resendText}>Gửi lại!</Text>
           </TouchableView>
         </KeyboardAwareScrollView>
       </View>
-    )
+    );
   }
 }
 
-const CodeElement = (props) => {
+const CodeElement = props => {
   const { index, value, editing, onSelect } = props;
   const _onSelect = () => onSelect(index);
   return (
-    <TouchableView onPress={_onSelect} style={[styles.codeWrap, editing && styles.codeWrapEditing]}>
+    <TouchableView
+      onPress={_onSelect}
+      style={[styles.codeWrap, editing && styles.codeWrapEditing]}
+    >
       <Text style={styles.valueCode}>{value}</Text>
     </TouchableView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 30,
     paddingVertical: 40,
-    backgroundColor: '#FFF',
+    backgroundColor: '#FFF'
   },
   loadingContainer: {
     position: 'absolute',
@@ -146,32 +177,32 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   guide: {
     marginBottom: 50,
     textAlign: 'center',
     lineHeight: 22,
-    fontSize: 16,
+    fontSize: 16
     // color: "#12283f",
   },
   hint: {
     textAlign: 'center',
     lineHeight: 24,
     fontSize: 18,
-    color: "#868686"
+    color: '#868686'
   },
   notMessage: {
     textAlign: 'center',
     lineHeight: 24,
     fontSize: 14,
-    color: "#868686"
+    color: '#868686'
   },
   codeContainer: {
     marginTop: 30,
     marginBottom: 30,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-around'
   },
   codeWrap: {
     width: 60,
@@ -182,11 +213,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 1,
     borderColor: '#EEEEEE',
-    backgroundColor: '#EEEEEE',
+    backgroundColor: '#EEEEEE'
   },
   codeWrapEditing: {
     borderColor: '#EEEEEE',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF'
     // shadowColor: '#EDF1FF'
   },
   valueCode: {
@@ -196,22 +227,23 @@ const styles = StyleSheet.create({
   resendText: {
     color: '#5175FF',
     alignSelf: 'center',
-    fontSize: 16,
+    fontSize: 16
   },
   hiddenInput: {
-    width: 0,
-    height: 0,
+    // width: 0,
+    // height: 0,
     position: 'absolute',
-    left: -999,
+    left: -999
   }
 });
 
-const mapStateToProps = state => {
-  return {};
-};
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = {
   ownerLogin
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OwnerLogin);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(OwnerLogin);
