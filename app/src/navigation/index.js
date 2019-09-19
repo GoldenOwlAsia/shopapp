@@ -1,11 +1,9 @@
 import React from 'react';
-import {
-  createDrawerNavigator,
-} from "react-navigation-drawer";
-import { createAppContainer } from 'react-navigation'
-import { createStackNavigator } from 'react-navigation-stack'
+import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
-import { AsyncStorage } from "react-native"
+import { AsyncStorage } from 'react-native';
 
 import AppStack from './AppStack';
 import AuthStack from './AuthStack';
@@ -21,30 +19,32 @@ import EditProductScreen from '../screens/EditProduct';
 
 const AppOwnerDrawer = createDrawerNavigator(
   {
-    Owner: OwnerStack,
-  }, {
-  contentComponent: props => <CustomDrawerContent {...props} />,
-}
+    Owner: OwnerStack
+  },
+  {
+    contentComponent: props => <CustomDrawerContent {...props} />
+  }
 );
 
 const AppStaffDrawer = createDrawerNavigator(
   {
-    App: AppStack,
-  }, {
-  contentComponent: props => <CustomDrawerContent {...props} />,
-}
+    App: AppStack
+  },
+  {
+    contentComponent: props => <CustomDrawerContent {...props} />
+  }
 );
 
 const ProductDetailStack = createStackNavigator({
   ProductDetail: ProductDetailScreen,
-  EditProduct: EditProductScreen,
+  EditProduct: EditProductScreen
 });
 
 const AppNavigator = createStackNavigator(
   {
     // You could add another route here for authentication.
     // Read more at https://reactnavigation.org/docs/en/auth-flow.html
-    AuthLoading: AuthLoading,
+    AuthLoading,
     Auth: AuthStack,
     MainOwner: AppOwnerDrawer,
     MainStaff: AppStaffDrawer,
@@ -52,11 +52,11 @@ const AppNavigator = createStackNavigator(
     CreateStaff: CreateStaffStack,
     OwnerNotification: OwnerNotificationStack,
     CreateProduct: CreateProductStack,
-    ProductDetail: ProductDetailStack,
+    ProductDetail: ProductDetailStack
   },
   {
     initialRouteName: 'AuthLoading',
-    headerMode: 'none',
+    headerMode: 'none'
   }
 );
 

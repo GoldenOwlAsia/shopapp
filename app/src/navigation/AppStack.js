@@ -1,49 +1,57 @@
-import React from "react";
+import React from 'react';
 import { Image } from 'react-native';
-import {
-  createBottomTabNavigator
-} from 'react-navigation-tabs'
-import { createStackNavigator } from 'react-navigation-stack'
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
 import HomeScreen from '../screens/Home';
 import CustomersScreen from '../screens/Customers';
 import CheckoutScreen from '../screens/Checkout';
-import { CheckoutTabIconActive, CheckoutTabIconInactive, HomeTabIconActive, HomeTabIconInactive, CustomerTabIconActive, CustomerTabIconInactive } from '../components/imageUrls';
+import {
+  CheckoutTabIconActive,
+  CheckoutTabIconInactive,
+  HomeTabIconActive,
+  HomeTabIconInactive,
+  CustomerTabIconActive,
+  CustomerTabIconInactive
+} from '../components/imageUrls';
 
 const TabIcon = ({ icon }) => (
   <Image resizeMode="contain" source={icon} style={{ width: 28, height: 28 }} />
-)
+);
 
 const TabIconCart = ({ icon }) => (
   <Image resizeMode="contain" source={icon} style={{ width: 42, height: 42 }} />
-)
+);
 
 const HomeStack = createStackNavigator({
-  Home: HomeScreen,
+  Home: HomeScreen
 });
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Products',
   tabBarIcon: ({ focused }) => (
     <TabIcon icon={focused ? HomeTabIconActive : HomeTabIconInactive} />
-  ),
+  )
 };
 
 const CheckoutStack = createStackNavigator({
-  Checkout: CheckoutScreen,
+  Checkout: CheckoutScreen
 });
 
 CheckoutStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
-    <TabIconCart icon={focused ? CheckoutTabIconActive : CheckoutTabIconInactive} />
+    <TabIconCart
+      icon={focused ? CheckoutTabIconActive : CheckoutTabIconInactive}
+    />
   ),
   tabBarOnPress: ({ navigation, defaultHandler }) => {
     // defaultHandler();
     if (navigation.isFocused()) {
       // Do nothing
     } else {
-      let parentNavigation = navigation.dangerouslyGetParent();
-      let prevRoute = parentNavigation.state.routes[parentNavigation.state.index];
-      const route = prevRoute.routes && prevRoute.routes[0]
+      const parentNavigation = navigation.dangerouslyGetParent();
+      const prevRoute =
+        parentNavigation.state.routes[parentNavigation.state.index];
+      const route = prevRoute.routes && prevRoute.routes[0];
       if (route && (route.params || {}).handler) {
         route.params.handler();
       } else {
@@ -51,29 +59,32 @@ CheckoutStack.navigationOptions = {
       }
     }
   },
-  tabBarVisible: false,
+  tabBarVisible: false
 };
 
 const CustomersStack = createStackNavigator({
-  Customers: CustomersScreen,
+  Customers: CustomersScreen
 });
 
 CustomersStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabIcon icon={focused ? CustomerTabIconActive : CustomerTabIconInactive} />
-  ),
+  )
 };
 
-export default createBottomTabNavigator({
-  HomeStack,
-  CheckoutStack,
-  CustomersStack,
-}, {
-  tabBarOptions: {
-    showLabel: false,
-    style: {
-      borderTopWidth: 1,
-      borderTopColor: '#F4F4F4'
-    },
+export default createBottomTabNavigator(
+  {
+    HomeStack,
+    CheckoutStack,
+    CustomersStack
+  },
+  {
+    tabBarOptions: {
+      showLabel: false,
+      style: {
+        borderTopWidth: 1,
+        borderTopColor: '#F4F4F4'
+      }
+    }
   }
-});
+);

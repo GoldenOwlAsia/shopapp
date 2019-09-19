@@ -5,15 +5,14 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  Image,
+  Image
 } from 'react-native';
 import MenuIcon from '../../components/MenuIcon';
 import NotificationItem from '../../components/NotificationItem';
 import { NotificationActiveIcon, CloseIcon } from '../../components/imageUrls';
-import { getNotifications } from '../../actions/notifications'
+import { getNotifications } from '../../actions/notifications';
 
 class NotificationScreen extends Component {
-
   static navigationOptions = ({ navigation }) => ({
     title: 'Thông báo',
     headerLeft: (
@@ -24,14 +23,8 @@ class NotificationScreen extends Component {
         />
       </TouchableOpacity>
     ),
-    headerRight: (
-      <MenuIcon icon={NotificationActiveIcon} />
-    )
+    headerRight: <MenuIcon icon={NotificationActiveIcon} />
   });
-
-  constructor(props) {
-    super(props);
-  }
 
   async componentDidMount() {
     this.props.getNotifications();
@@ -42,12 +35,14 @@ class NotificationScreen extends Component {
       item={item}
       // selected={index % 2 === 0}
     />
-  )
+  );
 
-  keyExtractor = (item) => `notification-${item.id}`
+  keyExtractor = item => `notification-${item.id}`;
 
   render() {
-    const notifications = this.props.notifications.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const notifications = this.props.notifications.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
     return (
       <View style={styles.container}>
         <FlatList
@@ -58,32 +53,30 @@ class NotificationScreen extends Component {
           ItemSeparatorComponent={Divider}
         />
       </View>
-    )
+    );
   }
 }
 
-const Divider = () => (
-  <View style={styles.divider} />
-)
+const Divider = () => <View style={styles.divider} />;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: '#FFF'
   },
   divider: {
     height: 1,
-    backgroundColor: '#EAEAEA',
+    backgroundColor: '#EAEAEA'
   }
 });
 
-const mapStateToProps = (state) => ({
-  notifications: state.Notifications.notifications,
-})
+const mapStateToProps = state => ({
+  notifications: state.Notifications.notifications
+});
 
 const mapDispatchToProps = {
-  getNotifications,
-}
+  getNotifications
+};
 
 export default connect(
   mapStateToProps,
