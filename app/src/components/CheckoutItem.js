@@ -62,9 +62,6 @@ const Content = ({ quantity, onDecrease, onIncrease, onRemove }) => (
 
 /* Style */
 const styles = StyleSheet.create({
-  content: {
-    
-  },
   header: {
     flexDirection: 'row',
     alignItems: 'center', 
@@ -72,22 +69,20 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   arrow: {
-    width: 16,
-    height: 16,
+    width: 12,
+    height: 6,
   },
   title: {
     flex: 1,
     marginLeft: 15,
     marginRight: 15,
     lineHeight: 19,
-    // fontFamily: "Rubik-Medium",
     fontSize: 14,
     fontWeight: "700",
     color: "#12283f"
   },
   price: {
     lineHeight: 19,
-    // fontFamily: "Rubik-Medium",
     fontSize: 14,
     fontWeight: "700",
     color: "#5175ff"
@@ -100,10 +95,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
     paddingBottom: 10,
+    borderRadius: 4,
   },
   quantityText: {
     lineHeight: 14,
-    // fontFamily: "Rubik-Regular",
     fontSize: 12,
     color: "#666666",
     marginRight: 20

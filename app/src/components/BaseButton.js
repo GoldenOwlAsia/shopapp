@@ -147,8 +147,8 @@ const styles = StyleSheet.create({
     // flex: 1,
     backgroundColor: 'transparent',
     color: 'white',
-    fontSize: 16,
-    fontFamily: 'Rubik-Regular',
+    fontSize: 18,
+    letterSpacing: -0.5,
     textAlign: 'center',
     padding: 8,
     ...Platform.select({

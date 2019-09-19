@@ -10,6 +10,13 @@ import { formatMoney } from '../utils/helpers';
 /* Component ==================================================================== */
 class CustomerItem extends React.PureComponent {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isSwipe: false,
+    }
+  }
+
   onPress = () => {
     const { item, onItemClick } = this.props;
     onItemClick(item)
@@ -17,7 +24,7 @@ class CustomerItem extends React.PureComponent {
 
   onDelete = () => {
     const { item, onDelete } = this.props;
-    onDelete(item);
+    onDelete();
   }
 
   render(){
@@ -30,17 +37,22 @@ class CustomerItem extends React.PureComponent {
       {
         component : (<RemoveButton />),
         onPress: this.onDelete,
-        backgroundColor: 'transparent',
+        backgroundColor: '#E96C9A',
       }
     ]
 
     return (
-      <Swipeout disabled={!hasProducts} autoClose backgroundColor={'#FFF'} right={swipeoutBtns}>
+      <Swipeout
+        // disabled={!hasProducts}
+        autoClose backgroundColor={'#FFF'}
+        onOpen={() => this.setState({ isSwipe: true })}
+        onClose={() => this.setState({ isSwipe: false })}
+        right={swipeoutBtns} >
         <TouchableView onPress={this.onPress}>
-          <View style={styles.container}>
+          <View style={[styles.container, {backgroundColor: this.state.isSwipe ? '#E96C9A' : '#fff' }]}>
             <View style={styles.content}>
-              <Text style={styles.name}>{customerName}</Text>
-              <Text style={styles.product}>{`${quantity} sản phẩm - ${formatMoney(total)} VNĐ`}</Text>
+              <Text style={[styles.name, {color: this.state.isSwipe ? '#FFFFFF' : "#4c4c4c"}]}>{customerName}</Text>
+              <Text style={[styles.product, {color: this.state.isSwipe ? '#FFFFFF' :  "#8c8c8c"}]}>{`${quantity} sản phẩm - ${formatMoney(total)} VNĐ`}</Text>
             </View>
             <View style={styles.imageWrap}>
               { hasProducts && (
@@ -57,6 +69,7 @@ class CustomerItem extends React.PureComponent {
 const RemoveButton = (props) => {
   return (
     <View style={styles.removeContent}>
+      <Text style={{color: '#FFFFFF'}}>Xoá</Text>
       <Image resizeMode="contain" source={TrashWhite} style={styles.removeIcon} />
     </View>
   )
@@ -82,24 +95,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   content: {
     flex: 1,
-    marginRight: 10,
+    // marginRight: 10,
   },
   name: {
     lineHeight: 19,
-    fontFamily: "Rubik-Medium",
     fontSize: 16,
     fontWeight: "700",
     fontStyle: "normal",
-    color: "#4c4c4c"
   },
   product: {
     lineHeight: 18,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
-    color: "#8c8c8c"
   },
   imageWrap: {
     width: 48,
@@ -114,7 +124,7 @@ const styles = StyleSheet.create({
     height: 68,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#E96C9A'
+    backgroundColor: '#E96C9A',
   },
   removeIcon: {
     width: 24,

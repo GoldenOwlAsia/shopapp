@@ -4,19 +4,18 @@ import { colors } from "../utils/constants";
 import {
   StyleSheet,
   View,
-  Text,
   TouchableOpacity,
   Image,
   FlatList,
+  Alert,
 } from 'react-native';
-
-import { PlusIcon } from '../components/imageUrls';
+import { PlusIcon, Hamburger } from '../components/imageUrls';
 import SearchBar from '../components/SearchBar';
 import CustomerItem from '../components/CustomerItem';
 import NewCustomerModal from '../components/NewCustomerModal';
 import { CREATE_CUSTOMER_SUCCESS } from '../actions/types';
 
-import { createCustomer, changeSelectedCustomer } from '../actions/customer';
+import { createCustomer, changeSelectedCustomer, removeCustomer } from '../actions/customer';
 import { createOrder } from '../actions/order';
 
 class CustomersScreen extends Component {
@@ -29,7 +28,18 @@ class CustomersScreen extends Component {
           source={PlusIcon}
         />
       </TouchableOpacity>
-    )
+    ),
+    headerLeft: (
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <Image
+          style={{ width: 16, height: 12, marginLeft: 12 }}
+          source={Hamburger}
+        />
+      </TouchableOpacity>
+    ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   static getDerivedStateFromProps= (props, state) => {
@@ -63,6 +73,16 @@ class CustomersScreen extends Component {
 
   componentDidMount() {
     this.props.navigation.setParams({rightButtonHandler: this.handleAddCustomer});
+    this.props.navigation.setParams({ handler: this.openModal });
+  }
+
+  openModal = () => {
+    // const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
+    if (this.props.customers.length === 0) this.renderAlert('Nhắc nhở', 'Vui lòng tạo khách hàng');
+    else {
+      // this.props.updateOrderByCustomer({ customerId: this.props.selectedCustomer, items: selectedProducts });
+      this.props.navigation.navigate('Checkout');
+    }
   }
 
   handleItemClick = async (customer) => {
@@ -71,10 +91,14 @@ class CustomersScreen extends Component {
   }
 
   handleCreateCustomer = async (params) => {
-    const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
-    if (result.type === CREATE_CUSTOMER_SUCCESS) {
-      this.closeModal();
-      this.props.createOrder(this.props.selectedCustomer, []);
+    if (params.customerName === '' || params.customerPhoneNumber === '') {
+      this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin khách hàng');
+    } else {
+      const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
+      if (result.type === CREATE_CUSTOMER_SUCCESS) {
+        this.closeModal();
+        this.props.createOrder(this.props.selectedCustomer, []);
+      }
     }
   }
 
@@ -98,6 +122,11 @@ class CustomersScreen extends Component {
     });
   }
 
+  handleRemoveCustomer = async (customerId) => {
+    await this.props.removeCustomer(customerId);
+    this.renderAlert('Thành công', 'Xoá khách hàng thành công!',);
+  }
+
   renderItem = ({ item }) => {
     return (
       <CustomerItem
@@ -109,16 +138,28 @@ class CustomersScreen extends Component {
           products: item.products,
         }}
         onItemClick={this.handleItemClick}
-        onDelete={() => {}}
+        onDelete={() => this.handleRemoveCustomer(item.id)}
       />
     )
   }
 
+  renderAlert = (title, message, onPressOK) => (
+    Alert.alert(
+      title,
+      message,
+      [
+        {text: 'OK', onPress: onPressOK},
+      ],
+      { cancelable: true }
+    )
+  )
+
   render() {
     return (
       <View style={styles.container}>
-        <SearchBar placeholder="Tìm kiếm" onChangeText={this.onChangeSearchKeyword} value={this.state.searchKeyword} />
-        
+        <View style={styles.containerSearchBox}>
+          <SearchBar placeholder="Tìm kiếm" onChangeText={this.onChangeSearchKeyword} value={this.state.searchKeyword} />
+        </View>
         <FlatList
           style={styles.list}
           data={this.state.data}
@@ -144,13 +185,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.WHITE,
-    padding: 20,
+  },
+  containerSearchBox: {
+    paddingHorizontal: 12,
   },
   list: {
-    marginTop: 20,
+    marginTop: 24,
   },
   headerRightIcon: {
-    marginRight: 15,
+    marginRight: 12,
     width: 15,
     height: 15
   },
@@ -172,6 +215,7 @@ const mapDispatchToProps = {
   createCustomer,
   changeSelectedCustomer,
   createOrder,
+  removeCustomer,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomersScreen);

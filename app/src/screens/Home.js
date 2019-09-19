@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import lodash from 'lodash';
 import { connect } from 'react-redux';
 import {
   StyleSheet,
@@ -8,45 +9,40 @@ import {
   TouchableOpacity,
   Image,
   RefreshControl,
-  AsyncStorage,
-  Alert,
+  Alert
 } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
-import {
-  Squares,
-  Hamburger,
-  GridList,
-} from '../components/imageUrls';
+import { Squares, GridList, Hamburger } from '../components/imageUrls';
 import SearchBar from '../components/SearchBar';
 import NewCustomerModal from '../components/NewCustomerModal';
 import ProductItem from '../components/ProductItem';
-
 import { getAllProducts } from '../actions/product';
 import { createCustomer } from '../actions/customer';
 import { createOrder, updateOrderByCustomer } from '../actions/order';
 import { toggleListProducts } from '../actions/app';
-import { CREATE_CUSTOMER_SUCCESS } from "../actions/types";
+import { CREATE_CUSTOMER_SUCCESS } from '../actions/types';
 
 const mapDistch = {
-  toggleListProducts,
-}
+  toggleListProducts
+};
 
 const RightButton = connect(
-  (state) => ({
-    showList: state.App.showList,
+  state => ({
+    showList: state.App.showList
   }),
-  mapDistch,
+  mapDistch
 )(({ navigation, toggleListProducts, showList }) => (
-  <TouchableOpacity onPress={() => {
-    toggleListProducts();
-  }}>
+  <TouchableOpacity
+    onPress={() => {
+      toggleListProducts();
+    }}
+  >
     <Image
       style={styles.headerRightIcon}
       resizeMode="contain"
       source={showList ? Squares : GridList}
     />
   </TouchableOpacity>
-))
+));
 
 class HomeScreen extends Component {
   static navigatorStyle = {
@@ -54,54 +50,48 @@ class HomeScreen extends Component {
     navBarTranslucent: true
   };
 
-  static getDerivedStateFromProps= (props, state) => {
-    const allProducts = props.products.map((item) => ({ ...item, quantity: 0}));
-    if (props.selectedCustomer) {
-      const selectedCustomer = props.selectedCustomer
-      const selectedProducts = props.orders[selectedCustomer];
-      (selectedProducts || []).forEach((prod) => {
-        const prodIndex = allProducts.findIndex((item) => item.id === prod.id);
-        if (prodIndex > -1) {
-          allProducts[prodIndex].quantity = prod.quantity;
-        }
-      });
-    }
+  static getDerivedStateFromProps = (nextProps, prevState) => {
+    const { selectedCustomer, orders, products } = nextProps;
+    const { selectedProducts: prevSelectedProducts } = prevState;
+    let selectedProducts = [];
 
-    state.products = allProducts;
-    
-    return state;
+    if (selectedCustomer) selectedProducts = orders[selectedCustomer] || [];
+    else selectedProducts = prevSelectedProducts;
+
+    const allProducts = products.map(item => {
+      const foundSelectedProdIndex = selectedProducts.findIndex(
+        selItem => selItem.id === item.id
+      );
+
+      return foundSelectedProdIndex !== -1
+        ? {
+            ...item,
+            quantity: selectedProducts[foundSelectedProdIndex].quantity
+          }
+        : { ...item, quantity: 0 };
+    });
+
+    return {
+      ...prevState,
+      products: allProducts,
+      selectedProducts
+    };
   };
 
   static navigationOptions = ({ navigation }) => ({
     title: `${(navigation.state.params || {}).title || ''}`,
     headerRight: <RightButton navigation={navigation} />,
     headerLeft: (
-      <TouchableOpacity onPress={() => {
-        Alert.alert(
-          'Xác Nhận',
-          'Bạn có thật sự muốn đăng xuất ?',
-          [
-            {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-            {text: 'OK', onPress: async () => {
-              await AsyncStorage.clear();
-
-              navigation.dispatch(StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'AuthLoading' })],
-                key: null,
-              }));
-
-            }},
-          ],
-          { cancelable: false }
-        )
-      }}>
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
         <Image
-          style={styles.headerLeftIcon}
+          style={{ width: 16, height: 12, marginLeft: 12 }}
           source={Hamburger}
         />
       </TouchableOpacity>
-    )
+    ),
+    headerStyle: {
+      borderBottomWidth: 0
+    }
   });
 
   constructor(props) {
@@ -114,6 +104,7 @@ class HomeScreen extends Component {
       isOpenCreateCustomerModal: false,
       loading: false,
       grid: false,
+      selectedProducts: []
     };
   }
 
@@ -121,97 +112,182 @@ class HomeScreen extends Component {
     this.props.navigation.setParams({ handler: this.openModal });
   }
 
+  onItemPress(itemId) {}
+
   openModal = () => {
-    const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
+    const selectedProducts = this.state.selectedProducts.filter(
+      item => item.quantity && item.quantity > 0
+    );
     if (!selectedProducts.length) {
-      alert('Vui lòng chọn sản phẩm');
+      this.renderAlert('Nhắc nhở', 'Vui lòng chọn sản phẩm');
       return;
-    } 
+    }
+
     if (!this.props.selectedCustomer) {
+      console.log(
+        'TCL: openModal -> this.props.selectedCustomer',
+        this.props.selectedCustomer
+      );
       this.setModalVisible(true);
     } else {
-      this.props.updateOrderByCustomer({ customerId: this.props.selectedCustomer, items: selectedProducts });
+      this.props.updateOrderByCustomer(
+        this.props.selectedCustomer,
+        selectedProducts
+      );
       this.props.navigation.navigate('Checkout');
     }
-  }
-  
+  };
+
   closeModal = () => {
     this.setModalVisible(false);
-  }
+  };
 
-  keyExtractor = (item) => this.props.showList ?  `list-${item.id}` :  `grid-${item.id}`;
+  keyExtractor = item =>
+    this.props.showList ? `list-${item.id}` : `grid-${item.id}`;
 
-  onChangeSearhKeyword = (keyword) => {
+  onChangeSearhKeyword = keyword => {
     this.setState({
       searchKeyword: keyword
     });
-  }
+  };
 
-  onChangeCustomerName = (text) => this.setState({ customerName: text });
+  onChangeCustomerName = text => this.setState({ customerName: text.trim() });
 
-  onChangeCustomerPhone = (text) => this.setState({ customerPhoneNumber: text });
+  onChangeCustomerPhone = text =>
+    this.setState({ customerPhoneNumber: text.trim() });
 
-  onItemPress(itemId) {
-    console.log('on item pressed');
-  }
-
-  increaseBuyNumber = (index) => {
-    const products = this.state.products;
-    let item = products[index];
-    item.quantity++;
-    products[index] = item;
-    this.setState({
-      products
-    });
-  }
-
-  decreaseBuyNumber = (index) => {
-    const products = this.state.products;
-    let item = products[index];
-    item.quantity--;
-    if (item.quantity < 0) {
-      item.quantity = 0;
+  increaseBuyNumber = (itemSelected, index) => {
+    let item;
+    const { products, selectedProducts } = this.state;
+    const indexSelect = selectedProducts.findIndex(
+      _item => _item.id === itemSelected.id
+    );
+    // find index of selected item
+    if (indexSelect !== -1) {
+      item = {
+        ...selectedProducts[indexSelect],
+        quantity: selectedProducts[indexSelect].quantity + 1
+      };
+      selectedProducts[indexSelect] = item;
+    } else {
+      item = { ...itemSelected, quantity: 1 };
+      selectedProducts.push(item);
     }
-    products[index] = item;
+    // products[index] = item;
+    const newProducts = products.map(p => (p.id === item.id ? item : p));
+
     this.setState({
-      products
+      products: newProducts,
+      selectedProducts
     });
-  }
+  };
 
-  setModalVisible = (isOpen) => {
-    this.setState({isOpenCreateCustomerModal: isOpen});
-  }
+  decreaseBuyNumber = (itemSelected, index) => {
+    let item;
+    const { products, selectedProducts } = this.state;
+    const indexSelect = selectedProducts.findIndex(
+      _item => _item.id === itemSelected.id
+    );
 
-  handleCreateCustomer = async (params) => {
-    const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
-    const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
-    if (result.type === CREATE_CUSTOMER_SUCCESS) {
-      this.closeModal();
-      await this.props.createOrder(this.props.selectedCustomer, selectedProducts);
-      this.props.navigation.navigate("Checkout");
+    // const item = itemSelected;
+    // item.quantity -= 1;
+
+    if (indexSelect !== -1) {
+      if (itemSelected.quantity <= 0) {
+        item = {
+          ...itemSelected,
+          quantity: 0
+        };
+        selectedProducts.splice(indexSelect, 1);
+      } else {
+        item = {
+          ...itemSelected,
+          quantity: itemSelected.quantity - 1
+        };
+        selectedProducts[indexSelect] = item;
+      }
     }
-  }
+    // products[index] = item;
+    const newProducts = products.map(p =>
+      p.id === itemSelected.id ? item : p
+    );
 
-  renderRow = ({item, index}) => {
-    console.log('[Home.js] zz item', item);
-    return (
-      <ProductItem
-        // key={`product-${item.id}`}
-        gridItem={!this.props.showList}
-        item={item}
-        onItemPress={this.onItemPress}
-        onIncrease={() => this.increaseBuyNumber(index)}
-        onDecrease={() => this.decreaseBuyNumber(index)}
-      />
-    )
-  }
+    this.setState(
+      {
+        products: newProducts,
+        selectedProducts
+      },
+      () => {
+        console.log('TCL: decreaseBuyNumber -> newProducts', newProducts);
+      }
+    );
+  };
+
+  renderAlert = (title, message, onPressOK) =>
+    Alert.alert(title, message, [{ text: 'OK', onPress: onPressOK }], {
+      cancelable: true
+    });
+
+  setModalVisible = isOpen => {
+    this.setState({ isOpenCreateCustomerModal: isOpen });
+  };
+
+  handleCreateCustomer = async params => {
+    console.log('TCL: params', params);
+    if (params.customerName === '' || params.customerPhoneNumber === '') {
+      this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin khách hàng');
+    } else {
+      // const selectedProducts = this.state.products.filter((item) => item.quantity && item.quantity > 0);
+      const { selectedProducts } = this.state;
+      const result = await this.props.createCustomer(
+        params.customerName,
+        params.customerPhoneNumber
+      );
+      if (result.type === CREATE_CUSTOMER_SUCCESS) {
+        this.closeModal();
+        await this.props.createOrder(
+          this.props.selectedCustomer,
+          selectedProducts
+        );
+        this.props.navigation.navigate('Checkout');
+      }
+    }
+  };
+
+  // handleCreateCustomer = async (params) => {
+  //   if (params.customerName === '' || params.customerPhoneNumber === '') {
+  //     this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin khách hàng');
+  //   } else {
+  //     const result = await this.props.createCustomer(params.customerName, params.customerPhoneNumber);
+  //     if (result.type === CREATE_CUSTOMER_SUCCESS) {
+  //       this.closeModal();
+  //       this.props.createOrder(this.props.selectedCustomer, []);
+  //     }
+  //   }
+  // }
+
+  renderRow = ({ item, index }) => (
+    <ProductItem
+      // key={`product-${item.id}`}
+      gridItem={!this.props.showList}
+      item={item}
+      onItemPress={this.onItemPress}
+      onIncrease={() => this.increaseBuyNumber(item, index)}
+      onDecrease={() => this.decreaseBuyNumber(item, index)}
+    />
+  );
 
   onRefresh = () => {
     this.props.getAllProducts();
-  }
+  };
 
   render() {
     const { showList } = this.props;
+    const products = this.state.products.filter(
+      item =>
+        !this.state.searchKeyword ||
+        item.name.toLowerCase().includes(this.state.searchKeyword.toLowerCase())
+    );
     return (
       <View style={styles.container}>
         <SearchBar
@@ -219,60 +295,65 @@ class HomeScreen extends Component {
           value={this.state.searchKeyword}
           onChangeText={this.onChangeSearhKeyword}
         />
-        <FlatList
-          key={showList ? 'list' : 'grid'}
-          style={styles.list}
-          data={this.state.products}
-          numColumns={showList ? 1 : 2}
-          renderItem={this.renderRow}
-          keyExtractor={this.keyExtractor} 
-          ItemSeparatorComponent={Divider}
-          columnWrapperStyle={showList ? null : styles.columnWrapperStyle }
-          refreshControl={
-            <RefreshControl
-              refreshing={this.props.loading}
-              onRefresh={this.onRefresh}
-            />
-          }
-        />
-        <NewCustomerModal
-          isOpen={this.state.isOpenCreateCustomerModal}
-          onSubmit={this.handleCreateCustomer}
-          onRequestClose={this.closeModal}
-          submitText={'Tạo mới'}
-          cancleText={'Không, thêm khách hàng sau'}
-          title={'Thêm khách hàng mới'}
-        />
+        <View style={styles.content}>
+          <FlatList
+            key={showList ? 'list' : 'grid'}
+            style={styles.list}
+            data={products}
+            numColumns={showList ? 1 : 2}
+            renderItem={this.renderRow}
+            keyExtractor={this.keyExtractor}
+            ItemSeparatorComponent={Divider}
+            columnWrapperStyle={showList ? null : styles.columnWrapperStyle}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.props.loading}
+                onRefresh={this.onRefresh}
+              />
+            }
+          />
+          <NewCustomerModal
+            isOpen={this.state.isOpenCreateCustomerModal}
+            onSubmit={this.handleCreateCustomer}
+            onRequestClose={this.closeModal}
+            submitText="Tạo mới"
+            cancleText="Không, thêm khách hàng sau"
+            title="Thêm khách hàng mới"
+          />
+        </View>
       </View>
     );
   }
 }
 
-const Divider = () => (
-  <View style={styles.divider} />
-)
+const Divider = () => <View style={styles.divider} />;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15,
-    backgroundColor: '#FFF',
+    paddingHorizontal: 12,
+    backgroundColor: '#FFF'
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 8,
+    backgroundColor: '#FFF'
   },
   list: {
     marginTop: 30,
-    flex: 1,
+    flex: 1
   },
   columnWrapperStyle: {
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   divider: {
     width: '100%',
-    height: 30,
+    height: 30
   },
   headerRightIcon: {
-    marginRight: 15,
-    width: 15,
-    height: 15
+    marginRight: 12,
+    width: 20,
+    height: 20
   },
   headerLeftIcon: {
     marginLeft: 15,
@@ -309,14 +390,14 @@ const styles = StyleSheet.create({
     color: 'grey'
   },
   itemPrice: {
-    flex: 1,
+    flex: 1
   },
   itemStatus: {
     color: 'green'
   },
   itemActionsWrapper: {
     flexDirection: 'row',
-    marginTop: 10,
+    marginTop: 10
   },
   itemAction: {
     width: 30,
@@ -326,19 +407,17 @@ const styles = StyleSheet.create({
   },
   searchWrapper: {
     marginBottom: 15
-  },
+  }
 });
 
-const mapStateToProps = state => {
-  return {
-    products: state.Product.products,
-    selectedCustomer: state.Customer.selectedCustomer,
-    orders: state.Order.list,
-    customers: state.Customer.list,
-    loading: state.Product.loading,
-    showList: state.App.showList,
-  }
-};
+const mapStateToProps = state => ({
+  products: state.Product.products,
+  selectedCustomer: state.Customer.selectedCustomer,
+  orders: state.Order.list,
+  customers: state.Customer.list,
+  loading: state.Product.loading,
+  showList: state.App.showList
+});
 
 const mapDispatchToProps = {
   getAllProducts,
@@ -347,4 +426,7 @@ const mapDispatchToProps = {
   updateOrderByCustomer
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomeScreen);

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Image, View, StyleSheet, Text, Dimensions } from 'react-native';
+import moment from 'moment';
 import QuantityPicker from './QuantityPicker';
 import TouchableView from './TouchableView';
 import CustomImage from './CustomImage';
@@ -10,7 +11,7 @@ import { formatMoney } from '../utils/helpers';
 /* Component ==================================================================== */
 const ProductItem = (props) => {
   const { item, onItemPress, onIncrease, onDecrease } = props;
-  const { images, name, price, quantity } = item;
+  const { images, name, price, quantity, createdAt } = item;
 
   const URL = (images || []).length ? images[0] : null;
 
@@ -27,7 +28,7 @@ const ProductItem = (props) => {
           <Text style={styles.price}>{`${formatMoney(price)} VNĐ`}</Text>
           <View style={styles.meta}>
             <Text style={styles.quantity}>{`Số lượng: ${quantity}`}</Text>
-            <Text style={styles.lastUpdate}>Cập nhật: 24.07.2018</Text>
+            <Text style={styles.lastUpdate}>Cập nhật: {moment(createdAt).format('DD-MM-YYYY')}</Text>
           </View>
         </View>
       </View>
@@ -71,14 +72,12 @@ const styles = StyleSheet.create({
   },
   title: {
     lineHeight: 19,
-    fontFamily: "Rubik-Medium",
     fontSize: 14,
     fontWeight: '700',
     color: '#12283f'
   },
   price: {
     lineHeight: 19,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     color: '#a8a8a8'
   },
@@ -90,15 +89,14 @@ const styles = StyleSheet.create({
   },
   quantity: {
     lineHeight: 19,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     color: '#5175ff'
   },
   lastUpdate: {
     lineHeight: 16,
-    fontFamily: 'Rubik-Regular',
     fontSize: 12,
-    color: '#a8a8a8'
+    color: '#a8a8a8',
+    paddingRight: 5
   }
   
 

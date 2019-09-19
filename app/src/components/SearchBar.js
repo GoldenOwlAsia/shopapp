@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 16,
-    color: '#F5F5F5',
+    color: '#DCDCDC',
   },
   input: {
     width: '99%',

@@ -1,10 +1,9 @@
-import React from "react";
-import {
-  createStackNavigator,
-  createBottomTabNavigator
-} from 'react-navigation'
+import React from 'react';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { createStackNavigator } from 'react-navigation-stack';
+
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import DashboardScreen from '../screens/Dashboard';
 import ProductsScreen from '../screens/Products';
 import StaffsScreen from '../screens/Staffs';
@@ -17,56 +16,63 @@ import {
   TabOwnerProductActive,
   TabOwnerProductInactive,
   TabUserActive,
-  TabUserInactive,
-} from '../components/imageUrls'
+  TabUserInactive
+} from '../components/imageUrls';
 
 const DashboardStack = createStackNavigator({
-  Dashboard: DashboardScreen,
+  Dashboard: DashboardScreen
 });
 
 DashboardStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabIcon icon={focused ? TabDashboardActive : TabDashboardInactive} />
-  ),
+  )
 };
 
 const CartStack = createStackNavigator({
-  Cart: DashboardScreen,
+  Cart: DashboardScreen
 });
 
 CartStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabIcon icon={focused ? TabCartActive : TabCartInactive} />
-  ),
+  )
 };
 
 const ProductsStack = createStackNavigator({
-  Products: ProductsScreen,
+  Products: ProductsScreen
 });
 
 ProductsStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabIcon icon={focused ? TabOwnerProductActive : TabOwnerProductInactive} />
-  ),
+  )
 };
 
 const StaffsStack = createStackNavigator({
-  Staffs: StaffsScreen,
+  Staffs: StaffsScreen
 });
 
 StaffsStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabIcon icon={focused ? TabUserActive : TabUserInactive} />
-  ),
+  )
 };
 
-export default createBottomTabNavigator({
-  DashboardStack,
-  CartStack,
-  ProductsStack,
-  StaffsStack,
-}, {
-  tabBarOptions: {
-    showLabel: false,
+export default createBottomTabNavigator(
+  {
+    DashboardStack,
+    // CartStack,
+    ProductsStack,
+    StaffsStack
+  },
+  {
+    tabBarOptions: {
+      showLabel: false,
+      style: {
+        borderTopWidth: 1,
+        borderTopColor: '#F4F4F4'
+      }
+    }
   }
-});
+);

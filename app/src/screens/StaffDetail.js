@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Linking,
+  Dimensions,
 } from 'react-native';
 import format from 'date-fns/format';
 import Button from '../components/BaseButton';
@@ -24,12 +25,14 @@ const BasicInfo = ({ isOnline, avatarUrl, name, phone, address, onCall, onEdit }
         <Text style={basicInfostyles.name}>{name}</Text>
         <View style={[basicInfostyles.status, isOnline ? basicInfostyles.online : basicInfostyles.offline]} />
       </View>
-      <Text style={[basicInfostyles.regularText, basicInfostyles.topSpacing]}>{phone}</Text>
+      <View>
+        <Text style={[basicInfostyles.regularText, basicInfostyles.topSpacing]}>{phone}</Text>
+      </View>
       <View style={[basicInfostyles.nameWrapper, basicInfostyles.topSpacing]}>
         <MaterialIcons style={basicInfostyles.icon} name="location-on" />
         <Text style={basicInfostyles.regularText}>{address}</Text>
       </View>
-      <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end' }}>
+      <View style={basicInfostyles.button}>
         <Button
           title={'Gọi điện'}
           fullWidth={false}
@@ -51,9 +54,8 @@ const BasicInfo = ({ isOnline, avatarUrl, name, phone, address, onCall, onEdit }
 const basicInfostyles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    paddingLeft: 24,
-    paddingRight: 24,
-    height: 114,
+    width: Dimensions.get('window').width - 48,
+    marginLeft: 24,
   },
   content: {
     flex: 1,
@@ -62,17 +64,15 @@ const basicInfostyles = StyleSheet.create({
   },
   avatar: {
     width: 90,
-    height: '100%',
+    height: 114,
     borderRadius: 4,
   },
   nameWrapper: {
     flexDirection: 'row',
-    alignItems: 'center',
   },
   name: {
     fontSize: 16,
     fontWeight: '700',
-    fontFamily: 'Rubik-Medium',
     lineHeight: 22,
     color: '#12283F',
   },
@@ -93,9 +93,9 @@ const basicInfostyles = StyleSheet.create({
   },
   regularText: {
     fontSize: 16,
-    fontFamily: 'Rubik-Regular',
     lineHeight: 19,
     color: '#A8A8A8',
+    flexWrap: 'wrap',
   },
   icon: {
     color: '#5175FF',
@@ -110,6 +110,10 @@ const basicInfostyles = StyleSheet.create({
   btnEdit: {
     marginLeft: 10,
   },
+  button: {
+    flexDirection: 'row',
+    marginTop: 15,
+  },
 });
 
 class StaffDetailScreen extends Component {
@@ -123,6 +127,9 @@ class StaffDetailScreen extends Component {
         />
       </TouchableOpacity>
     ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   constructor(props) {
@@ -148,9 +155,7 @@ class StaffDetailScreen extends Component {
     Linking.canOpenURL(url).then(supported => {
       if (supported) {
         return Linking.openURL(url);
-      } else {
-        console.log('[StaffDetail.js] Current platform is not supported');
-      }
+      } else { }
     }).catch(error => {
       alert(error);
     })
@@ -213,7 +218,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     color: '#12283F',
-    fontFamily: 'Rubik-Medium',
     fontWeight: '700',
     lineHeight: 32,
     margin: 24,
@@ -225,19 +229,17 @@ const styles = StyleSheet.create({
     paddingTop: 14,
     paddingBottom: 14,
     flexDirection: 'row',
-    backgroundColor: '#DADADC',
+    backgroundColor: '#F6F6F8',
     justifyContent: 'space-around',
   },
   statisticItemLabel: {
     fontSize: 14,
     color: '#A8A8A8',
-    fontFamily: 'Rubik-Regular',
     lineHeight: 19,
   },
   statisticItemValue: {
     fontSize: 16,
     color: '#12283F',
-    fontFamily: 'Rubik-Medium',
     fontWeight: '700',
     lineHeight: 22,
   },
@@ -249,14 +251,12 @@ const styles = StyleSheet.create({
   desTitle: {
     fontSize: 14,
     color: '#12283F',
-    fontFamily: 'Rubik-Medium',
     fontWeight: '700',
     lineHeight: 19,
   },
   desText: {
     fontSize: 16,
     color: '#A8A8A8',
-    fontFamily: 'Rubik-Regular',
     lineHeight: 19,
   }
 });

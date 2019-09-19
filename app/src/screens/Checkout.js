@@ -9,6 +9,7 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from "react-native";
 
 import PropTypes from "prop-types";
@@ -23,7 +24,7 @@ import { formatMoney } from '../utils/helpers';
 
 import { removeItemFromOrder, increaseItemQuantity, decreaseItemQuantity, checkout } from '../actions/order';
 import { CHECKOUT_SUCCESS, UPDATE_CUSTOMER_SUCCESS } from "../actions/types";
-import { clearSelectedCustomer, updateCustomer } from '../actions/customer';
+import { clearSelectedCustomer, updateCustomer, removeCustomer } from '../actions/customer';
 
 class CheckOutScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -34,7 +35,10 @@ class CheckOutScreen extends Component {
           source={BackArrow}
         />
       </TouchableOpacity>
-    )
+    ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   static getDerivedStateFromProps= (props, state) => {
@@ -72,7 +76,6 @@ class CheckOutScreen extends Component {
     let items = this.props.orders[this.props.selectedCustomer].map((item) => {delete item.__typename; return item;});
     const subTotal = this.calculateSubTotal(items);
     const tax = this.calculateTax(subTotal);
-    debugger
     const grandTotal = this.calculateGrandTotal(subTotal, tax)
 
     let params = {
@@ -87,7 +90,10 @@ class CheckOutScreen extends Component {
     const result = await this.props.checkout(params);
     if (result.type === CHECKOUT_SUCCESS) {
       this.props.clearSelectedCustomer();
-      this.props.navigation.navigate('Home', {title: ''});
+      this.props.removeCustomer(this.state.customer.id);
+      this.renderAlert('Thành công', 'Thực hiện thanh toán thành công', () => {
+        this.props.navigation.navigate('Home', {title: ''});
+      });
     }
   }
 
@@ -139,14 +145,29 @@ class CheckOutScreen extends Component {
   openModal = () => this.setState({isEditCustomer: true});
 
   handleUpdateCustomer = async (params) => {
-    const result = await this.props.updateCustomer({ name: params.customerName, phoneNumber: params.customerPhoneNumber, id: this.props.selectedCustomer });
-    if (result.type === UPDATE_CUSTOMER_SUCCESS) {
-      this.setState({
-        customer: { ...result.payload }
-      })
-      this.closeModal();
+    if (params.customerName === '' || params.customerPhoneNumber === '') {
+      this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin khách hàng');
+    } else {
+      const result = await this.props.updateCustomer({ name: params.customerName, phoneNumber: params.customerPhoneNumber, id: this.props.selectedCustomer });
+      if (result.type === UPDATE_CUSTOMER_SUCCESS) {
+        this.setState({
+          customer: { ...result.payload }
+        })
+        this.closeModal();
+      }
     }
   }
+
+  renderAlert = (title, message, onPressOK) => (
+    Alert.alert(
+      title,
+      message,
+      [
+        {text: 'OK', onPress: onPressOK},
+      ],
+      { cancelable: true }
+    )
+  )
 
   renderItem = ({item, index}) => {
     const totalPrice = item.price * item.quantity;
@@ -175,12 +196,14 @@ class CheckOutScreen extends Component {
         <ScrollView style={styles.content} contentContainerStyle={{ paddingBottom: 20 }}>
           <Text style={styles.title}>Thanh toán</Text>
           <Divider />
-          <FlatList
-            data={items}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => `${item.id}`}
-            ItemSeparatorComponent={() => (<View style={styles.listDivider} />)}
-          />
+          <View style={{paddingHorizontal: 20}}>
+            <FlatList
+              data={items}
+              renderItem={this.renderItem}
+              keyExtractor={(item, index) => `${item.id}`}
+              ItemSeparatorComponent={() => (<View style={styles.listDivider} />)}
+            />
+          </View>
           <Divider />
           <View style={styles.row}>
             <Text style={styles.label}>Tổng giá</Text>
@@ -238,7 +261,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: 20,
   },
   listDivider: {
     height: 8,
@@ -247,46 +269,41 @@ const styles = StyleSheet.create({
     height: 1,
     marginTop: 20,
     marginBottom: 20,
-    paddingHorizontal: -20,
     backgroundColor: '#f4f4f4',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingTop: 10,
+    paddingHorizontal: 20,
   },
   label: {
     lineHeight: 19,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     color: "#8a8a8a"
   },
   grandTotal: {
     lineHeight: 19,
-    fontFamily: "Rubik-Medium",
     fontSize: 14,
     fontWeight: '700',
   },
   customerInfo: {
-
+    paddingHorizontal: 20,
   },
   customerInfoTitle: {
     lineHeight: 30,
-    fontFamily: "Rubik-Medium",
     fontSize: 22,
     fontWeight: "700",
     fontStyle: "normal",
     color: "#666666"
   },
   customerInfoText: {
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     color: "#8a8a8a",
     lineHeight: 24,
   },
   editText: {
     lineHeight: 19,
-    fontFamily: "Rubik-Regular",
     fontSize: 14,
     fontWeight: "normal",
     fontStyle: "normal",
@@ -296,20 +313,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    marginBottom: 10,
-    color: '#666666',
-    fontFamily: "Rubik-Medium",
+    paddingLeft: 20,
+    paddingTop: 10
   },
   btnCheckout: {
     padding: 20,
-  },
-  title: {
-    lineHeight: 32,
-    fontFamily: "Rubik-Medium",
-    fontSize: 24,
-    fontWeight: "700",
-    fontStyle: "normal",
-    color: "#12283f"
   },
   headerLeftIcon: {
     marginLeft: 15,
@@ -332,7 +340,8 @@ const mapDispatchToProps = {
   removeItemFromOrder,
   checkout,
   clearSelectedCustomer,
-  updateCustomer
+  updateCustomer,
+  removeCustomer
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CheckOutScreen);

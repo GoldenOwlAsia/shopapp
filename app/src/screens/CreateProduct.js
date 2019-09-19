@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  Alert,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import TextInput  from '../components/TextInput';
+import TextInput from '../components/TextInput';
 import AvatarPicker from '../components/AvatarPicker';
 import BaseButton from '../components/BaseButton';
 import ColorPicker from '../components/ColorPicker';
@@ -17,6 +18,7 @@ import SelectSize from '../components/SelectSize';
 import ListImagePicker from '../components/ListImagePicker';
 import { CloseIcon } from '../components/imageUrls';
 import { handleCreateProduct, getCategories } from '../actions/product';
+import { validateAddProductForm } from './../utils/helpers';
 
 const COLORS = [
   { id: 1, color: 'white' },
@@ -29,9 +31,9 @@ const COLORS = [
 ]
 
 const SIZES = [
-  { value: '8 (EU)'},
-  { value: '10 (EU)'},
-  { value: '12 (EU)'},
+  { value: '8 (EU)' },
+  { value: '10 (EU)' },
+  { value: '12 (EU)' },
 ]
 
 class CreateProduct extends Component {
@@ -45,6 +47,9 @@ class CreateProduct extends Component {
         />
       </TouchableOpacity>
     ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   constructor(props) {
@@ -53,40 +58,78 @@ class CreateProduct extends Component {
       categories: [],
       product: {
         color: COLORS[0].color,
+        name: null,
+        category: null,
+        quantity: null,
+        size: null,
+        importPrice: null,
+        price: null,
+        description: null,
+        images: [],
       },
     }
   }
 
   componentDidMount() {
     this.props.getCategories()
-    .then(categories => {
-      this.setState({ categories })
-    })
+      .then(categories => {
+        this.setState({ categories })
+      })
   }
+
+  handleValidateForm = (product) => Object.values(product).find(item => item === null);
 
   onChangeText = (field, value) => {
-    this.setState({
-      product: {
-        ...this.state.product,
-        [field]: value,
-      }
-    })
+    if (field === 'images') {
+      this.setState({
+        product: {
+          ...this.state.product,
+          [field]: value,
+        }
+      })
+    } else {
+      this.setState({
+        product: {
+          ...this.state.product,
+          [field]: value.trim() === '' ? null : value,
+        }
+      })
+    }
   }
 
-  handleSubmit = () => {
-    this.props.handleCreateProduct(this.state.product)
-    .then(() => {
-      this.props.navigation.goBack(null);
-    }) 
+  renderAlert = (title, message, onPressOK) => (
+    Alert.alert(
+      title,
+      message,
+      [
+        { text: 'OK', onPress: onPressOK },
+      ],
+      { cancelable: true }
+    )
+  )
+
+  handleSubmit = async () => {
+    if (this.handleValidateForm(this.state.product) !== undefined) {
+      return this.renderAlert('Nhắc nhở', 'Điền đầy đủ thông tin sản phẩm');
+    }
+    const resultValidate = await validateAddProductForm(this.state.product);
+    if (resultValidate.isValidate === true) {
+      return this.renderAlert('Nhắc nhở', resultValidate.messageValidate);
+    }
+    this.props.handleCreateProduct(this.state.product).then(() => {
+      this.renderAlert('Thành công', 'Tạo sản phẩm thành công', () => {
+        this.props.navigation.goBack(null);
+      });
+    })
   }
 
   render() {
     const { name, color, quantity, importPrice, price, description } = this.state.product;
 
     return (
-      <KeyboardAwareScrollView extraScrollHeight={Platform.OS === 'ios' ? 10 : 100} enableOnAndroid style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.title}>Tạo sản phẩm mới</Text>
+      <View style={styles.container}>
+        <Text style={styles.title}>Tạo sản phẩm mới</Text>
+        <KeyboardAwareScrollView extraScrollHeight={Platform.OS === 'ios' ? 10 : 100} enableOnAndroid style={styles.content}>
           <ListImagePicker onImagesChange={(value) => this.onChangeText('images', value)} />
           <ColorPicker
             colorList={COLORS}
@@ -98,10 +141,12 @@ class CreateProduct extends Component {
             value={name}
             onChangeText={(value) => this.onChangeText('name', value)}
           />
+          <View style={{ height: 5 }} />
           <SelectSize
             onSelectedChange={(value) => this.onChangeText('category', value)}
             label={'Loại sản phẩm'} data={this.state.categories}
           />
+          <View style={{ height: 5 }} />
           <View style={styles.horizontal}>
             <View style={styles.horizontalItem}>
               <TextInput
@@ -118,6 +163,7 @@ class CreateProduct extends Component {
               />
             </View>
           </View>
+          <View style={{ height: 5 }} />
           <View style={styles.horizontal}>
             <View style={styles.horizontalItem}>
               <TextInput
@@ -136,16 +182,19 @@ class CreateProduct extends Component {
               />
             </View>
           </View>
+          <View style={{ height: 5 }} />
           <TextInput
             label="Ghi chú"
             value={description}
             onChangeText={(value) => this.onChangeText('description', value)}
-            multiline = {true}
-            numberOfLines = {4}
+            multiline={true}
+            numberOfLines={4}
           />
+        </KeyboardAwareScrollView>
+        <View style={{ marginHorizontal: 24, alignItems: 'center' }}>
           <BaseButton onPress={this.handleSubmit} containerStyle={styles.btnConfirm} title="Xác nhận" />
         </View>
-      </KeyboardAwareScrollView>
+      </View>
     )
   }
 }
@@ -161,10 +210,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     color: '#12283F',
-    fontFamily: 'Rubik-Medium',
     fontWeight: '700',
     lineHeight: 32,
-    marginBottom: 23,
+    paddingLeft: 24,
+    paddingBottom: 10,
+    paddingTop: 24
   },
   input: {
     marginTop: 20,
@@ -180,8 +230,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   btnConfirm: {
-    marginTop: 30,
-    marginBottom: 30,
+    marginTop: 15,
+    marginBottom: 20,
   }
 });
 

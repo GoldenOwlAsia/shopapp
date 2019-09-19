@@ -13,7 +13,6 @@ import { colors } from "../utils/constants";
 import {
   Button,
   Title,
-  ListView,
   View,
   Tile,
   ImageBackground,
@@ -23,7 +22,8 @@ import {
   Row,
   Icon
 } from "@shoutem/ui";
-import { BarCodeScanner, Permissions } from "expo";
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import * as Permissions from 'expo-permissions'
 
 const ContainerView = styled.View`
   flex: 1;
@@ -91,7 +91,7 @@ export default class ScanScreen extends Component {
           text: "Yes",
           onPress: () => Linking.openURL(this.state.lastScannedUrl)
         },
-        { text: "No", onPress: () => {} }
+        { text: "No", onPress: () => { } }
       ],
       { cancellable: false }
     );
@@ -128,14 +128,14 @@ export default class ScanScreen extends Component {
             Camera permission is not granted
           </Text>
         ) : (
-          <BarCodeScanner
-            onBarCodeRead={this._handleBarCodeRead}
-            style={{
-              height: Dimensions.get("window").height,
-              width: Dimensions.get("window").width
-            }}
-          />
-        )}
+              <BarCodeScanner
+                onBarCodeRead={this._handleBarCodeRead}
+                style={{
+                  height: Dimensions.get("window").height,
+                  width: Dimensions.get("window").width
+                }}
+              />
+            )}
 
         {this.maybeRenderUrl()}
         <StatusBar hidden />

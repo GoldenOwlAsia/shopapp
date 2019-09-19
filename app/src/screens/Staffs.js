@@ -19,9 +19,9 @@ class StaffsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Nhân viên',
     headerLeft: (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
         <Image
-          style={{ width: 16, height: 16, marginLeft: 16 }}
+          style={{ width: 16, height: 12, marginLeft: 12 }}
           source={Hamburger}
         />
       </TouchableOpacity>
@@ -29,19 +29,31 @@ class StaffsScreen extends Component {
     headerRight: (
       <TouchableOpacity onPress={() => navigation.navigate('CreateStaff', { user: {}, isEdit: false })}>
         <Image
-          style={{ width: 16, height: 16, marginRight: 16 }}
+          style={{ width: 16, height: 16, marginRight: 12 }}
           source={PlusIcon}
         />
       </TouchableOpacity>
-    )
+    ),
+    headerStyle: {
+      borderBottomWidth: 0,
+    },
   });
 
   constructor(props) {
     super(props);
+    this.state = {
+      searchKeyword: '',
+    };
   }
 
   componentDidMount() {
     this.props.getStaffsFromApi();
+  }
+
+  onChangeSearhKeyword = (keyword) => {
+    this.setState({
+      searchKeyword: keyword
+    });
   }
 
   onItemPress = (staff) => {
@@ -59,11 +71,17 @@ class StaffsScreen extends Component {
   }
 
   render() {
-    const { loading, error, staffs } = this.props;
-
+    const { loading, error } = this.props;
+    const staffs = this.props.staffs.filter(item => !this.state.searchKeyword || item.fullName.toLowerCase().includes(this.state.searchKeyword.toLowerCase()));
     return (
       <View style={styles.container}>
-        <SearchBar placeholder="Tìm kiếm" />
+        <View style={{paddingHorizontal: 12}}>
+          <SearchBar
+            placeholder="Tìm kiếm"
+            value={this.state.searchKeyword}
+            onChangeText={this.onChangeSearhKeyword}
+          />
+      </View>
         <FlatList
           data={staffs}
           renderItem={this.renderStaffItem}
@@ -89,11 +107,11 @@ const Divider = () => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#FFF',
   },
   list: {
     marginTop: 27,
+    paddingLeft: 18
   },
   divider: {
     height: 1,

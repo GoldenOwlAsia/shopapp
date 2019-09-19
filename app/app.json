@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Shop App",
+    "name": "ShopApp-18092019-v1",
     "description": "Shop Application.",
     "slug": "shop-app",
     "privacy": "public",
-    "sdkVersion": "29.0.0",
+    "sdkVersion": "34.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
     "primaryColor": "#cccccc",
@@ -14,10 +14,16 @@
       "hideExponentText": false
     },
     "packagerOpts": {
-      "assetExts": ["ttf", "mp4"]
+      "assetExts": [
+        "ttf",
+        "mp4"
+      ]
     },
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.goldenowl.shopmanagement"
     }
   }
 }

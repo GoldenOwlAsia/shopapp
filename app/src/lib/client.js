@@ -5,12 +5,12 @@ import { HttpLink, createHttpLink } from "apollo-link-http";
 import { setContext } from 'apollo-link-context';
 import { AsyncStorage } from 'react-native';
 
+
 // async function getToken() {
 //   try {
 //     const authen_token = await AsyncStorage.getItem('authen_token');
 //     return authen_token;
 //   } catch (error) {
-//     console.log(`Something went wrong with the AsyncStorage: ${error.messages}`);
 //     return null;
 //   }
 // }
@@ -28,6 +28,7 @@ const authLink = setContext(async () => {
 const httpLink = createHttpLink({
   uri: 'https://shop-app-backend.herokuapp.com/graphql'
   // uri: 'http://192.168.56.1:3001/graphql'
+  // uri: 'http://localhost:3001/graphql'
 })
 
 const cache = new InMemoryCache();

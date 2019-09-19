@@ -6,23 +6,21 @@ import {
   View,
   TouchableOpacity,
   Image,
-  RefreshControl,
-  Text,
+  RefreshControl
 } from 'react-native';
 import ProductItem from '../components/OwnerProductItem';
 import SearchBar from '../components/SearchBar';
-import StaffItem from '../components/StaffItem';
+// import StaffItem from '../components/StaffItem';
 import { Hamburger, PlusIcon } from '../components/imageUrls';
 import { getAllProducts } from '../actions/product';
 
 class ProductsScreen extends Component {
-
   static navigationOptions = ({ navigation }) => ({
     title: 'Sản phẩm',
     headerLeft: (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
         <Image
-          style={{ width: 16, height: 16, marginLeft: 16 }}
+          style={{ width: 16, height: 12, marginLeft: 12 }}
           source={Hamburger}
         />
       </TouchableOpacity>
@@ -30,41 +28,63 @@ class ProductsScreen extends Component {
     headerRight: (
       <TouchableOpacity onPress={() => navigation.navigate('CreateProduct')}>
         <Image
-          style={{ width: 16, height: 16, marginRight: 16 }}
+          style={{ width: 16, height: 16, marginRight: 12 }}
           source={PlusIcon}
         />
       </TouchableOpacity>
-    )
+    ),
+    headerStyle: {
+      borderBottomWidth: 0
+    }
   });
 
   constructor(props) {
     super(props);
+    this.state = {
+      searchKeyword: ''
+    };
   }
 
-  componentDidMount() {
-    this.props.getAllProducts();
+  async componentDidMount() {
+    await this.props.getAllProducts();
   }
 
-  onItemPress = (product) => {
-    // this.props.navigation.navigate('CreateProduct', { product });
-  }
+  onChangeSearhKeyword = keyword => {
+    this.setState({
+      searchKeyword: keyword
+    });
+  };
+
+  onItemPress = product => {
+    this.props.navigation.navigate('ProductDetail', { product });
+  };
 
   renderProductItem = ({ item }) => (
     <ProductItem item={item} onItemPress={this.onItemPress} />
-  )
+  );
 
-  keyExtractor = (item) => `product-${item.id}`;
+  keyExtractor = item => `product-${item.id}`;
 
-  onRefresh = () => {
-    this.props.getAllProducts();
-  }
+  onRefresh = async () => {
+    await this.props.getAllProducts();
+  };
 
   render() {
-    const { loading, error, products } = this.props;
-
+    const { loading, error } = this.props;
+    const products = this.props.products.filter(
+      item =>
+        !this.state.searchKeyword ||
+        item.name.toLowerCase().includes(this.state.searchKeyword.toLowerCase())
+    );
     return (
       <View style={styles.container}>
-        <SearchBar placeholder="Tìm kiếm" />
+        <View style={{ paddingHorizontal: 12 }}>
+          <SearchBar
+            placeholder="Tìm kiếm"
+            value={this.state.searchKeyword}
+            onChangeText={this.onChangeSearhKeyword}
+          />
+        </View>
         <FlatList
           data={products}
           renderItem={this.renderProductItem}
@@ -73,49 +93,44 @@ class ProductsScreen extends Component {
           ItemSeparatorComponent={Divider}
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl
-              refreshing={loading}
-              onRefresh={this.onRefresh}
-            />
+            <RefreshControl refreshing={loading} onRefresh={this.onRefresh} />
           }
         />
       </View>
-    )
+    );
   }
 }
 
-const Divider = () => (
-  <View style={styles.divider} />
-)
+const Divider = () => <View style={styles.divider} />;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: '#FFF',
+    backgroundColor: '#FFF'
   },
   list: {
     marginTop: 27,
+    paddingLeft: 18
   },
   divider: {
     height: 1,
     backgroundColor: '#EAEAEA',
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 10
   }
-})
+});
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   loading: state.Product.loading,
   error: state.Product.error,
-  products: state.Product.products,
+  products: state.Product.products
 });
 
 const mapDispatchToProps = {
-  getAllProducts,
-}
+  getAllProducts
+};
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ProductsScreen);

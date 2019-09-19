@@ -5,7 +5,8 @@ import {
   CLEAR_SELECTED_CUSTOMER,
   CHANGE_SELECTED_CUSTOMER,
   UPDATE_CUSTOMER_SUCCESS,
-  UPDATE_CUSTOMER_FAIL
+  UPDATE_CUSTOMER_FAIL,
+  REMOVE_CUSTOMER
 } from './types';
 
 import client from '../lib/client';
@@ -25,7 +26,6 @@ const handleCreateCustomer = (name, phoneNumber) => dispatch => {
       return dispatch(createCustomerSuccess(customer));
     })
     .catch(error => {
-      console.log('create customer error:  ', error);
       return dispatch(createCustomerFail(error));
     });
 }
@@ -75,7 +75,6 @@ const handleUpdateCustomer = (params) => dispatch => {
       return dispatch(updateCustomerSuccess(customer));
     })
     .catch(error => {
-      console.log('update customer error:  ', error);
       return dispatch(updateCustomerFail(error));
     });
 }
@@ -125,6 +124,19 @@ const handleClearSelectedCustomer = () => {
 export const clearSelectedCustomer = () => {
   return (dispatch, getState) => {
     return dispatch(handleClearSelectedCustomer());
+  }
+}
+
+const handleremoveCustomer = (params) => {
+  return {
+    type: REMOVE_CUSTOMER,
+    payload: params
+  }
+}
+
+export const removeCustomer = (customerId) => {
+  return (dispatch, getState) => {
+    return dispatch(handleremoveCustomer(customerId))
   }
 }
 

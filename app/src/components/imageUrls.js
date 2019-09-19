@@ -31,4 +31,5 @@ export const TabUserInactive = require('../../assets/images/tab-user-inactive.pn
 export const AvatarHolder = require('../../assets/images/avatar-holder.png');
 export const NotificationIcon = require('../../assets/images/notification.png');
 export const ProductHolder = require('../../assets/images/product-holder.png');
-export const CardTransactionIcon = require('../../assets/images/card-transaction.png');
+export const NotificationActiveIcon = require('../../assets/images/notificationActive.png');
+export const Logout = require('../../assets/images/logout.png');

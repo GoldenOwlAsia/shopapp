@@ -1,45 +1,65 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   StyleSheet,
   Modal,
   View,
   Text,
   KeyboardAvoidingView,
-  Keyboard,
-  Platform,
+  Platform
 } from 'react-native';
-import Button from './Button';
 import BaseButton from './BaseButton';
 import TouchableView from './TouchableView';
 import TextInput from './TextInput';
-import { colors } from "../utils/constants";
+import { colors } from '../utils/constants';
 
 const ContaineComponent = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
 
 class NewCustomerModal extends Component {
   constructor(props) {
     super(props);
+    const { customer } = props;
     this.state = {
-      customerName: props.customer?  (props.customer || {}).name : '',
-      customerPhoneNumber: props.customer ? (props.customer || {}).phoneNumber : '',
+      customerName: customer ? (customer || {}).name : '',
+      customerPhoneNumber: customer ? (customer || {}).phoneNumber : ''
     };
   }
 
-  onChangeCustomerName = (text) => this.setState({ customerName: text });
-  onChangeCustomerPhone = (text) => this.setState({ customerPhoneNumber: text });
+  static getDerivedStateFromProps = (props, state) => {
+    const {
+      customerName: prevCustomerName,
+      customerPhoneNumber: prevCustomerPhoneNumber
+    } = state;
+    const { customer } = props;
+    return {
+      customerName: customer ? (customer || {}).name : prevCustomerName,
+      customerPhoneNumber: customer
+        ? (customer || {}).phoneNumber
+        : prevCustomerPhoneNumber
+    };
+  };
+
+  onChangeCustomerName = text => this.setState({ customerName: text });
+
+  onChangeCustomerPhone = text => this.setState({ customerPhoneNumber: text });
 
   handleSubmit = () => {
     this.props.onSubmit(this.state);
-  }
+  };
 
   render() {
     return (
       <Modal
-        animationType="slide"
+        animationType="fade"
         visible={this.props.isOpen}
-        transparent={true}
-        onRequestClose={this.props.onRequestClose}>
-        <ContaineComponent style={styles.modalContainer} behavior="padding" enabled>
+        transparent
+        onRequestClose={this.props.onRequestClose}
+      >
+        <ContaineComponent
+          style={styles.modalContainer}
+          behavior="padding"
+          enabled
+        >
           <View style={[styles.contentContainer]}>
             <View style={styles.modalTitle}>
               <Text style={styles.modalTitleText}>{this.props.title}</Text>
@@ -71,7 +91,7 @@ class NewCustomerModal extends Component {
           </View>
         </ContaineComponent>
       </Modal>
-    )
+    );
   }
 }
 const styles = StyleSheet.create({
@@ -88,7 +108,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     justifyContent: 'center',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   modalTitle: {
     borderBottomWidth: 1,
@@ -100,26 +120,47 @@ const styles = StyleSheet.create({
   },
   modalTitleText: {
     lineHeight: 24,
-    fontFamily: "Rubik-Medium",
     fontSize: 18,
-    fontWeight: "700",
-    color: "#12283f"
+    fontWeight: '700',
+    color: '#12283f'
   },
   createCustomerForm: {
     flexDirection: 'column',
-    padding: 20,
+    padding: 20
   },
   btnSubmit: {
-    marginTop: 12,
+    marginTop: 12
   },
   cancelText: {
     marginTop: 16,
     textAlign: 'center',
     lineHeight: 19,
-    fontFamily: "Rubik-Medium",
     fontSize: 14,
-    color: "#12283f"
+    color: '#12283f'
   }
 });
+
+NewCustomerModal.defaultProps = {
+  customer: null,
+  onSubmit: null,
+  onRequestClose: null,
+  submitText: '',
+  cancleText: '',
+  title: '',
+  isOpen: false
+};
+
+NewCustomerModal.propTypes = {
+  customer: PropTypes.shape({
+    name: PropTypes.string,
+    phoneNumber: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  }),
+  onSubmit: PropTypes.func,
+  onRequestClose: PropTypes.func,
+  submitText: PropTypes.string,
+  cancleText: PropTypes.string,
+  title: PropTypes.string,
+  isOpen: PropTypes.bool
+};
 
 export default NewCustomerModal;
